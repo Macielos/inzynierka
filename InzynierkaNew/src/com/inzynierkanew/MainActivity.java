@@ -1,8 +1,10 @@
 package com.inzynierkanew;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 
 /**
  * The Main Activity.
@@ -19,12 +21,17 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		// Start up RegisterActivity right away
-		Intent intent = new Intent(this, RegisterActivity.class);
+		
+		Intent intent = new Intent(this, accountExists() ? GameActivity.class : RegisterActivity.class);
 		startActivity(intent);
-		// Since this is just a wrapper to start the main activity,
-		// finish it after launching RegisterActivity
+
 		finish();
+	}
+	
+	private boolean accountExists(){
+		SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+		String name = sharedPreferences.getString(Constants.NAME, null);
+		String password = sharedPreferences.getString(Constants.PASSWORD, null);
+		return name != null && password != null;
 	}
 }

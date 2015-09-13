@@ -15,6 +15,7 @@ import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
+import com.inzynierkanew.entities.communication.DeviceInfo;
 
 @Api(name = "deviceinfoendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = ""))
 public class DeviceInfoEndpoint {

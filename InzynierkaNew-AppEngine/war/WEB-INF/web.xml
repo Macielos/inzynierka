@@ -5,7 +5,7 @@
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
-   <param-value>com.inzynierkanew.DeviceInfoEndpoint,com.inzynierkanew.MessageEndpoint</param-value>
+   <param-value>com.inzynierkanew.DeviceInfoEndpoint,com.inzynierkanew.MessageEndpoint,com.inzynierkanew.endpoints.players.PlayerEndpoint</param-value>
   </init-param>
  </servlet>
  <servlet-mapping>
