@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20150913125346/java/1.18.0-rc/inzynierkanew.com-deviceinfoendpoint-v1-20150913125346-java-1.18.0-rc-sources.jar", 
-      "path": "inzynierkanew.com-deviceinfoendpoint-v1-20150913125346-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20150913160420/java/1.18.0-rc/inzynierkanew.com-deviceinfoendpoint-v1-20150913160420-java-1.18.0-rc-sources.jar", 
+      "path": "inzynierkanew.com-deviceinfoendpoint-v1-20150913160420-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-09-13 12:53"
+      "timestamp": "2015-09-13 16:04"
     }, 
     {
-      "path": "inzynierkanew.com-deviceinfoendpoint-v1-20150913125346-java-1.18.0-rc.jar.properties", 
+      "path": "inzynierkanew.com-deviceinfoendpoint-v1-20150913160420-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -674,5 +674,5 @@
   "version": "v1", 
   "language_version": "1.18.0-rc", 
   "id": "deviceinfoendpoint:v1", 
-  "revision": 20150913125346
+  "revision": 20150913160420
 }

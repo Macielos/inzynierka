@@ -26,14 +26,14 @@
   "ownerDomain" : "inzynierkanew.com",
   "ownerName" : "inzynierkanew.com",
   "methods" : {
-    "deviceinfoendpoint.getDeviceInfo" : {
+    "deviceinfoendpoint.removeDeviceInfo" : {
       "path" : "deviceinfo/{id}",
-      "httpMethod" : "GET",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.DeviceInfoEndpoint.getDeviceInfo",
+      "rosyMethod" : "com.inzynierkanew.DeviceInfoEndpoint.removeDeviceInfo",
       "request" : {
         "parameters" : {
           "id" : {
@@ -44,7 +44,7 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     },
     "deviceinfoendpoint.updateDeviceInfo" : {
@@ -79,6 +79,27 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "deviceinfoendpoint.getDeviceInfo" : {
+      "path" : "deviceinfo/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.DeviceInfoEndpoint.getDeviceInfo",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "deviceinfoendpoint.listDeviceInfo" : {
       "path" : "deviceinfo",
       "httpMethod" : "GET",
@@ -102,27 +123,6 @@
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "deviceinfoendpoint.removeDeviceInfo" : {
-      "path" : "deviceinfo/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.DeviceInfoEndpoint.removeDeviceInfo",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
       }
     }
   },
@@ -161,10 +161,7 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.DeviceInfoEndpoint.getDeviceInfo" : {
-        "response" : {
-          "$ref" : "DeviceInfo"
-        }
+      "com.inzynierkanew.DeviceInfoEndpoint.removeDeviceInfo" : {
       },
       "com.inzynierkanew.DeviceInfoEndpoint.updateDeviceInfo" : {
         "request" : {
@@ -182,12 +179,15 @@
           "$ref" : "DeviceInfo"
         }
       },
+      "com.inzynierkanew.DeviceInfoEndpoint.getDeviceInfo" : {
+        "response" : {
+          "$ref" : "DeviceInfo"
+        }
+      },
       "com.inzynierkanew.DeviceInfoEndpoint.listDeviceInfo" : {
         "response" : {
           "$ref" : "CollectionResponse_DeviceInfo"
         }
-      },
-      "com.inzynierkanew.DeviceInfoEndpoint.removeDeviceInfo" : {
       }
     }
   }
