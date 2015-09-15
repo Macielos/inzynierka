@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.inzynierkanew.entities.communication.Hero;
-
 @Entity
 public class Player {
 	
@@ -30,7 +28,7 @@ public class Player {
 	
 	private Date lastLogin;
 	
-	private Hero hero;
+	private int heroLevel;
 
 	public Long getId() {
 		return id;
@@ -92,13 +90,13 @@ public class Player {
 		this.lastLogin = lastLogin;
 	}
 
-	public Hero getHero() {
-		return hero;
+	public int getHeroLevel() {
+		return heroLevel;
 	}
 
-	public void setHero(Hero hero) {
-		this.hero = hero;
+	public void setHeroLevel(int heroLevel) {
+		this.heroLevel = heroLevel;
 	}
 
-
+	
 }

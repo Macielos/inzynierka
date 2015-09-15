@@ -49,6 +49,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	protected static final String PROJECT_NUMBER = "891637358470";
 	
+	// TODO wymyslic lepsze rozwiazanie jak przazywac playera miedzy register a onRegistered, bo to jest thread-unsafe
 	private static Player playerForRegistration;
 
 	/**
@@ -129,13 +130,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 		boolean alreadyRegisteredWithEndpointServer = false;
 
 		//FIXME z jakiegos powodu dziala dopiero za 2 razem - probuje zapisac obu playerow
-		
+	/*	
 		try {
-
+*/
 			/*
 			 * Using cloud endpoints, see if the device has already been
 			 * registered with the backend
-			 */
+			 *//*
 			DeviceInfo existingInfo = endpoint.getDeviceInfo(registrationId).execute();
 
 			if (existingInfo != null && registrationId.equals(existingInfo.getDeviceRegistrationID())) {
@@ -144,20 +145,20 @@ public class GCMIntentService extends GCMBaseIntentService {
 		} catch (IOException e) {
 			// Ignore
 		}
-
+*/
 		try {
-			if (!alreadyRegisteredWithEndpointServer) {
+			//if (!alreadyRegisteredWithEndpointServer) {
 				/*
 				 * We are not registered as yet. Send an endpoint message
 				 * containing the GCM registration id and some of the device's
 				 * product information over to the backend. Then, we'll be
 				 * registered.
 				 */
-				if(playerEndpoint.findPlayerByName(playerForRegistration.getName())!=null){
+		/*		if(playerEndpoint.findPlayerByName(playerForRegistration.getName())!=null){
 					sendNotificationIntent(context, "Player with name "+playerForRegistration.getName()+" already exists", true, true);
 					return;
 				}
-				
+			*/	/*
 				DeviceInfo deviceInfo = new DeviceInfo();
 				endpoint.insertDeviceInfo(
 						deviceInfo
@@ -166,12 +167,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 								.setDeviceInformation(
 										URLEncoder.encode(android.os.Build.MANUFACTURER + " " + android.os.Build.PRODUCT, "UTF-8")))
 						.execute();
-				
+				*/
 				playerForRegistration
 					.setDeviceRegistrationID(registrationId)
 					.setRegistrationTime(new DateTime(System.currentTimeMillis()));
 				playerEndpoint.insertPlayer(playerForRegistration).execute();
-			}
+			//}
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),
 					"Exception received when attempting to register with server at " + endpoint.getRootUrl(), e);

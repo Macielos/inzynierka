@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 public class RequestValidator {
 	
 	private static final int MIN_NAME_LENGTH = 3;
-	private static final int MIN_PASSWORD_LENGTH = 8;
+	private static final int MIN_PASSWORD_LENGTH = 3;
 	
 	public static ValidationResult validateRegisterRequest(String name, byte[] password){
 		if(StringUtils.isEmpty(name)){
@@ -19,7 +19,7 @@ public class RequestValidator {
 			return new ValidationResult(false, "Name must contains at least "+MIN_NAME_LENGTH+" characters");
 		}
 		if(password.length < MIN_PASSWORD_LENGTH){
-			return new ValidationResult(false, "Password must contains at least "+MIN_NAME_LENGTH+" characters");
+			return new ValidationResult(false, "Password must contains at least "+MIN_PASSWORD_LENGTH+" characters");
 		}
 		return new ValidationResult(true, null);
 	}

@@ -31,6 +31,8 @@
         </receiver>
     
         <activity android:launchMode="singleTop" android:name=".RegisterActivity"/>
+        <activity android:launchMode="singleTop" android:name=".LoginActivity"/>
+        <activity android:launchMode="singleTop" android:name=".GameActivity"/>
 </application>
 
 </manifest>

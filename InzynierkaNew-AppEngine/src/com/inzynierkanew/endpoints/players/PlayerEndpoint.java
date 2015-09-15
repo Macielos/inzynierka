@@ -22,6 +22,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.mortbay.log.Log;
+
 @Api(name = "playerendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players"))
 public class PlayerEndpoint {
 
@@ -161,24 +163,23 @@ public class PlayerEndpoint {
 	@ApiMethod(name = "authenticatePlayer")
 	public LoginResponse authenticatePlayer(@Named("name")String name, @Named("password")String password){
 		EntityManager mgr = getEntityManager();
-		List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where name = ?").setParameter(0, name).getResultList();
+		List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.name = '"+name+"'").getResultList();
 		if(players.isEmpty()){
-			return null;	
+			return new LoginResponse();
 		}
 		Player player = players.get(0);
 		if(!player.getPassword().equals(RequestValidator.hashPassword(password.getBytes()))){
-			return null;
+			return new LoginResponse();
 		}
+
 		String sessionId = UUID.randomUUID().toString();
 		Date loginTime = new Date();
 		
 		player.setSessionId(sessionId);
 		player.setLastLogin(loginTime);
-		
-		LoginResponse response = new LoginResponse();
-		response.setSessionId(sessionId);
-		response.setLoginTime(loginTime);
-		return response;
+		mgr.merge(player);
+
+		return new LoginResponse(sessionId);
 	}
 
 	private boolean containsPlayer(Player player) {

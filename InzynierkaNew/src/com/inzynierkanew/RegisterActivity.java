@@ -1,7 +1,6 @@
 package com.inzynierkanew;
 
 import java.io.IOException;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,9 +19,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
-import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
-import com.inzynierkanew.entities.players.playerendpoint.model.Hero;
+import com.inzynierkanew.entities.players.playerendpoint.model.LoginResponse;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
 import com.inzynierkanew.messageEndpoint.model.CollectionResponseMessageData;
@@ -69,6 +66,7 @@ public class RegisterActivity extends Activity {
 	private OnTouchListener unregisterListener = null;
 	
 	private Button registerButton;
+	private Button cancelButton;
 	private TextView nameView;
 	private TextView passwordView;
 	
@@ -78,6 +76,7 @@ public class RegisterActivity extends Activity {
 		setContentView(R.layout.activity_register);
 
 		registerButton = (Button) findViewById(R.id.registerButton);
+		cancelButton = (Button) findViewById(R.id.cancelButton);
 		nameView = (TextView) findViewById(R.id.name);
 		passwordView = (TextView) findViewById(R.id.password);
 
@@ -91,7 +90,9 @@ public class RegisterActivity extends Activity {
 								+ "Your application's PROJECT_NUMBER field is unset! You can change " + "it in GCMIntentService.java");
 					} else {
 						String name = nameView.getText().toString();
-						byte[] passwordBytes = passwordView.getText().toString().getBytes();
+						String password = passwordView.getText().toString();
+						byte[] passwordBytes = password.getBytes();
+						
 						ValidationResult result = RequestValidator.validateRegisterRequest(name, passwordBytes);
 						if(!result.valid){
 							showDialog(result.error);
@@ -101,10 +102,7 @@ public class RegisterActivity extends Activity {
 								Player player = new Player();
 								player.setName(name);
 								player.setPassword(RequestValidator.hashPassword(passwordBytes));
-								Hero hero = new Hero();
-								hero.setName(name);
-								hero.setLevel(1);
-								player.setHero(hero);
+								player.setHeroLevel(1);
 								GCMIntentService.register(getApplicationContext(), player);
 							} catch (Exception e) {
 								Log.e(RegisterActivity.class.getName(), "Exception received when attempting to register for Google Cloud "
@@ -145,6 +143,24 @@ public class RegisterActivity extends Activity {
 		};
 
 		registerButton.setOnTouchListener(registerListener);
+		
+		cancelButton.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction() & MotionEvent.ACTION_MASK) {
+				case MotionEvent.ACTION_DOWN:
+					Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+					startActivity(loginIntent);
+					finish();
+					return true;
+				case MotionEvent.ACTION_UP:
+					return true;
+				default:
+					return false;
+				}	
+			}
+		});
 
 		/*
 		 * build the messaging endpoint so we can access old messages via an
@@ -195,6 +211,9 @@ public class RegisterActivity extends Activity {
 					 */
 					if (curState == State.REGISTERING) {
 						updateState(State.REGISTERED);
+						Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+						startActivity(loginIntent);
+						finish();
 					} else {
 						updateState(State.UNREGISTERED);
 					}

@@ -1,10 +1,15 @@
 package com.inzynierkanew;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.googleapis.services.AbstractGoogleClient;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 
 import android.app.Activity;
 import android.util.Log;
@@ -131,5 +136,14 @@ public class CloudEndpointUtils {
 				Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
 			}
 		});
+	}
+	
+	public static Playerendpoint newPlayerEndpoint(){
+		Playerendpoint.Builder playerEndpointBuilder = new Playerendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return CloudEndpointUtils.updateBuilder(playerEndpointBuilder).build();
 	}
 }

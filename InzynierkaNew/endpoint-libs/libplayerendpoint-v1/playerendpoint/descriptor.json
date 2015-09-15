@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/playerendpoint/v1/20150913225134/java/1.18.0-rc/inzynierkanew.com-playerendpoint-v1-20150913225134-java-1.18.0-rc-sources.jar", 
-      "path": "inzynierkanew.com-playerendpoint-v1-20150913225134-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/playerendpoint/v1/20150915223647/java/1.18.0-rc/inzynierkanew.com-playerendpoint-v1-20150915223647-java-1.18.0-rc-sources.jar", 
+      "path": "inzynierkanew.com-playerendpoint-v1-20150915223647-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-09-13 22:51"
+      "timestamp": "2015-09-15 22:36"
     }, 
     {
-      "path": "inzynierkanew.com-playerendpoint-v1-20150913225134-java-1.18.0-rc.jar.properties", 
+      "path": "inzynierkanew.com-playerendpoint-v1-20150915223647-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "entities.players", 
   "language_version": "1.18.0-rc", 
   "id": "playerendpoint:v1", 
-  "revision": 20150913225134
+  "revision": 20150915223647
 }
