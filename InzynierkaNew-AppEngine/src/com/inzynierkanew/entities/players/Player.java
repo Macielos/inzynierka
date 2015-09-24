@@ -2,11 +2,16 @@ package com.inzynierkanew.entities.players;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
+import org.datanucleus.api.jpa.annotations.PersistenceAware;
+
+@PersistenceAware
 @Entity
 public class Player {
 	
@@ -20,16 +25,15 @@ public class Player {
 	
 	private String deviceRegistrationID;
 
-	private String deviceInformation;
-
 	private Date registrationTime;
 	
 	private String sessionId;
 	
 	private Date lastLogin;
 	
-	private int heroLevel;
-
+	@OneToOne(cascade=CascadeType.ALL)
+	private Hero hero;
+	
 	public Long getId() {
 		return id;
 	}
@@ -58,14 +62,6 @@ public class Player {
 		this.deviceRegistrationID = deviceRegistrationID;
 	}
 
-	public String getDeviceInformation() {
-		return deviceInformation;
-	}
-
-	public void setDeviceInformation(String deviceInformation) {
-		this.deviceInformation = deviceInformation;
-	}
-
 	public Date getRegistrationTime() {
 		return registrationTime;
 	}
@@ -90,13 +86,12 @@ public class Player {
 		this.lastLogin = lastLogin;
 	}
 
-	public int getHeroLevel() {
-		return heroLevel;
+	public Hero getHero() {
+		return hero;
 	}
 
-	public void setHeroLevel(int heroLevel) {
-		this.heroLevel = heroLevel;
+	public void setHero(Hero hero) {
+		this.hero = hero;
 	}
-
 	
 }

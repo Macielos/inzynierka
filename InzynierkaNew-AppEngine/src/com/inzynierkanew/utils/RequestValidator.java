@@ -9,7 +9,7 @@ import org.apache.juli.logging.LogFactory;
 public class RequestValidator {
 	
 	private static final int MIN_NAME_LENGTH = 3;
-	private static final int MIN_PASSWORD_LENGTH = 8;
+	private static final int MIN_PASSWORD_LENGTH = 3;
 	
 	private static Log log = LogFactory.getLog(RequestValidator.class);
 	
@@ -21,10 +21,10 @@ public class RequestValidator {
 			return new ValidationResult(false, "Password cannot be empty");
 		}
 		if(name.length() < MIN_NAME_LENGTH){
-			return new ValidationResult(false, "Name must contains at least "+MIN_NAME_LENGTH+" characters");
+			return new ValidationResult(false, "Name must contain at least "+MIN_NAME_LENGTH+" characters");
 		}
 		if(password.length < MIN_PASSWORD_LENGTH){
-			return new ValidationResult(false, "Password must contains at least "+MIN_NAME_LENGTH+" characters");
+			return new ValidationResult(false, "Password must contain at least "+MIN_PASSWORD_LENGTH+" characters");
 		}
 		return new ValidationResult(true, null);
 	}

@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-//@Entity
+@Entity
 public class UnitType {
 	
 	private static final long serialVersionUID = -4005051003659282302L;

@@ -5,14 +5,14 @@
 -keep class com.inzynierkanew.GCMIntentService { <init>(...); }
 
 # view AndroidManifest.xml #generated:35
--keep class com.inzynierkanew.GameActivity { <init>(...); }
+-keep class com.inzynierkanew.activities.GameActivity { <init>(...); }
 
 # view AndroidManifest.xml #generated:34
--keep class com.inzynierkanew.LoginActivity { <init>(...); }
+-keep class com.inzynierkanew.activities.LoginActivity { <init>(...); }
 
 # view AndroidManifest.xml #generated:14
--keep class com.inzynierkanew.MainActivity { <init>(...); }
+-keep class com.inzynierkanew.activities.MainActivity { <init>(...); }
 
 # view AndroidManifest.xml #generated:33
--keep class com.inzynierkanew.RegisterActivity { <init>(...); }
+-keep class com.inzynierkanew.activities.RegisterActivity { <init>(...); }
 

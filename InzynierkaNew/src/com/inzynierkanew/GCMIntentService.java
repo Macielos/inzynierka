@@ -1,7 +1,6 @@
 package com.inzynierkanew;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +8,11 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.inzynierkanew.deviceinfoendpoint.Deviceinfoendpoint;
-import com.inzynierkanew.deviceinfoendpoint.model.DeviceInfo;
+import com.inzynierkanew.activities.RegisterActivity;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
+import com.inzynierkanew.utils.CloudEndpointUtils;
 
 /**
  * This class is started up as a service of the Android application. It listens
@@ -39,7 +34,6 @@ import com.inzynierkanew.entities.players.playerendpoint.model.Player;
  * information.
  */
 public class GCMIntentService extends GCMBaseIntentService {
-	private final Deviceinfoendpoint endpoint;
 	private final Playerendpoint playerEndpoint;
 
 	/*
@@ -47,9 +41,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * http://developers.google.com/eclipse/docs/cloud_endpoints for more
 	 * information.
 	 */
-	protected static final String PROJECT_NUMBER = "891637358470";
+	public static final String PROJECT_NUMBER = "891637358470";
 	
-	// TODO wymyslic lepsze rozwiazanie jak przazywac playera miedzy register a onRegistered, bo to jest thread-unsafe
+	// TODO wymyslic lepsze rozwiazanie jak przazywac playera miedzy register a onRegistered, bo to jest thread-unsafe. Jakaœ kolejka?
 	private static Player playerForRegistration;
 
 	/**
@@ -77,19 +71,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	public GCMIntentService() {
 		super(PROJECT_NUMBER);
-		Deviceinfoendpoint.Builder endpointBuilder = new Deviceinfoendpoint.Builder(AndroidHttp.newCompatibleTransport(),
-				new JacksonFactory(), new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) {
-					}
-				});
-		endpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
-		
-		Playerendpoint.Builder playerEndpointBuilder = new Playerendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) {
-					}
-				});
-		playerEndpoint = CloudEndpointUtils.updateBuilder(playerEndpointBuilder).build();
+		playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
 	}
 
 	/**
@@ -175,11 +157,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 			//}
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),
-					"Exception received when attempting to register with server at " + endpoint.getRootUrl(), e);
+					"Exception received when attempting to register with server at " + playerEndpoint.getRootUrl(), e);
 
 			sendNotificationIntent(context, "1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
 					+ "2) Registration with Endpoints Server...FAILED!\n\n"
-					+ "Unable to register your device with your Cloud Endpoints server running at " + endpoint.getRootUrl()
+					+ "Unable to register your device with your Cloud Endpoints server running at " + playerEndpoint.getRootUrl()
 					+ ". Either your Cloud Endpoints server is not deployed to App Engine, or "
 					+ "your settings need to be changed to run against a local instance "
 					+ "by setting LOCAL_ANDROID_RUN to 'true' in CloudEndpointUtils.java.", true, true);
@@ -188,8 +170,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		sendNotificationIntent(context, "1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
 				+ "2) Registration with Endpoints Server...SUCCEEDED!\n\n" + "Device registration with Cloud Endpoints Server running at  "
-				+ endpoint.getRootUrl() + " succeeded!\n\n" + "To send a message to this device, "
-				+ "open your browser and navigate to the sample application at " + getWebSampleUrl(endpoint.getRootUrl()), false, true);
+				+ playerEndpoint.getRootUrl() + " succeeded!\n\n" + "To send a message to this device, "
+				+ "open your browser and navigate to the sample application at " + getWebSampleUrl(playerEndpoint.getRootUrl()), false, true);
 	}
 
 	/**
@@ -205,23 +187,23 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if (registrationId != null && registrationId.length() > 0) {
 
 			try {
-				endpoint.removeDeviceInfo(registrationId).execute();
+				playerEndpoint.removePlayerByRegistrationId(registrationId).execute();
 			} catch (IOException e) {
 				Log.e(GCMIntentService.class.getName(),
-						"Exception received when attempting to unregister with server at " + endpoint.getRootUrl(), e);
+						"Exception received when attempting to unregister with server at " + playerEndpoint.getRootUrl(), e);
 				sendNotificationIntent(
 						context,
 						"1) De-registration with Google Cloud Messaging....SUCCEEDED!\n\n"
 								+ "2) De-registration with Endpoints Server...FAILED!\n\n"
 								+ "We were unable to de-register your device from your Cloud " + "Endpoints server running at "
-								+ endpoint.getRootUrl() + "." + "See your Android log for more information.", true, true);
+								+ playerEndpoint.getRootUrl() + "." + "See your Android log for more information.", true, true);
 				return;
 			}
 		}
 
 		sendNotificationIntent(context, "1) De-registration with Google Cloud Messaging....SUCCEEDED!\n\n"
 				+ "2) De-registration with Endpoints Server...SUCCEEDED!\n\n"
-				+ "Device de-registration with Cloud Endpoints server running at  " + endpoint.getRootUrl() + " succeeded!", false, true);
+				+ "Device de-registration with Cloud Endpoints server running at  " + playerEndpoint.getRootUrl() + " succeeded!", false, true);
 	}
 
 	/**

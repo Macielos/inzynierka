@@ -6,6 +6,7 @@ public class LoginResponse {
 	private String sessionId;
 	
 	public LoginResponse() {
+		sessionId = null;
 	}
 
 	public LoginResponse(String sessionId) {

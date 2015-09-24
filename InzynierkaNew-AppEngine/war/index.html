@@ -82,9 +82,9 @@ if (window.location.hostname == 'localhost'
     $("#alertArea").show();
   }
   
-  // This method loads the deviceinfoendpoint and messageEndpoint libraries
+  // This method loads the playerendpoint and messageEndpoint libraries
   function loadGapi() {
-    gapi.client.load('deviceinfoendpoint', 'v1', function() {
+    gapi.client.load('playerendpoint', 'v1', function() {
       updateRegisteredDeviceTable();
     });
     
@@ -102,8 +102,8 @@ if (window.location.hostname == 'localhost'
     return {isError: false};
   }
   
-  function generateRegDeviceTable(deviceInfoItems) {
-    items = deviceInfoItems.items;
+  function generateRegDeviceTable(playerItems) {
+    items = playerItems.items;
   
     if (!items || items.length == 0) {
       var htmlString = "<thead>"
@@ -116,15 +116,15 @@ if (window.location.hostname == 'localhost'
       var htmlString = "<thead>" + "<tr>"
           + "<th style='min-width:150px'>Device Name</th>"
           + "<th>Registration Id</th>"
-          + "<th>Timestamp</th>" 
+          + "<th>Registration date</th>" 
           + "</tr>" + "</thead>"          
           + "<tbody>";
           
       for (var i = 0; i < items.length; i++) {
         item = items[i];
         htmlString += "<tr>";
-        if (item.deviceInformation) {
-          htmlString += "<td class='devicenameCol'>" + item.deviceInformation
+        if (item.name) {
+          htmlString += "<td class='devicenameCol'>" + item.name
               + "</td>";
         } else {
           htmlString += "<td class='devicenameCol'>" + "(unknown)"
@@ -139,11 +139,8 @@ if (window.location.hostname == 'localhost'
         }
         
         
-        if (item.timestamp) {
-          var timestampNumberic = new Number(item.timestamp);
-          var date = new Date(timestampNumberic);
-
-          
+        if (item.registrationTime) {
+          var date = item.registrationTime;
             htmlString += "<td>" + date.toString() + "</td>";
           } else {
             htmlString += "<td>" + "(unknown)"
@@ -159,17 +156,17 @@ if (window.location.hostname == 'localhost'
   }
   
   function updateRegisteredDeviceTable() {
-    gapi.client.deviceinfoendpoint
-        .listDeviceInfo()
+    gapi.client.playerendpoint
+        .listPlayer()
         .execute(
-            function(deviceInfoItems, deviceInfoItemsRaw) {
-              errorResult = checkErrorResponse(deviceInfoItems, deviceInfoItemsRaw);
+            function(playerItems, playerItemsRaw) {
+              errorResult = checkErrorResponse(playerItems, playerItemsRaw);
               if (errorResult.isError) {
                 showError("There was a problem contacting the server when attempting to list the registered devices. " 
                     + "Please refresh the page and try again in a short while. Here's the error information:<br/> "
                     + errorResult.errorMessage);
               } else {
-                generateRegDeviceTable(deviceInfoItems);              
+                generateRegDeviceTable(playerItems);              
               }
             });
   }
@@ -201,58 +198,58 @@ if (window.location.hostname == 'localhost'
 </head>
 
 <body>
- <div class="container">
-  <h1>Cloud Endpoints Starter Template</h1>
-  <p style="">This sample lists all of your registered Android
-   devices by accessing the Cloud Endpoint exposed by your App Engine
-   App.</p>
-  <p>Use the form below to send a message (via Cloud Endpoints) to
-   your App Engine Server, which will then send a message (via Cloud
-   Messaging) to all of your registered devices.</p>
-  <p>
-   Check out the <a
-    href="http://developers.google.com/eclipse/docs/cloud_endpoints"
-    target="_blank">docs</a> for more information.
-  </p>
+	<div class="container">
+		<h1>Cloud Endpoints Starter Template</h1>
+		<p style="">This sample lists all of your registered Android
+			devices by accessing the Cloud Endpoint exposed by your App Engine
+			App.</p>
+		<p>Use the form below to send a message (via Cloud Endpoints) to
+			your App Engine Server, which will then send a message (via Cloud
+			Messaging) to all of your registered devices.</p>
+		<p>
+			Check out the <a
+				href="http://developers.google.com/eclipse/docs/cloud_endpoints"
+				target="_blank">docs</a> for more information.
+		</p>
 
-  <div class="regDevicesSection">
-   <h3>Registered Devices</h3>
-   <table class="table table-striped" id="regDevicesTable">
-    <thead>
-     <tr>
-      <th>Searching for registered devices...</th>
-     </tr>
-    </thead>
-   </table>
-  </div>
+		<div class="regDevicesSection">
+			<h3>Registered Devices</h3>
+			<table class="table table-striped" id="regDevicesTable">
+				<thead>
+					<tr>
+						<th>Searching for registered devices...</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
 
-  <div class="form-sendmessage">
-   <input class="input-block-level" type="text" id="inputMessage"
-    placeholder="Message">
-   <button id="sendButton" class="btn btn-large btn-primary btn-block">Send</button>
-  </div>
+		<div class="form-sendmessage">
+			<input class="input-block-level" type="text" id="inputMessage"
+				placeholder="Message">
+			<button id="sendButton" class="btn btn-large btn-primary btn-block">Send</button>
+		</div>
 
-  <div id="alertArea" class="alert alertStyle">
-   <button type="button" class="close">&times;</button>
-   <div id="alertContentArea"></div>
-  </div>
+		<div id="alertArea" class="alert alertStyle">
+			<button type="button" class="close">&times;</button>
+			<div id="alertContentArea"></div>
+		</div>
 
-  <div id="successArea" class="alert alertStyle alert-success fade in">
-   Message Sent!</div>
- </div>
- <div class='container navbar navbar-fixed-bottom'>
-  <p class='text-error'>
-   <small>NOTE: This page is not protected by authentication! If
-    you decide to deploy this application, anyone will be able to access
-    it! Information on configuring auth can be found <a
-    href="https://developers.google.com/appengine/articles/auth"
-    target="_blank">here.</a>
-   </small>
-  </p>
- </div>
+		<div id="successArea" class="alert alertStyle alert-success fade in">
+			Message Sent!</div>
+	</div>
+	<div class='container navbar navbar-fixed-bottom'>
+		<p class='text-error'>
+			<small>NOTE: This page is not protected by authentication! If
+				you decide to deploy this application, anyone will be able to access
+				it! Information on configuring auth can be found <a
+				href="https://developers.google.com/appengine/articles/auth"
+				target="_blank">here.</a>
+			</small>
+		</p>
+	</div>
 
- <!-- JavaScript -->
- <script src="https://apis.google.com/js/client.js?onload=loadGapi">
+	<!-- JavaScript -->
+	<script src="https://apis.google.com/js/client.js?onload=loadGapi">
   {
     "client": {},
       "googleapis.config": {
@@ -260,10 +257,10 @@ if (window.location.hostname == 'localhost'
       }
   }
   </script>
- <script src="js/jquery-1.9.0.min.js"></script>
- <script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery-1.9.0.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 
- <script type="text/javascript">
+	<script type="text/javascript">
     $("#sendButton").click(sendMessage);
     $("#alertArea").hide();
     $("#successArea").hide();

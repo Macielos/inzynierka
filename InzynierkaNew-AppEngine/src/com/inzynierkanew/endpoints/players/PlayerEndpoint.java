@@ -1,16 +1,5 @@
 package com.inzynierkanew.endpoints.players;
 
-import com.inzynierkanew.EMF;
-import com.inzynierkanew.entities.players.Player;
-import com.inzynierkanew.utils.RequestValidator;
-import com.inzynierkanew.wrappers.LoginResponse;
-import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.ApiNamespace;
-import com.google.api.server.spi.response.CollectionResponse;
-import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
-
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,11 +7,23 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-import org.mortbay.log.Log;
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.response.CollectionResponse;
+import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
+import com.inzynierkanew.entities.map.Land;
+import com.inzynierkanew.entities.players.Hero;
+import com.inzynierkanew.entities.players.Player;
+import com.inzynierkanew.utils.EMF;
+import com.inzynierkanew.utils.RequestValidator;
+import com.inzynierkanew.world.WorldGeneratorFactory;
+import com.inzynierkanew.wrappers.LoginResponse;
 
 @Api(name = "playerendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players"))
 public class PlayerEndpoint {
@@ -62,8 +63,7 @@ public class PlayerEndpoint {
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Player obj : execute)
-				;
+			for (Player obj : execute);
 		} finally {
 			mgr.close();
 		}
@@ -104,6 +104,11 @@ public class PlayerEndpoint {
 			if (containsPlayer(player)) {
 				throw new EntityExistsException("Object already exists");
 			}
+			WorldGeneratorFactory.fireWorldGeneration();
+			Land startingLand = WorldGeneratorFactory.findLandForNewPlayer();
+			Long startingLandId = startingLand.getId();
+			Hero hero = player.getHero();
+			hero.setCurrentLandId(startingLandId);
 			mgr.persist(player);
 		} finally {
 			mgr.close();
@@ -150,35 +155,79 @@ public class PlayerEndpoint {
 		}
 	}
 	
-	@ApiMethod(name = "findPlayerByName")
-	public Player findPlayerByName(@Named("name") String name){
+	@ApiMethod(name = "removePlayerByRegistrationId")
+	public void removePlayerByRegistrationId(@Named("id") String id) {
 		EntityManager mgr = getEntityManager();
-		List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where name = ?").setParameter(0, name).getResultList();
-		if(players.isEmpty()){
-			return null;	
+		try {
+			Player player = findPlayerByRegistrationId(id);
+			if(player!=null){
+				mgr.remove(player);
+			}
+		} finally {
+			mgr.close();
 		}
-		return players.get(0);
+	}
+	
+	private Player findPlayerByRegistrationId(@Named("id") String id){
+		EntityManager mgr = getEntityManager();
+		try {
+			List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.deviceRegistrationId = '"+id+"'").getResultList();
+			if(players.isEmpty()){
+				return null;
+			}
+			return players.get(0);
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	@ApiMethod(name = "findPlayerBySessionId")
+	public Player findPlayerBySessionId(@Named("id") String id){
+		EntityManager mgr = getEntityManager();
+		try {
+			List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.sessionId = '"+id+"'").getResultList();
+			if(players.isEmpty()){
+				return null;
+			}
+			return players.get(0);
+		} finally {
+			mgr.close();
+		}
 	}
 	
 	@ApiMethod(name = "authenticatePlayer")
 	public LoginResponse authenticatePlayer(@Named("name")String name, @Named("password")String password){
-		EntityManager mgr = getEntityManager();
-		List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.name = '"+name+"'").getResultList();
-		if(players.isEmpty()){
-			return new LoginResponse();
+		EntityManager mgr = null;
+		String sessionId = null;
+		try {
+			mgr = getEntityManager();
+			List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.name = '"+name+"'").getResultList();
+			if(players.isEmpty()){
+				return new LoginResponse();
+			}
+			Player player = players.get(0);
+			
+			if(!player.getPassword().equals(RequestValidator.hashPassword(password.getBytes()))){
+				return new LoginResponse();
+			}
+			
+			sessionId = UUID.randomUUID().toString();
+			Date loginTime = new Date();
+			
+			player.setSessionId(sessionId);
+			player.setLastLogin(loginTime);
+			
+			mgr.merge(player);
+		} finally {
+			mgr.close();
 		}
-		Player player = players.get(0);
-		if(!player.getPassword().equals(RequestValidator.hashPassword(password.getBytes()))){
-			return new LoginResponse();
+		//TODO znalezc rozwiazanie bez sleepa
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		String sessionId = UUID.randomUUID().toString();
-		Date loginTime = new Date();
-		
-		player.setSessionId(sessionId);
-		player.setLastLogin(loginTime);
-		mgr.merge(player);
-
 		return new LoginResponse(sessionId);
 	}
 

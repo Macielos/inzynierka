@@ -11,14 +11,14 @@
    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
-        <activity android:label="@string/app_name" android:name=".MainActivity">
+        <activity android:label="@string/app_name" android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name=".GCMIntentService"/>
+        <service android:name="com.inzynierkanew.GCMIntentService"/>
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
@@ -30,9 +30,9 @@
             </intent-filter>
         </receiver>
     
-        <activity android:launchMode="singleTop" android:name=".RegisterActivity"/>
-        <activity android:launchMode="singleTop" android:name=".LoginActivity"/>
-        <activity android:launchMode="singleTop" android:name=".GameActivity"/>
+        <activity android:launchMode="singleTop" android:name=".activities.RegisterActivity"/>
+        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.activities.LoginActivity"/>
+        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.activities.GameActivity"/>
 </application>
 
 </manifest>

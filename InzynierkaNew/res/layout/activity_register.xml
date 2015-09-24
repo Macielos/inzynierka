@@ -6,6 +6,12 @@
     android:gravity="center_vertical|center_horizontal|center"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/enterName"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="Your name" />
+
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
@@ -14,10 +20,10 @@
         android:ems="10" />
 
     <TextView
-        android:id="@+id/msgView"
-        android:layout_width="fill_parent"
+        android:id="@+id/enterPassword"
+        android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:text="Password" />
 
     <EditText
         android:id="@+id/password"

@@ -27,23 +27,39 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "playerendpoint.authenticatePlayer" : {
-      "path" : "authenticatePlayer/{name}/{password}",
-      "httpMethod" : "POST",
+    "playerendpoint.updatePlayer" : {
+      "path" : "player",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "playerendpoint.listPlayer" : {
+      "path" : "player",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer",
       "request" : {
         "parameters" : {
-          "name" : {
+          "cursor" : {
             "type" : "string",
-            "required" : true
+            "required" : false
           },
-          "password" : {
-            "type" : "string",
-            "required" : true
+          "limit" : {
+            "type" : "int32",
+            "required" : false
           }
         },
         "body" : "empty"
@@ -52,18 +68,34 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "playerendpoint.findPlayerByName" : {
-      "path" : "findPlayerByName/{name}",
+    "playerendpoint.insertPlayer" : {
+      "path" : "player",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerByName",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.insertPlayer",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "playerendpoint.getPlayer" : {
+      "path" : "player/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.getPlayer",
       "request" : {
         "parameters" : {
-          "name" : {
-            "type" : "string",
+          "id" : {
+            "type" : "int64",
             "required" : true
           }
         },
@@ -94,50 +126,39 @@
         "body" : "empty"
       }
     },
-    "playerendpoint.insertPlayer" : {
-      "path" : "player",
+    "playerendpoint.removePlayerByRegistrationId" : {
+      "path" : "playerbyregistrationid/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayerByRegistrationId",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "playerendpoint.findPlayerBySessionId" : {
+      "path" : "findPlayerBySessionId/{id}",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.insertPlayer",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "playerendpoint.updatePlayer" : {
-      "path" : "player",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "playerendpoint.getPlayer" : {
-      "path" : "player/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.getPlayer",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerBySessionId",
       "request" : {
         "parameters" : {
           "id" : {
-            "type" : "int64",
+            "type" : "string",
             "required" : true
           }
         },
@@ -147,23 +168,23 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "playerendpoint.listPlayer" : {
-      "path" : "player",
-      "httpMethod" : "GET",
+    "playerendpoint.authenticatePlayer" : {
+      "path" : "authenticatePlayer/{name}/{password}",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer",
       "request" : {
         "parameters" : {
-          "cursor" : {
+          "name" : {
             "type" : "string",
-            "required" : false
+            "required" : true
           },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
+          "password" : {
+            "type" : "string",
+            "required" : true
           }
         },
         "body" : "empty"
@@ -175,15 +196,6 @@
   },
   "descriptor" : {
     "schemas" : {
-      "LoginResponse" : {
-        "id" : "LoginResponse",
-        "type" : "object",
-        "properties" : {
-          "sessionId" : {
-            "type" : "string"
-          }
-        }
-      },
       "Player" : {
         "id" : "Player",
         "type" : "object",
@@ -201,9 +213,6 @@
           "deviceRegistrationID" : {
             "type" : "string"
           },
-          "deviceInformation" : {
-            "type" : "string"
-          },
           "registrationTime" : {
             "type" : "string",
             "format" : "date-time"
@@ -215,8 +224,27 @@
             "type" : "string",
             "format" : "date-time"
           },
-          "heroLevel" : {
+          "hero" : {
+            "$ref" : "Hero"
+          }
+        }
+      },
+      "Hero" : {
+        "id" : "Hero",
+        "type" : "object",
+        "properties" : {
+          "x" : {
             "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "level" : {
+            "type" : "integer"
+          },
+          "currentLandId" : {
+            "type" : "string",
+            "format" : "int64"
           }
         }
       },
@@ -234,22 +262,19 @@
             "type" : "string"
           }
         }
+      },
+      "LoginResponse" : {
+        "id" : "LoginResponse",
+        "type" : "object",
+        "properties" : {
+          "sessionId" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer" : {
-        "response" : {
-          "$ref" : "LoginResponse"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerByName" : {
-        "response" : {
-          "$ref" : "Player"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayer" : {
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.insertPlayer" : {
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer" : {
         "request" : {
           "$ref" : "Player"
         },
@@ -257,7 +282,12 @@
           "$ref" : "Player"
         }
       },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer" : {
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Player"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.insertPlayer" : {
         "request" : {
           "$ref" : "Player"
         },
@@ -270,9 +300,18 @@
           "$ref" : "Player"
         }
       },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer" : {
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayer" : {
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayerByRegistrationId" : {
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerBySessionId" : {
         "response" : {
-          "$ref" : "CollectionResponse_Player"
+          "$ref" : "Player"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer" : {
+        "response" : {
+          "$ref" : "LoginResponse"
         }
       }
     }

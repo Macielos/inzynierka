@@ -1,0 +1,341 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://myapp.appspot.com/_ah/api",
+  "name" : "landendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://myapp.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "inzynierkanew.com",
+  "ownerName" : "inzynierkanew.com",
+  "packagePath" : "entities.map",
+  "methods" : {
+    "landendpoint.listLand" : {
+      "path" : "land",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.listLand",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.getLand" : {
+      "path" : "land/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.getLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.findNeighbours" : {
+      "path" : "findNeighbours/{cursor}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findNeighbours",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.insertLand" : {
+      "path" : "land",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.insertLand",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.updateLand" : {
+      "path" : "land",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.removeLand" : {
+      "path" : "land/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "CollectionResponse_Land" : {
+        "id" : "CollectionResponse_Land",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Land"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Land" : {
+        "id" : "Land",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "town" : {
+            "$ref" : "Town"
+          },
+          "passages" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Passage"
+            }
+          },
+          "dungeons" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Dungeon"
+            }
+          },
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "width" : {
+            "type" : "integer"
+          },
+          "height" : {
+            "type" : "integer"
+          },
+          "fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "int64"
+            }
+          }
+        }
+      },
+      "Town" : {
+        "id" : "Town",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Key" : {
+        "id" : "Key",
+        "type" : "object",
+        "properties" : {
+          "kind" : {
+            "type" : "string"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          },
+          "namespace" : {
+            "type" : "string"
+          },
+          "complete" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Passage" : {
+        "id" : "Passage",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "nextLandId" : {
+            "type" : "string",
+            "format" : "int64"
+          }
+        }
+      },
+      "Dungeon" : {
+        "id" : "Dungeon",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "int64"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.inzynierkanew.endpoints.map.LandEndpoint.listLand" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.getLand" : {
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findNeighbours" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.insertLand" : {
+        "request" : {
+          "$ref" : "Land"
+        },
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand" : {
+        "request" : {
+          "$ref" : "Land"
+        },
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand" : {
+      }
+    }
+  }
+}
