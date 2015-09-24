@@ -101,5 +101,12 @@ public class Land {
 		this.height = height;
 	}
 	
+	public int getRightBorderX(){
+		return x+width-1;
+	}
+	
+	public int getBottomBorderY(){
+		return y+height-1;
+	}
 	
 }
