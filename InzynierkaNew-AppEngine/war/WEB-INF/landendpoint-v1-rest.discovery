@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/zNwBDDalWbnj1V6XQCn9Ia2OxR4\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/iEVc9Ck20rRMlnIgz0lzsEJNl0c\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -110,27 +110,6 @@
     }
    }
   },
-  "EmptyField": {
-   "id": "EmptyField",
-   "type": "object",
-   "properties": {
-    "key": {
-     "$ref": "Key"
-    },
-    "type": {
-     "type": "string",
-     "format": "int64"
-    },
-    "x": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "y": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
   "Key": {
    "id": "Key",
    "type": "object",
@@ -163,6 +142,10 @@
    "id": "Land",
    "type": "object",
    "properties": {
+    "bottomBorderY": {
+     "type": "integer",
+     "format": "int32"
+    },
     "dungeons": {
      "type": "array",
      "items": {
@@ -172,15 +155,13 @@
     "fields": {
      "type": "array",
      "items": {
-      "$ref": "EmptyField"
-     }
-    },
-    "fieldsNew": {
-     "type": "array",
-     "items": {
       "type": "string",
       "format": "int64"
      }
+    },
+    "height": {
+     "type": "integer",
+     "format": "int32"
     },
     "id": {
      "type": "string",
@@ -192,8 +173,24 @@
       "$ref": "Passage"
      }
     },
+    "rightBorderX": {
+     "type": "integer",
+     "format": "int32"
+    },
     "town": {
      "$ref": "Town"
+    },
+    "width": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "x": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "y": {
+     "type": "integer",
+     "format": "int32"
     }
    }
   },
@@ -248,6 +245,28 @@
   }
  },
  "methods": {
+  "findNeighbours": {
+   "id": "landendpoint.findNeighbours",
+   "path": "findNeighbours/{cursor}",
+   "httpMethod": "POST",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "cursor"
+   ],
+   "response": {
+    "$ref": "CollectionResponse_Land"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "getLand": {
    "id": "landendpoint.getLand",
    "path": "land/{id}",

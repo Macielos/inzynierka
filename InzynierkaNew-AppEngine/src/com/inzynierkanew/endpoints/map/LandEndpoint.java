@@ -1,6 +1,5 @@
 package com.inzynierkanew.endpoints.map;
 
-import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,16 +9,14 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+
+import org.datanucleus.store.appengine.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.Dungeon;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.entities.map.Passage;
@@ -102,23 +99,14 @@ public class LandEndpoint {
 		if(land==null){
 			return null;
 		}
-		List<Long> passageIds = new ArrayList<>(land.getPassages().size());
+
+		/*List<Long> passageIds = new ArrayList<>(land.getPassages().size());
 		for(Passage passage: land.getPassages()){
 			passageIds.add(passage.getNextLandId());
 		}
 		
-		List<Land> neighbours = null;
-		try {
-			mgr = getEntityManager();
-			CriteriaBuilder builder = mgr.getCriteriaBuilder();
-			CriteriaQuery criteriaQuery = builder.createQuery(Land.class);
-			criteriaQuery.select(criteriaQuery.from(Land.class));
-			neighbours = mgr.createQuery(criteriaQuery).getResultList();
-			for (Land obj : neighbours);
-		} finally {
-			mgr.close();
-		}
-		return CollectionResponse.<Land> builder().setItems(neighbours)./*setNextPageToken(cursorString).*/build();
+		List<Land> neighbours = null;*/
+		return listLand(null, null);
 	}
 	
 	/**

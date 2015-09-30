@@ -17,16 +17,16 @@ public class WorldGenerationTest {
 	
 	@org.junit.Test
 	public void testLandGeneration(){
-		//while(true){
+		while(true){
 			WorldGenerator generator = new WorldGenerator();
 			generator.generateLand();
-	/*		try {
+			try {
 				Thread.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
 	
 	//@org.junit.Test

@@ -27,7 +27,7 @@ import com.inzynierkanew.utils.WorldGenerationUtils;
 public class WorldGenerator {
 
 	// CONSTANTS
-	private static final double INITIAL_CONTINUE_RATE = 1.4;
+	private static final double INITIAL_CONTINUE_RATE = 7.0;
 	private static final double CONTINUE_RATE_DROP = 0.1;
 	private static final double START_FROM_PASSAGE_BONUS = 1.0;
 
@@ -449,7 +449,7 @@ public class WorldGenerator {
 
 	private void carveRoads() {
 		selectCrossRoads();
-		log.info(WorldGenerationUtils.mapToString(mapSegment));
+		//log.info(WorldGenerationUtils.mapToString(mapSegment));
 		connectCrossRoads();
 		fillInRoadsOnMap();
 
@@ -465,18 +465,37 @@ public class WorldGenerator {
 
 	private void selectCrossRoads() {
 		Point point;
-		for (int i = 0; i < mapSegment[0].length; i = i + CROSSROAD_MIN_GAP + random.nextInt(CROSSROAD_GAP_DIFF)) {
-			for (int j = 0; j < mapSegment.length; j = j + CROSSROAD_MIN_GAP + random.nextInt(CROSSROAD_GAP_DIFF)) {
-				if (mapSegment[j][i] == NON_PASSABLE) {
-					point = new Point(i, j);
+//		for (int i = 0; i < mapSegment[0].length; i = i + CROSSROAD_MIN_GAP + random.nextInt(CROSSROAD_GAP_DIFF)) {
+//			for (int j = 0; j < mapSegment.length; j = j + CROSSROAD_MIN_GAP + random.nextInt(CROSSROAD_GAP_DIFF)) {
+//				if (mapSegment[j][i] == NON_PASSABLE) {
+//					point = new Point(i, j);
+//					if (!borderPoints.contains(point)) {
+//						crossRoads.add(new Point(i, j));
+//						// temp
+//						mapSegment[j][i] = 9;
+//					}
+//				}
+//			}
+//		}
+
+		int x; 
+		int y;
+		for (int i = 0; i < mapSegment[0].length; i = i + CROSSROAD_MIN_GAP) {
+			for (int j = 0; j < mapSegment.length; j = j + CROSSROAD_MIN_GAP) {
+				x = i + random.nextInt(CROSSROAD_GAP_DIFF);
+				y = j + random.nextInt(CROSSROAD_GAP_DIFF);	
+				if (isFieldValid(x, y)) {
+					point = new Point(x, y);
 					if (!borderPoints.contains(point)) {
-						crossRoads.add(new Point(i, j));
+						crossRoads.add(point);
 						// temp
-						mapSegment[j][i] = ROAD;
+						mapSegment[y][x] = 9;
 					}
 				}
 			}
 		}
+		
+		
 		if (town != null) {
 			crossRoads.add(town);
 		}
@@ -485,36 +504,48 @@ public class WorldGenerator {
 
 	private void connectCrossRoads() {
 		int i = CROSSROAD_MIN_GAP;
-		while (connectCrossRoadsInternal(i++));
+		GraphBuilder graphBuilder = new GraphBuilder(crossRoads);
+		while (connectCrossRoadsInternal(graphBuilder, i++));
+		if(i > mapSegment.length){
+			log.info("Connecting roads did not stop!!!");
+			log.info(WorldGenerationUtils.mapToString(mapSegment));
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		edges = graphBuilder.getEdgesIfConnected();
 	}
 
-	private boolean connectCrossRoadsInternal(int maxDistance) {
+	private boolean connectCrossRoadsInternal(GraphBuilder graphBuilder, int maxDistance) {
 		Point[] crossRoadArray = crossRoads.toArray(new Point[crossRoads.size()]);
 		GraphEdge edge;
 		log.info("connectCrossRoadsInternal - iteration for max distance = " + maxDistance);
-		boolean continueConnecting = false;
 		for (int i = 0; i < crossRoadArray.length; ++i) {
 			for (int j = i + 1; j < crossRoadArray.length; ++j) {
 				if (inRange(crossRoadArray[i], crossRoadArray[j], maxDistance)
-						&& (!passages.contains(crossRoadArray[i]) || !passages.contains(crossRoadArray[j]))) {
-					edge = new GraphEdge(crossRoadArray[i], crossRoadArray[j]);
-					if (!edges.contains(edge) && !edges.contains(new GraphEdge(crossRoadArray[j], crossRoadArray[i]))) {
-						edges.add(edge);
-						continueConnecting = true;
-					}
+						&& (!borderPoints.contains(crossRoadArray[i]) || passages.contains(crossRoadArray[j]))) {
+					graphBuilder.addConnection(crossRoadArray[i], crossRoadArray[j]);
 				}
 			}
 		}
-		return continueConnecting;
+		return !graphBuilder.isConnected();
 	}
 
 	private void fillInRoadsOnMap() {
-		//printGraph();
+		printGraph();
+		log.info("Crossroads:");
+		for (Point point: crossRoads){
+			log.info(point);
+		}
 		for (GraphEdge edge : edges) {
 			log.info(edge);
 			carveRoad(edge);
-			log.info(WorldGenerationUtils.mapToString(mapSegment, true));
+			//log.info(WorldGenerationUtils.mapToString(mapSegment, true));
 		}
+		log.info(WorldGenerationUtils.mapToString(mapSegment, true));
 		
 	}
 
@@ -523,30 +554,71 @@ public class WorldGenerator {
 		int y = edge.point1.y;
 		int finishX = edge.point2.x;
 		int finishY = edge.point2.y;
+		int diffX;
+		int diffY;
+		boolean moving;
+		log.info("Carving road from "+edge.point1+" to "+edge.point2);
 		while (x != finishX || y != finishY && withinMapSegment(x, y)) {
 			if (mapSegment[y][x] == EMPTY) {
 				log.warn("Road has gone to empty space! Point is: (" + x + ", " + y + ")");
+				//break;
 			}
 			if (mapSegment[y][x] == EXISTING_LAND) {
 				log.warn("Road has gone to an existing land! Point is: (" + x + ", " + y + ")");
+				//break;
 			}
 			if (mapSegment[y][x] == ROAD) {
+				//break;
 				//log.warn("Road has gone to an existing road! Point is: (" + x + ", " + y + ")");
 			}
-			mapSegment[y][x] = ROAD;
-			if (x < finishX) {
-				++x;
-			} else if (x > finishX) {
-				--x;
-			} else if (y < finishY) {
-				++y;
-			} else if (y > finishY) {
-				--y;
+			if(mapSegment[y][x]!=DUNGEON && mapSegment[y][x]!=TOWN && mapSegment[y][x]!=PASSAGE){
+				mapSegment[y][x] = ROAD;
+			}
+			diffX = finishX - x;
+			diffY = finishY - y;
+			moving = false;
+			if(Math.abs(diffX) > Math.abs(diffY)){
+				if (x < finishX && isFieldValid(x+1, y)) {
+					++x;
+					moving = true;
+				} else if (x > finishX && isFieldValid(x-1, y)) {
+					--x;
+					moving = true;
+				} else if (y < finishY && isFieldValid(x, y+1)) {
+					++y;
+					moving = true;
+				} else if (y > finishY && isFieldValid(x, y-1)) {
+					--y;
+					moving = true;
+				}
+			} else {
+				if (y < finishY && isFieldValid(x, y+1)) {
+					++y;
+					moving = true;
+				} else if (y > finishY && isFieldValid(x, y-1)) {
+					--y;
+					moving = true;
+				} else if (x < finishX && isFieldValid(x+1, y)) {
+					++x;
+					moving = true;
+				} else if (x > finishX && isFieldValid(x-1, y)) {
+					--x;
+					moving = true;
+				}
+			}
+			if(!moving){
+				log.warn("Cannot move! Interrupted! Point is: (" + x + ", " + y + ")");
+				break;
 			}
 			if (!withinMapSegment(x, y)) {
 				log.warn("Road has gone beyond map borders! Point is: (" + x + ", " + y + ")");
 			}
 		}
+		log.info(WorldGenerationUtils.mapToString(mapSegment));
+	}
+	
+	private boolean isFieldValid(int x, int y){
+		return withinMapSegment(x, y) && mapSegment[y][x]!=EXISTING_LAND && mapSegment[y][x]!=EMPTY;
 	}
 
 	private void printGraph() {
