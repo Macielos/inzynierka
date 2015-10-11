@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.appengine.labs.repackaged.com.google.common.base.Objects;
 import com.google.appengine.labs.repackaged.com.google.common.base.Pair;
 
 public class Statistics<T> {
@@ -40,7 +41,7 @@ public class Statistics<T> {
 		T key = null;
 		int value = 0;
 		for(Entry<T, Integer> entry: map.entrySet()){
-			if(entry.getValue()>value){
+			if(entry.getKey()!=null && entry.getValue()>=value){
 				key = entry.getKey();
 				value = entry.getValue();
 			}

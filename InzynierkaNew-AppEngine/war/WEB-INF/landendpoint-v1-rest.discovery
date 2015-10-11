@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/iEVc9Ck20rRMlnIgz0lzsEJNl0c\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/4vDn_XWvLCcMu3iKLmaigL8_cQw\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -142,10 +142,6 @@
    "id": "Land",
    "type": "object",
    "properties": {
-    "bottomBorderY": {
-     "type": "integer",
-     "format": "int32"
-    },
     "dungeons": {
      "type": "array",
      "items": {
@@ -155,9 +151,12 @@
     "fields": {
      "type": "array",
      "items": {
-      "type": "string",
-      "format": "int64"
+      "type": "integer",
+      "format": "int32"
      }
+    },
+    "hasFreePassage": {
+     "type": "boolean"
     },
     "height": {
      "type": "integer",
@@ -167,28 +166,36 @@
      "type": "string",
      "format": "int64"
     },
+    "mapSegment": {
+     "type": "string",
+     "format": "int64"
+    },
+    "maxX": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "maxY": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "minX": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "minY": {
+     "type": "integer",
+     "format": "int32"
+    },
     "passages": {
      "type": "array",
      "items": {
       "$ref": "Passage"
      }
     },
-    "rightBorderX": {
-     "type": "integer",
-     "format": "int32"
-    },
     "town": {
      "$ref": "Town"
     },
     "width": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "x": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "y": {
      "type": "integer",
      "format": "int32"
     }
@@ -198,6 +205,10 @@
    "id": "Passage",
    "type": "object",
    "properties": {
+    "direction": {
+     "type": "integer",
+     "format": "int32"
+    },
     "key": {
      "$ref": "Key"
     },
@@ -205,9 +216,20 @@
      "type": "string",
      "format": "int64"
     },
+    "nextX": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "nextY": {
+     "type": "integer",
+     "format": "int32"
+    },
     "type": {
      "type": "string",
      "format": "int64"
+    },
+    "valid": {
+     "type": "boolean"
     },
     "x": {
      "type": "integer",
@@ -245,12 +267,12 @@
   }
  },
  "methods": {
-  "findNeighbours": {
-   "id": "landendpoint.findNeighbours",
-   "path": "findNeighbours/{cursor}",
+  "findLandsInNeighbourhood": {
+   "id": "landendpoint.findLandsInNeighbourhood",
+   "path": "findLandsInNeighbourhood/{mapSegment}",
    "httpMethod": "POST",
    "parameters": {
-    "cursor": {
+    "mapSegment": {
      "type": "string",
      "required": true,
      "format": "int64",
@@ -258,8 +280,19 @@
     }
    },
    "parameterOrder": [
-    "cursor"
+    "mapSegment"
    ],
+   "response": {
+    "$ref": "CollectionResponse_Land"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "findLandsWithFreePassages": {
+   "id": "landendpoint.findLandsWithFreePassages",
+   "path": "findLandsWithFreePassages",
+   "httpMethod": "POST",
    "response": {
     "$ref": "CollectionResponse_Land"
    },

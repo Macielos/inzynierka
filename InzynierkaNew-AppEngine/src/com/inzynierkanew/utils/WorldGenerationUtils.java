@@ -3,18 +3,24 @@ package com.inzynierkanew.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.inzynierkanew.entities.map.Land;
+import com.inzynierkanew.world.WorldGenerator;
+
 public abstract class WorldGenerationUtils {
 	
 	private static final Map<Integer, String> printableSymbols = new HashMap<>();
 	
 	static {
-		printableSymbols.put(0, " ");
-		printableSymbols.put(1, "1");
-		printableSymbols.put(2, ".");
-		printableSymbols.put(6, "+");
-		printableSymbols.put(7, "I");
-		printableSymbols.put(8, "O");
-		printableSymbols.put(9, "X");
+		printableSymbols.put(WorldGenerator.EMPTY, " ");
+		printableSymbols.put(WorldGenerator.PASSABLE, ".");
+		printableSymbols.put(WorldGenerator.NON_PASSABLE, "^");
+		printableSymbols.put(WorldGenerator.EXISTING_LAND, "E");
+		printableSymbols.put(WorldGenerator.EXISTING_LAND_PASSAGE, "I");
+		printableSymbols.put(WorldGenerator.CROSSROAD, "X");
+		printableSymbols.put(WorldGenerator.ROAD, "+");
+		printableSymbols.put(WorldGenerator.PASSAGE, "I");
+		printableSymbols.put(WorldGenerator.TOWN, "T");
+		printableSymbols.put(WorldGenerator.DUNGEON, "D");
 	}
 	
 	private WorldGenerationUtils(){
@@ -45,5 +51,13 @@ public abstract class WorldGenerationUtils {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+	
+	public static long calcMapSegment(Land land){
+		return calcMapSegment(land.getMinX(), land.getMinY(), land.getMaxX(), land.getMaxY());
+	}
+	
+	public static long calcMapSegment(int minX, int minY, int maxX, int maxY){
+		return (minX+maxX)/(2*2*WorldGenerator.LAND_MAX_WIDTH)*WorldGenerator.MAP_SEGMENT_FACTOR + (minY+maxY)/(2*2*WorldGenerator.LAND_MAX_HEIGHT);
 	}
 }

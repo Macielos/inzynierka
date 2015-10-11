@@ -1,6 +1,7 @@
 package com.inzynierkanew.endpoints.map;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -10,21 +11,27 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-import org.datanucleus.store.appengine.query.JPACursorHelper;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.Dungeon;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.entities.map.Passage;
+import com.inzynierkanew.utils.DatastoreUtils;
 import com.inzynierkanew.utils.EMF;
+import com.inzynierkanew.world.WorldGenerator;
 
 @Api(name = "landendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map"))
 public class LandEndpoint {
 
+	private Log log = LogFactory.getLog(getClass());
+	
 	/**
 	 * This method lists all the entities inserted in datastore.
 	 * It uses HTTP GET method and paging support.
@@ -60,7 +67,7 @@ public class LandEndpoint {
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Land obj : execute);
+			DatastoreUtils.fetchLands(execute);
 		} finally {
 			mgr.close();
 		}
@@ -80,10 +87,7 @@ public class LandEndpoint {
 		Land land = null;
 		try {
 			land = mgr.find(Land.class, id);
-			land.getTown();
-			land.getFields();
-			for (Dungeon obj : land.getDungeons());
-			for (Passage obj : land.getPassages());
+			DatastoreUtils.fetchLand(land);
 		} finally {
 			mgr.close();
 		}
@@ -91,24 +95,46 @@ public class LandEndpoint {
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "findNeighbours")
-	public CollectionResponse<Land> findNeighbours(@Named("cursor") long landId) {
+	@ApiMethod(name = "findLandsInNeighbourhood")
+	public CollectionResponse<Land> findLandsInNeighbourhood(@Named("mapSegment") long mapSegment) {	
 		EntityManager mgr = null;
-		
-		Land land = getLand(landId);
-		if(land==null){
-			return null;
+		List<Land> lands = new ArrayList<>();
+		try {
+			mgr = getEntityManager();
+			for(long l: getNeighbourMapSegments(mapSegment)){
+				lands.addAll(findLandsInTheNeighbourhoodInternal(mgr, l));
+			}
+			DatastoreUtils.fetchLands(lands);
+			return CollectionResponse.<Land>builder().setItems(lands).build();
+		} finally {
+			mgr.close();
 		}
-
-		/*List<Long> passageIds = new ArrayList<>(land.getPassages().size());
-		for(Passage passage: land.getPassages()){
-			passageIds.add(passage.getNextLandId());
-		}
-		
-		List<Land> neighbours = null;*/
-		return listLand(null, null);
 	}
 	
+	private Collection<Land> findLandsInTheNeighbourhoodInternal(EntityManager mgr, long mapSegment){
+		return mgr.createQuery("select from Land as Land where mapSegment = "+mapSegment).getResultList();
+	}
+	
+	private long[] getNeighbourMapSegments(long mapSegment){
+		return new long[]{mapSegment, mapSegment+1, mapSegment+WorldGenerator.MAP_SEGMENT_FACTOR, mapSegment+WorldGenerator.MAP_SEGMENT_FACTOR+1};
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	@ApiMethod(name = "findLandsWithFreePassages")
+	public CollectionResponse<Land> findLandsWithFreePassages() {	
+		EntityManager mgr = null;
+		String queryString = "select from Land as Land where Land.hasFreePassage = true";
+		try {
+			mgr = getEntityManager();
+			Query query = mgr.createQuery(queryString);
+			List<Land> lands = (List<Land>) query.getResultList();
+			DatastoreUtils.fetchLands(lands);
+			return CollectionResponse.<Land>builder().setItems(lands).build();
+		} finally {
+			mgr.close();
+		}
+	}
+		
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity already
 	 * exists in the datastore, an exception is thrown.
@@ -146,7 +172,7 @@ public class LandEndpoint {
 			if (!containsLand(land)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.persist(land);
+			mgr.merge(land);
 		} finally {
 			mgr.close();
 		}
@@ -171,6 +197,9 @@ public class LandEndpoint {
 	}
 
 	private boolean containsLand(Land land) {
+		if(land.getId()==null){
+			return false;
+		}
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {

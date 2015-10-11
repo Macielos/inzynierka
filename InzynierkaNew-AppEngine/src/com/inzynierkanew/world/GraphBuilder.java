@@ -5,9 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import com.inzynierkanew.utils.Point;
 
 public class GraphBuilder {
+	
+	private final Log log = LogFactory.getLog(getClass());
 	
 	private final Set<Point> points;
 	
@@ -52,6 +57,7 @@ public class GraphBuilder {
 		}
 		if(addEdge){
 			edges.add(new GraphEdge(point1, point2));
+			//log.info(new GraphEdge(point1, point2));
 		}
 		
 		if(containingFirst != null && containingFirst.size() > maxSize){

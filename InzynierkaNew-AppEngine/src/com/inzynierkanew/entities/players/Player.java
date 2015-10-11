@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import org.datanucleus.jpa.annotations.PersistenceAware;
+import org.datanucleus.api.jpa.annotations.PersistenceAware;
 
 @PersistenceAware
 @Entity

@@ -27,13 +27,21 @@ public class Land {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Dungeon> dungeons = new ArrayList<>();
 	
-	private int x;
-	private int y;
-	private int width;
-	private int height; 
-	private long[] fields;
+	private boolean hasFreePassage;
 	
-	public long getId() {
+	private long mapSegment;
+	
+	private int minX;
+	private int minY;
+	private int maxX;
+	private int maxY; 
+	private int[] fields;
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
@@ -61,52 +69,68 @@ public class Land {
 		this.dungeons = dungeons;
 	}
 
-	public long[] getFields() {
+	public int[] getFields() {
 		return fields;
 	}
 
-	public void setFields(long[] fields) {
+	public void setFields(int[] fields) {
 		this.fields = fields;
 	}
 
-	public int getX() {
-		return x;
+	public int getMinX() {
+		return minX;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setMinX(int minX) {
+		this.minX = minX;
 	}
 
-	public int getY() {
-		return y;
+	public int getMinY() {
+		return minY;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setMinY(int minY) {
+		this.minY = minY;
 	}
 
-	public int getWidth() {
-		return width;
+	public int getMaxX() {
+		return maxX;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setMaxX(int maxX) {
+		this.maxX = maxX;
 	}
 
-	public int getHeight() {
-		return height;
+	public int getMaxY() {
+		return maxY;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	public void setMaxY(int maxY) {
+		this.maxY = maxY;
 	}
 	
-	public int getRightBorderX(){
-		return x+width-1;
+	public boolean hasFreePassage() {
+		return hasFreePassage;
 	}
-	
-	public int getBottomBorderY(){
-		return y+height-1;
+
+	public void setHasFreePassage(boolean hasFreePassage) {
+		this.hasFreePassage = hasFreePassage;
+	}
+
+	public int getWidth(){
+		return maxX-minX+1;
+	}
+
+	public int getHeight(){
+		return maxY-minY+1;
+	}
+
+	public long getMapSegment() {
+		return mapSegment;
+	}
+
+	public void setMapSegment(long mapSegment) {
+		this.mapSegment = mapSegment;
 	}
 	
 }

@@ -5,7 +5,7 @@
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
-   <param-value>com.inzynierkanew.endpoints.communication.MessageEndpoint,com.inzynierkanew.endpoints.map.LandEndpoint,com.inzynierkanew.endpoints.players.PlayerEndpoint</param-value>
+   <param-value>com.inzynierkanew.endpoints.communication.MessageEndpoint,com.inzynierkanew.endpoints.map.LandEndpoint,com.inzynierkanew.endpoints.map.PassageEndpoint,com.inzynierkanew.endpoints.players.PlayerEndpoint</param-value>
   </init-param>
  </servlet>
  <servlet-mapping>

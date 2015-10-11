@@ -11,13 +11,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-import org.datanucleus.store.appengine.query.JPACursorHelper;
-
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
+import com.inzynierkanew.dumps.WorldDump;
+import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
@@ -64,7 +65,9 @@ public class PlayerEndpoint {
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Player obj : execute);
+			for (Player obj : execute){
+				obj.getHero();
+			}
 		} finally {
 			mgr.close();
 		}
@@ -114,6 +117,7 @@ public class PlayerEndpoint {
 		} finally {
 			mgr.close();
 		}
+		new WorldDump(new LandEndpoint()).dump();
 		return player;
 	}
 
@@ -221,13 +225,6 @@ public class PlayerEndpoint {
 			mgr.merge(player);
 		} finally {
 			mgr.close();
-		}
-		//TODO znalezc rozwiazanie bez sleepa
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return new LoginResponse(sessionId);
 	}
