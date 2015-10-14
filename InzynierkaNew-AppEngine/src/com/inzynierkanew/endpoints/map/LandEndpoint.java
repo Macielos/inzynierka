@@ -13,16 +13,14 @@ import javax.persistence.Query;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.datanucleus.store.appengine.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
-import com.inzynierkanew.entities.map.Dungeon;
 import com.inzynierkanew.entities.map.Land;
-import com.inzynierkanew.entities.map.Passage;
 import com.inzynierkanew.utils.DatastoreUtils;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.world.WorldGenerator;

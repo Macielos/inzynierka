@@ -104,10 +104,22 @@ public class WorldGenerationTest {
 	}
 	
 	//@org.junit.Test
+	public void testLandGenerationBorderlandPassage() throws WorldGenerationException{
+		long x = new Random().nextLong();//1234567890L;
+		//dziala: 7143712281646963543
+		//path not found: -5210437816999656336
+		LandEndpoint landEndpoint = mockLandEndpointMultipleNeighbours();
+		PlayerEndpoint playerEndpoint = mockPlayerEndpoint();
+		PassageEndpoint passageEndpoint = mockPassageEndpoint();
+		WorldGenerator generator = new WorldGenerator(x, landEndpoint, playerEndpoint, passageEndpoint); //new Random(-2343597961835384248L));
+		generator.generateLand();
+	}
+	
+	//@org.junit.Test
 	public void testLandGenerationMultipleGenerationOrders() throws WorldGenerationException{
 		final int COUNT = 10;
 		
-		LandEndpoint landEndpoint = mockLandEndpointMultipleNeighbours();
+		LandEndpoint landEndpoint = mockLandEndpointMultipleGenerationOrders();
 		PlayerEndpoint playerEndpoint = mockPlayerEndpoint();
 		PassageEndpoint passageEndpoint = mockPassageEndpoint();
 		for(int i=0; i<COUNT; ++i){
@@ -115,18 +127,7 @@ public class WorldGenerationTest {
 			new WorldGenerator(seed, landEndpoint, playerEndpoint, passageEndpoint).generateAndPersistLand();	
 		}
 	}
-	
-	@org.junit.Test
-	public void testMethodParameter(){
-		AtomicBoolean parameter = new AtomicBoolean(false);
-		internal(parameter);
-		Assert.assertTrue(parameter.get());
-	}
-	
-	private void internal(AtomicBoolean parameter){
-		parameter.set(true);
-	}
-	
+
 	//@org.junit.Test
 	public void testRoadBuilding() throws WorldGenerationException{
 		int[][] mapSegment = WorldGenerator.newMapSegment(8, 8);

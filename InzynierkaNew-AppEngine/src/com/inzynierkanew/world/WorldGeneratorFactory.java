@@ -15,18 +15,21 @@ import com.inzynierkanew.utils.EMF;
 
 public class WorldGeneratorFactory {
 	
-	private static final int COUNT = 100;
-	
+	//private static final int MIN_LANDS = 3;
+	//private static final double LANDS_PER_PLAYER = 0.25;
+	private static final int COUNT = 2;
+
 	private static final Log log = LogFactory.getLog(WorldGeneratorFactory.class);
 	
 	public static synchronized void fireWorldGeneration(){
+		
 		for(int i=0; i<COUNT; ++i){
-			try {
-				Thread.sleep(5000L);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(5000L);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			new WorldDump(new LandEndpoint()).dump();
 			new WorldGenerator().generateAndPersistLand();		
 		} 
@@ -38,7 +41,4 @@ public class WorldGeneratorFactory {
 		return lands.isEmpty() ? null : lands.get(0);
 	}
 	
-	public static synchronized void dumpLands(String filename){
-		
-	}
 }

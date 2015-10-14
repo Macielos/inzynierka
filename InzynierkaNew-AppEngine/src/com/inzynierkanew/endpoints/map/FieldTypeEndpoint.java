@@ -16,11 +16,11 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.inzynierkanew.entities.map.Passage;
+import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.utils.EMF;
 
-@Api(name = "passageendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map"))
-public class PassageEndpoint {
+@Api(name = "fieldtypeendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map"))
+public class FieldTypeEndpoint {
 
 	/**
 	 * This method lists all the entities inserted in datastore.
@@ -30,16 +30,17 @@ public class PassageEndpoint {
 	 * persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listPassage")
-	public CollectionResponse<Passage> listPassage(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit) {
+	@ApiMethod(name = "listFieldType")
+	public CollectionResponse<FieldType> listFieldType(@Nullable @Named("cursor") String cursorString,
+			@Nullable @Named("limit") Integer limit) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
-		List<Passage> execute = null;
+		List<FieldType> execute = null;
 
 		try {
 			mgr = getEntityManager();
-			Query query = mgr.createQuery("select from Passage as Passage");
+			Query query = mgr.createQuery("select from FieldType as FieldType");
 			if (cursorString != null && cursorString != "") {
 				cursor = Cursor.fromWebSafeString(cursorString);
 				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
@@ -50,20 +51,20 @@ public class PassageEndpoint {
 				query.setMaxResults(limit);
 			}
 
-			execute = (List<Passage>) query.getResultList();
+			execute = (List<FieldType>) query.getResultList();
 			cursor = JPACursorHelper.getCursor(execute);
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Passage obj : execute)
+			for (FieldType obj : execute)
 				;
 		} finally {
 			mgr.close();
 		}
 
-		return CollectionResponse.<Passage> builder().setItems(execute).setNextPageToken(cursorString).build();
+		return CollectionResponse.<FieldType> builder().setItems(execute).setNextPageToken(cursorString).build();
 	}
 
 	/**
@@ -72,16 +73,16 @@ public class PassageEndpoint {
 	 * @param id the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getPassage")
-	public Passage getPassage(@Named("id") Long id) {
+	@ApiMethod(name = "getFieldType")
+	public FieldType getFieldType(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
-		Passage passage = null;
+		FieldType fieldtype = null;
 		try {
-			passage = mgr.find(Passage.class, id);
+			fieldtype = mgr.find(FieldType.class, id);
 		} finally {
 			mgr.close();
 		}
-		return passage;
+		return fieldtype;
 	}
 
 	/**
@@ -89,21 +90,21 @@ public class PassageEndpoint {
 	 * exists in the datastore, an exception is thrown.
 	 * It uses HTTP POST method.
 	 *
-	 * @param passage the entity to be inserted.
+	 * @param fieldtype the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertPassage")
-	public Passage insertPassage(Passage passage) {
+	@ApiMethod(name = "insertFieldType")
+	public FieldType insertFieldType(FieldType fieldtype) {
 		EntityManager mgr = getEntityManager();
 		try {
-			if (containsPassage(passage)) {
+			if (containsFieldType(fieldtype)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			mgr.persist(passage);
+			mgr.persist(fieldtype);
 		} finally {
 			mgr.close();
 		}
-		return passage;
+		return fieldtype;
 	}
 
 	/**
@@ -111,21 +112,21 @@ public class PassageEndpoint {
 	 * exist in the datastore, an exception is thrown.
 	 * It uses HTTP PUT method.
 	 *
-	 * @param passage the entity to be updated.
+	 * @param fieldtype the entity to be updated.
 	 * @return The updated entity.
 	 */
-	@ApiMethod(name = "updatePassage")
-	public Passage updatePassage(Passage passage) {
+	@ApiMethod(name = "updateFieldType")
+	public FieldType updateFieldType(FieldType fieldtype) {
 		EntityManager mgr = getEntityManager();
 		try {
-			if (!containsPassage(passage)) {
+			if (!containsFieldType(fieldtype)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.merge(passage);
+			mgr.persist(fieldtype);
 		} finally {
 			mgr.close();
 		}
-		return passage;
+		return fieldtype;
 	}
 
 	/**
@@ -134,22 +135,22 @@ public class PassageEndpoint {
 	 *
 	 * @param id the primary key of the entity to be deleted.
 	 */
-	@ApiMethod(name = "removePassage")
-	public void removePassage(@Named("id") Long id) {
+	@ApiMethod(name = "removeFieldType")
+	public void removeFieldType(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		try {
-			Passage passage = mgr.find(Passage.class, id);
-			mgr.remove(passage);
+			FieldType fieldtype = mgr.find(FieldType.class, id);
+			mgr.remove(fieldtype);
 		} finally {
 			mgr.close();
 		}
 	}
 
-	private boolean containsPassage(Passage passage) {
+	private boolean containsFieldType(FieldType fieldtype) {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			Passage item = mgr.find(Passage.class, passage.getKey());
+			FieldType item = mgr.find(FieldType.class, fieldtype.getId());
 			if (item == null) {
 				contains = false;
 			}

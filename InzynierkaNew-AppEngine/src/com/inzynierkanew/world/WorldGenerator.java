@@ -164,15 +164,15 @@ public class WorldGenerator {
 		placeNeighbours();
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		selectFreePassages();
-		populateMapSegment();
-		log.info(WorldGenerationUtils.mapToString(mapSegment));
-		reduceMapSegment();
+		populateMapSegment();		
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		smoothEdges();
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
-		//TODO wez pasujace passage z sasiednich landow i zrob to samo!!!
+		log.info(WorldGenerationUtils.mapToString(mapSegment));
+		reduceMapSegment();
 		prepareGroundForNeighbourPassages();
 		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		//TODO wez pasujace passage z sasiednich landow i zrob to samo!!!
+		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		prepareBorders();
 		createPassages();
 		//log.info(WorldGenerationUtils.mapToString(mapSegment));
@@ -194,9 +194,9 @@ public class WorldGenerator {
 		if (hasType(x, y, EMPTY, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 			return false;
 		}
-		if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-			return true;
-		}
+//		if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
+//			return true;
+//		}
 		if (hasType(x, y - 1, EMPTY, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 			return true;
 		}
@@ -508,6 +508,31 @@ public class WorldGenerator {
 		}
 		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 	}
+	
+	private void erasePinnaclesVerticallyBackwards(int typeToErase, int replacementType) {
+		boolean replacementTypeFound;
+		int foundAreaSize;
+		for (int i = width - 1; i >= 0; --i) {
+			foundAreaSize = 0;
+			replacementTypeFound = false;
+			for (int j = height - 1; j >= height/2; --j) {
+				if(hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)){
+					replacementTypeFound = true;
+				}
+				if (mapSegment[j][i] == typeToErase && j < height - 1 && replacementTypeFound) {
+					++foundAreaSize;
+				} else if (foundAreaSize > 0 && foundAreaSize < MIN_ACCEPTABLE_PINNACLE_WIDTH) {
+					for (int k = 1; k <= foundAreaSize; ++k) {
+						mapSegment[j + k][i] = replacementType;
+					}
+					foundAreaSize = 0;
+				} else {
+					foundAreaSize = 0;
+				}
+			}
+		}
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
+	}
 
 	private void erasePinnaclesHorizontally(int typeToErase, int replacementType) {
 		boolean replacementTypeFound;
@@ -524,31 +549,6 @@ public class WorldGenerator {
 				} else if (foundAreaSize > 0 && foundAreaSize < MIN_ACCEPTABLE_PINNACLE_WIDTH) {
 					for (int k = 1; k <= foundAreaSize; ++k) {
 						mapSegment[j][i - k] = replacementType;
-					}
-					foundAreaSize = 0;
-				} else {
-					foundAreaSize = 0;
-				}
-			}
-		}
-		// log.info(WorldGenerationUtils.mapToString(mapSegment));
-	}
-
-	private void erasePinnaclesVerticallyBackwards(int typeToErase, int replacementType) {
-		boolean replacementTypeFound;
-		int foundAreaSize;
-		for (int i = width - 1; i >= 0; --i) {
-			foundAreaSize = 0;
-			replacementTypeFound = false;
-			for (int j = height - 1; j >= height/2; --j) {
-				if(hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)){
-					replacementTypeFound = true;
-				}
-				if (mapSegment[j][i] == typeToErase && j < height - 1 && replacementTypeFound) {
-					++foundAreaSize;
-				} else if (foundAreaSize > 0 && foundAreaSize < MIN_ACCEPTABLE_PINNACLE_WIDTH) {
-					for (int k = 1; k <= foundAreaSize; ++k) {
-						mapSegment[j + k][i] = replacementType;
 					}
 					foundAreaSize = 0;
 				} else {
@@ -592,7 +592,7 @@ public class WorldGenerator {
 			for (Passage passage : land.getPassages()) {
 				localX = passage.getX() - mapSegmentMinX;
 				localY = passage.getY() - mapSegmentMinY;
-				if (passage.getNextLandId() == null && withinMapSegment(localX, localY)) {
+				if (passage.getNextLandId() == null) {
 					newPassage = getNeighbourFieldOfType(localX, localY, NON_PASSABLE);
 					if (newPassage != null) {
 						buildLandAroundExistingPassage(passage, newPassage);
@@ -616,38 +616,7 @@ public class WorldGenerator {
 				}
 			}
 		}
-//		
-//		if (startBorderPoint == null) {
-//			throwException("No border point found in a generated map");
-//		}
-//
-//		Point borderPoint = startBorderPoint;
-//		do {
-//			borderPointSet.add(borderPoint);
-//			borderPoints.add(borderPoint);
-//			borderPoint = findNextBorderPoint(borderPoint);
-//		} while (borderPoint!=null && !borderPoint.equals(startBorderPoint));
-//		if (borderPoint == null) {
-//			throwException("Failed to detect land's border points. Stop after "+borderPoints.size()+" points, start point is: "+startBorderPoint);
-//		}
-		
 	}
-
-//	private Point findNextBorderPoint(Point borderPoint) {
-//		int x = borderPoint.x;
-//		int y = borderPoint.y;
-//		for (Point point : new Point[] { 
-//				new Point(x - 1, y), new Point(x - 1, y - 1), 
-//				new Point(x, y - 1), new Point(x + 1, y - 1), 
-//				new Point(x + 1, y), new Point(x + 1, y + 1),
-//				new Point(x, y + 1), new Point(x - 1, y + 1) 
-//				}) {
-//			if (isBorder(point.x, point.y) && (!borderPointSet.contains(point) || (point.equals(startBorderPoint) && borderPoints.size() > 2))) {
-//				return point;
-//			}
-//		}
-//		return null;
-//	}
 
 	private void fillInHole(int x, int y) {
 		mapSegment[y][x] = NON_PASSABLE;
@@ -752,7 +721,7 @@ public class WorldGenerator {
 	}
 
 	private boolean isSuitableForPassage(int x, int y) {
-		return matchesPattern(x, y, 
+		return x > 0 && y > 0 && x < width-1 && y < height - 1 && matchesPattern(x, y, 
 				new int[][]{
 					new int[]{EMPTY, EMPTY, EMPTY}, 
 					new int[]{NON_PASSABLE, NON_PASSABLE, NON_PASSABLE}, 
@@ -773,7 +742,7 @@ public class WorldGenerator {
 						new int[]{NON_PASSABLE, NON_PASSABLE, NON_PASSABLE}, 
 						new int[]{EMPTY, EMPTY, EMPTY}
 					}
-				);				
+				);
 	}
 	
 	private boolean matchesPattern(int x, int y, int[][]... patterns){
@@ -919,27 +888,14 @@ public class WorldGenerator {
 	}
 
 	private void buildLandAroundExistingPassage(Passage existingPassage, Point newPassage) {
-//		switch(existingPassage.getDirection()){
-//		case UP:
-//			points.add(new Point(x+i, y-j));
-//			break;
-//		case DOWN:
-//			points.add(new Point(x+i, y+j));
-//			break;
-//		case LEFT:
-//			points.add(new Point(x-j, y+i));
-//			break;
-//		case RIGHT:
-//			points.add(new Point(x+j, y+i));
-//			break;
-//		}
-		
-		//for(int i=-1; i<=1; ++i){
-		//	for(int j=0; j<=2; ++j){
-		
 		for(Point point: getPassageNearbyPointsForBuild(existingPassage, newPassage)){
 			if(withinMapSegment(point.x, point.y) && mapSegment[point.y][point.x] == EMPTY){
 				mapSegment[point.y][point.x] = NON_PASSABLE;
+			}
+		}
+		for(Point point: getPassageNearbyPointsForErasure(existingPassage, newPassage)){
+			if(withinMapSegment(point.x, point.y) && mapSegment[point.y][point.x] == NON_PASSABLE){
+				mapSegment[point.y][point.x] = EMPTY;
 			}
 		}
 	}
@@ -950,6 +906,31 @@ public class WorldGenerator {
 		int y = newPassage.y;
 		for(int i=-1; i<=1; ++i){
 			for(int j=0; j<=2; ++j){
+				switch(existingPassage.getDirection()){
+				case UP:
+					points.add(new Point(x+i, y-j));
+					break;
+				case DOWN:
+					points.add(new Point(x+i, y+j));
+					break;
+				case LEFT:
+					points.add(new Point(x-j, y+i));
+					break;
+				case RIGHT:
+					points.add(new Point(x+j, y+i));
+					break;
+				}
+			}
+		}
+		return points;
+	}
+	
+	private List<Point> getPassageNearbyPointsForErasure(Passage existingPassage, Point newPassage){
+		List<Point> points = new ArrayList<>(9);
+		int x = newPassage.x;
+		int y = newPassage.y;
+		for(int i=-1; i<=1; ++i){
+			for(int j=-1; j<=-3; --j){
 				switch(existingPassage.getDirection()){
 				case UP:
 					points.add(new Point(x+i, y-j));
@@ -1104,7 +1085,7 @@ public class WorldGenerator {
 				point1 = crossRoadArray[i];
 				point2 = crossRoadArray[j];
 				if (inRange(point1, point2, maxDistance)
-						&& (!passagePoints.contains(point1) || passagePoints.contains(point2))) {
+						&& (!passagePoints.contains(point1) || !passagePoints.contains(point2))) {
 					graphBuilder.addConnection(point1, point2);
 				}
 			}
