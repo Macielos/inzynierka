@@ -10,6 +10,8 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="lib" path="D:/Users/Maciej/workspace/java/appcompat_v7/libs/android-support-v4.jar"/>
+	<classpathentry kind="src" path="endpoint-libs/libfieldtypeendpoint-v1/fieldtypeendpoint/fieldtypeendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/liblandendpoint-v1/landendpoint/landendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libmessageEndpoint-v1/messageEndpoint/messageendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libpassageendpoint-v1/passageendpoint/passageendpoint-v1-generated-source"/>

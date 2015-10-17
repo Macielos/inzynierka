@@ -10,11 +10,13 @@
         <class>com.inzynierkanew.entities.communication.MessageData</class>
         <class>com.inzynierkanew.entities.players.Player</class>
         <class>com.inzynierkanew.entities.players.Hero</class>
+		<class>com.inzynierkanew.entities.players.PlayerSession</class>
         <class>com.inzynierkanew.entities.map.Land</class>
         <class>com.inzynierkanew.entities.map.BaseField</class>
         <class>com.inzynierkanew.entities.map.Town</class>
         <class>com.inzynierkanew.entities.map.Dungeon</class>
         <class>com.inzynierkanew.entities.map.Passage</class>
+        <class>com.inzynierkanew.entities.map.FieldType</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>

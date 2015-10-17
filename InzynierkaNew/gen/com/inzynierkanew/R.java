@@ -11,7 +11,16 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int dungeon=0x7f020000;
+        public static final int empty=0x7f020001;
+        public static final int forest=0x7f020002;
+        public static final int grass=0x7f020003;
+        public static final int hero=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int mountains=0x7f020006;
+        public static final int passage=0x7f020007;
+        public static final int road=0x7f020008;
+        public static final int town=0x7f020009;
     }
     public static final class id {
         public static final int cancelButton=0x7f060008;

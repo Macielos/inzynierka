@@ -11,26 +11,29 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-import org.datanucleus.store.appengine.query.JPACursorHelper;
-
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.dumps.WorldDump;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
+import com.inzynierkanew.entities.players.PlayerSession;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.utils.RequestValidator;
+import com.inzynierkanew.utils.StringUtils;
 import com.inzynierkanew.world.WorldGeneratorFactory;
 import com.inzynierkanew.wrappers.LoginResponse;
 
 @Api(name = "playerendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players"))
 public class PlayerEndpoint {
 
+	private final LandEndpoint landEndpoint = new LandEndpoint();
+	
 	/**
 	 * This method lists all the entities inserted in datastore.
 	 * It uses HTTP GET method and paging support.
@@ -110,10 +113,11 @@ public class PlayerEndpoint {
 				throw new EntityExistsException("Object already exists");
 			}
 			WorldGeneratorFactory.fireWorldGeneration();
-			Land startingLand = WorldGeneratorFactory.findLandForNewPlayer();
-			Long startingLandId = startingLand.getId();
+			Land startingLand = landEndpoint.findLandForNewPlayer();
 			Hero hero = player.getHero();
-			hero.setCurrentLandId(startingLandId);
+			hero.setCurrentLandId(startingLand.getId());
+			hero.setX(startingLand.getTown().getX());
+			hero.setY(startingLand.getTown().getY());
 			mgr.persist(player);
 		} finally {
 			mgr.close();
@@ -191,11 +195,13 @@ public class PlayerEndpoint {
 	public Player findPlayerBySessionId(@Named("id") String id){
 		EntityManager mgr = getEntityManager();
 		try {
-			List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.sessionId = '"+id+"'").getResultList();
-			if(players.isEmpty()){
+			List<PlayerSession> playerSessions = (List<PlayerSession>) mgr.createQuery("select from PlayerSession as PlayerSession where PlayerSession.sessionId = '"+id+"'").getResultList();
+			if(playerSessions.isEmpty()){
 				return null;
 			}
-			return players.get(0);
+			Player player = getPlayer(playerSessions.get(0).getId());
+			player.getHero();
+			return player;
 		} finally {
 			mgr.close();
 		}
@@ -204,7 +210,10 @@ public class PlayerEndpoint {
 	@ApiMethod(name = "authenticatePlayer")
 	public LoginResponse authenticatePlayer(@Named("name")String name, @Named("password")String password){
 		EntityManager mgr = null;
-		String sessionId = null;
+		PlayerSession session = null;
+		if(StringUtils.isEmpty(name) || StringUtils.isEmpty(password)){
+			return new LoginResponse();
+		}
 		try {
 			mgr = getEntityManager();
 			List<Player> players = (List<Player>) mgr.createQuery("select from Player as Player where Player.name = '"+name+"'").getResultList();
@@ -217,17 +226,14 @@ public class PlayerEndpoint {
 				return new LoginResponse();
 			}
 			
-			sessionId = UUID.randomUUID().toString();
-			Date loginTime = new Date();
+			//session = new PlayerSession(player.getId(), UUID.randomUUID().toString(), new Date());
+			//mgr.merge(session);
 			
-			player.setSessionId(sessionId);
-			player.setLastLogin(loginTime);
-			
-			mgr.merge(player);
+			//TODO zrobiæ system sesji, który nie jest tak zjebany jak trzymanie ich w datastorze
+			return new LoginResponse(player.getId().toString());
 		} finally {
 			mgr.close();
 		}
-		return new LoginResponse(sessionId);
 	}
 
 	private boolean containsPlayer(Player player) {

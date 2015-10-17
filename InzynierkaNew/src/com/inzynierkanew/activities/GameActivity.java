@@ -11,7 +11,6 @@ public class GameActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(new GameView(this, getIntent().getStringExtra(Constants.SESSION_ID)));
-
 	}
 
 //	@Override

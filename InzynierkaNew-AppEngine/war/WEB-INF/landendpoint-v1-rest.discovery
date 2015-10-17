@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/4vDn_XWvLCcMu3iKLmaigL8_cQw\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/rl5mHviWcmuPs5sH0Rp8nW3q5DM\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -158,6 +158,9 @@
     "hasFreePassage": {
      "type": "boolean"
     },
+    "hasTown": {
+     "type": "boolean"
+    },
     "height": {
      "type": "integer",
      "format": "int32"
@@ -227,9 +230,6 @@
     "type": {
      "type": "string",
      "format": "int64"
-    },
-    "valid": {
-     "type": "boolean"
     },
     "x": {
      "type": "integer",
@@ -392,6 +392,23 @@
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
+  }
+ },
+ "resources": {
+  "landEndpoint": {
+   "methods": {
+    "findLandForNewPlayer": {
+     "id": "landendpoint.landEndpoint.findLandForNewPlayer",
+     "path": "findLandForNewPlayer",
+     "httpMethod": "POST",
+     "response": {
+      "$ref": "Land"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    }
+   }
   }
  }
 }

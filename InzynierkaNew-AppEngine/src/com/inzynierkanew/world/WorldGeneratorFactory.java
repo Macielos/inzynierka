@@ -10,6 +10,7 @@ import org.apache.juli.logging.LogFactory;
 import com.inzynierkanew.dumps.WorldDump;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.entities.map.Land;
+import com.inzynierkanew.utils.DatastoreUtils;
 import com.inzynierkanew.utils.EMF;
 
 
@@ -34,11 +35,4 @@ public class WorldGeneratorFactory {
 			new WorldGenerator().generateAndPersistLand();		
 		} 
 	}
-	
-	public static synchronized Land findLandForNewPlayer(){
-		EntityManager entityManager = EMF.get().createEntityManager();
-		List<Land> lands = entityManager.createQuery("select from Land as Land").setMaxResults(1).getResultList();
-		return lands.isEmpty() ? null : lands.get(0);
-	}
-	
 }

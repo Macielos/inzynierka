@@ -13,13 +13,13 @@ import javax.persistence.Query;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.datanucleus.store.appengine.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.utils.DatastoreUtils;
 import com.inzynierkanew.utils.EMF;
@@ -113,6 +113,14 @@ public class LandEndpoint {
 		return mgr.createQuery("select from Land as Land where mapSegment = "+mapSegment).getResultList();
 	}
 	
+	public Land findLandForNewPlayer(){
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Land> lands = entityManager.createQuery("select from Land as Land where Land.hasTown = true").setMaxResults(1).getResultList();
+		Land land = lands.isEmpty() ? null : lands.get(0);
+		DatastoreUtils.fetchLand(land);
+		return land;
+	}
+		
 	private long[] getNeighbourMapSegments(long mapSegment){
 		return new long[]{mapSegment, mapSegment+1, mapSegment+WorldGenerator.MAP_SEGMENT_FACTOR, mapSegment+WorldGenerator.MAP_SEGMENT_FACTOR+1};
 	}

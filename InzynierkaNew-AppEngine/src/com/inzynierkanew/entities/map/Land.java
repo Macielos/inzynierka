@@ -28,6 +28,7 @@ public class Land {
 	private List<Dungeon> dungeons = new ArrayList<>();
 	
 	private boolean hasFreePassage;
+	private boolean hasTown;
 	
 	private long mapSegment;
 	
@@ -132,5 +133,13 @@ public class Land {
 	public void setMapSegment(long mapSegment) {
 		this.mapSegment = mapSegment;
 	}
-	
+
+	public boolean hasTown() {
+		return hasTown;
+	}
+
+	public void setHasTown(boolean hasTown) {
+		this.hasTown = hasTown;
+	}
+
 }

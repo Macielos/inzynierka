@@ -27,22 +27,17 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "passageendpoint.getPassage" : {
-      "path" : "passage/{id}",
-      "httpMethod" : "GET",
+    "passageendpoint.updatePassage" : {
+      "path" : "passage",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -67,6 +62,22 @@
       },
       "response" : {
         "body" : "empty"
+      }
+    },
+    "passageendpoint.insertPassage" : {
+      "path" : "passage",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "passageendpoint.listPassage" : {
@@ -94,33 +105,22 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "passageendpoint.updatePassage" : {
-      "path" : "passage",
-      "httpMethod" : "PUT",
+    "passageendpoint.getPassage" : {
+      "path" : "passage/{id}",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "passageendpoint.insertPassage" : {
-      "path" : "passage",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -206,18 +206,6 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage" : {
-        "response" : {
-          "$ref" : "Passage"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
-      },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.listPassage" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Passage"
-        }
-      },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage" : {
         "request" : {
           "$ref" : "Passage"
@@ -226,10 +214,22 @@
           "$ref" : "Passage"
         }
       },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
+      },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage" : {
         "request" : {
           "$ref" : "Passage"
         },
+        "response" : {
+          "$ref" : "Passage"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.listPassage" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Passage"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage" : {
         "response" : {
           "$ref" : "Passage"
         }

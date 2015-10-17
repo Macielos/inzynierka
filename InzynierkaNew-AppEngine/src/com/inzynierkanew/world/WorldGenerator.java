@@ -1357,6 +1357,7 @@ public class WorldGenerator {
 		land.setDungeons(dungeons);
 
 		land.setHasFreePassage(hasFreePassage(passages));
+		land.setHasTown(town != null);
 		land.setMapSegment(WorldGenerationUtils.calcMapSegment(land));
 		return land;
 	}

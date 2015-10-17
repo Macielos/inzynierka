@@ -1,0 +1,198 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://myapp.appspot.com/_ah/api",
+  "name" : "fieldtypeendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://myapp.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "inzynierkanew.com",
+  "ownerName" : "inzynierkanew.com",
+  "packagePath" : "entities.map",
+  "methods" : {
+    "fieldtypeendpoint.getFieldType" : {
+      "path" : "fieldtype/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.getFieldType",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "fieldtypeendpoint.removeFieldType" : {
+      "path" : "fieldtype/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.removeFieldType",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "fieldtypeendpoint.updateFieldType" : {
+      "path" : "fieldtype",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "fieldtypeendpoint.insertFieldType" : {
+      "path" : "fieldtype",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "fieldtypeendpoint.listFieldType" : {
+      "path" : "fieldtype",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.listFieldType",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "FieldType" : {
+        "id" : "FieldType",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "passable" : {
+            "type" : "boolean"
+          },
+          "texture" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CollectionResponse_FieldType" : {
+        "id" : "CollectionResponse_FieldType",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "FieldType"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.getFieldType" : {
+        "response" : {
+          "$ref" : "FieldType"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.removeFieldType" : {
+      },
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType" : {
+        "request" : {
+          "$ref" : "FieldType"
+        },
+        "response" : {
+          "$ref" : "FieldType"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType" : {
+        "request" : {
+          "$ref" : "FieldType"
+        },
+        "response" : {
+          "$ref" : "FieldType"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.listFieldType" : {
+        "response" : {
+          "$ref" : "CollectionResponse_FieldType"
+        }
+      }
+    }
+  }
+}
