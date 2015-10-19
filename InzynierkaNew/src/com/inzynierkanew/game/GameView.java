@@ -2,6 +2,7 @@ package com.inzynierkanew.game;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -19,11 +20,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.inzynierkanew.R;
+import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
+import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
+import com.inzynierkanew.model.DrawableFieldType;
 import com.inzynierkanew.model.LandMap;
 import com.inzynierkanew.model.HeroObject;
 import com.inzynierkanew.utils.CloudEndpointUtils;
@@ -43,7 +47,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private MessageEndpoint messageEndpoint = CloudEndpointUtils.newMessageEndpoint();
 	private Playerendpoint playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
 	private Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
+	private Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
 
+	private List<FieldType> fieldTypes;
+	
 	private Player player;
 	private Land land;
 
@@ -82,23 +89,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	private Map<Integer, Bitmap> createBitmaps() {
-		Map<Integer, Bitmap> bitmaps = new HashMap<>();
-		bitmaps.put(1, createBitmap(R.drawable.grass));
-		bitmaps.put(2, createBitmap(R.drawable.mountains));
-		bitmaps.put(5, createBitmap(R.drawable.road));
-		bitmaps.put(6, createBitmap(R.drawable.road));
-		bitmaps.put(7, createBitmap(R.drawable.passage));
-		bitmaps.put(8, createBitmap(R.drawable.town));
-		bitmaps.put(9, createBitmap(R.drawable.dungeon));
-		return bitmaps;
+	private Map<Integer, DrawableFieldType> createDrawableFieldTypes() throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+		Map<Integer, DrawableFieldType> drawableFieldTypes = new HashMap<>(fieldTypes.size());
+		for(FieldType fieldType: fieldTypes){
+			drawableFieldTypes.put(fieldType.getId().intValue(), new DrawableFieldType(fieldType, createBitmap(R.drawable.class.getField(fieldType.getName().toLowerCase()).getInt(null))));
+		}
+//	
+//		bitmaps.put(1, createBitmap(R.drawable.grass));
+//		bitmaps.put(2, createBitmap(R.drawable.mountains));
+//		bitmaps.put(5, createBitmap(R.drawable.road));
+//		bitmaps.put(6, createBitmap(R.drawable.road));
+//		bitmaps.put(7, createBitmap(R.drawable.passage));
+//		bitmaps.put(8, createBitmap(R.drawable.town));
+//		bitmaps.put(9, createBitmap(R.drawable.dungeon));
+//		return bitmaps;
+		return drawableFieldTypes;
 	}
 
 	private Bitmap createBitmap(int id) {
 		return BitmapFactory.decodeResource(getResources(), id);
 	}
 
-	private void downloadGameStatus() throws IOException, InterruptedException, ExecutionException {
+	private void downloadGameStatus() throws IOException, InterruptedException, ExecutionException, IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
 		player = new AsyncTask<Long, Void, Player>() {
 			protected Player doInBackground(Long[] params) {
 				try {
@@ -127,8 +139,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			};
 		}.execute(player.getHero().getCurrentLandId()).get();
 		
+		fieldTypes = new AsyncTask<Void, Void, List<FieldType>>(){
+
+			@Override
+			protected List<FieldType> doInBackground(Void... params) {
+				try {
+					return fieldTypeEndpoint.listFieldType().execute().getItems();
+				} catch (IOException e) {
+					Log.e(TAG, "Failed to download field types", e);
+					return null;
+				}
+			}
+			
+		}.execute(null, null).get();
+		if (fieldTypes == null) {
+			throw new RuntimeException("Failed to download field types");
+		}
+		
 		heroObject = new HeroObject(getPlayerBitmap(), player.getHero(), land.getMinX(), land.getMinY());
-		landMap = new LandMap(land, createBitmaps());
+		landMap = new LandMap(land, createDrawableFieldTypes());
 		
 		//offsetX = player.getHero().getX();
 		//offsetY = player.getHero().getY();
@@ -191,7 +220,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				if(landMap.isFieldPassable(localDestinationPoint.x, localDestinationPoint.y)){
 					heroObject.setGlobalCoordinates(localDestinationPoint.x, localDestinationPoint.y);
 					//TODO update player in central DB via endpoint
-					heroObject.setPath(landMap.findPath(localDestinationPoint, localStartPoint));
+					heroObject.setPath(landMap.findPath(localStartPoint, localDestinationPoint));
 				} else {
 					Log.w(TAG, "Incorrect destination point: "+localStartPoint);
 				}

@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Nd5ZpnLEKBkTilLZ15Wd5aNJhRM\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/__hE632jl0oBFvuQimRWXih_6XE\"",
  "discoveryVersion": "v1",
  "id": "fieldtypeendpoint:v1",
  "name": "fieldtypeendpoint",
@@ -110,6 +110,27 @@
   }
  },
  "methods": {
+  "findByName": {
+   "id": "fieldtypeendpoint.findByName",
+   "path": "findByName/{name}",
+   "httpMethod": "POST",
+   "parameters": {
+    "name": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "name"
+   ],
+   "response": {
+    "$ref": "FieldType"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "getFieldType": {
    "id": "fieldtypeendpoint.getFieldType",
    "path": "fieldtype/{id}",

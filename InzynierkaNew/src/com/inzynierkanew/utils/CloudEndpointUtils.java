@@ -9,6 +9,7 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
@@ -166,4 +167,15 @@ public class CloudEndpointUtils {
 				});
 		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
 	}
+	
+	public static Fieldtypeendpoint newFieldTypeEndpoint(){
+		Fieldtypeendpoint.Builder endpointBuilder = new Fieldtypeendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+	}
+	
+	
 }

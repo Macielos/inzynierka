@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/MCe0M7WePZOMIY8PIZhpAra_HVM\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Ysy9HKQw8GoTh-pLdBOPFcj5imQ\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -93,6 +93,13 @@
    "id": "Hero",
    "type": "object",
    "properties": {
+    "army": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
     "currentLandId": {
      "type": "string",
      "format": "int64"

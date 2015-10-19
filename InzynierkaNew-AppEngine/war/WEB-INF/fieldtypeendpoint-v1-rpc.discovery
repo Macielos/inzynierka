@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Nd5ZpnLEKBkTilLZ15Wd5aNJhRM\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/__hE632jl0oBFvuQimRWXih_6XE\"",
  "discoveryVersion": "v1",
  "id": "fieldtypeendpoint:v1",
  "name": "fieldtypeendpoint",
@@ -108,6 +108,24 @@
   }
  },
  "methods": {
+  "fieldtypeendpoint.findByName": {
+   "id": "fieldtypeendpoint.findByName",
+   "parameters": {
+    "name": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "name"
+   ],
+   "returns": {
+    "$ref": "FieldType"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "fieldtypeendpoint.getFieldType": {
    "id": "fieldtypeendpoint.getFieldType",
    "allowGet": true,

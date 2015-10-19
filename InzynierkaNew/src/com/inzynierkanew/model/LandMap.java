@@ -28,27 +28,27 @@ public class LandMap implements IRenderable {
 	private int height;
 	private int width;
 	
-	private Map<Integer, Bitmap> bitmaps = new HashMap<>();
+	private final Map<Integer, DrawableFieldType> fieldTypes;
 	
 	private float offsetX;
 	private float offsetY;
 	
 	// FIELD TYPES - TEMP
-	public static final int EMPTY = 0;
-	public static final int PASSABLE = 1;
-	public static final int NON_PASSABLE = 2;
-	public static final int EXISTING_LAND = 3;
-	public static final int EXISTING_LAND_PASSAGE = 4;
-	public static final int CROSSROAD = 5;
-
-	public static final int ROAD = 6;
-	public static final int PASSAGE = 7;
-	public static final int TOWN = 8;
-	public static final int DUNGEON = 9;
+//	public static final int EMPTY = 0;
+//	public static final int PASSABLE = 1;
+//	public static final int NON_PASSABLE = 2;
+//	public static final int EXISTING_LAND = 3;
+//	public static final int EXISTING_LAND_PASSAGE = 4;
+//	public static final int CROSSROAD = 5;
+//
+//	public static final int ROAD = 6;
+//	public static final int PASSAGE = 7;
+//	public static final int TOWN = 8;
+//	public static final int DUNGEON = 9;
 	
-	public LandMap(Land land, Map<Integer, Bitmap> bitmaps){
+	public LandMap(Land land, Map<Integer, DrawableFieldType> fieldTypes){
 		this.land = land;
-		this.bitmaps = bitmaps;
+		this.fieldTypes = fieldTypes;
 		this.height = land.getHeight();
 		this.width = land.getWidth();
 		
@@ -69,12 +69,12 @@ public class LandMap implements IRenderable {
 	@Override
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.LTGRAY);
-		Bitmap bitmap;
+		DrawableFieldType drawableFieldType;
 		for(int j=0; j<height; ++j){
 			for(int i=0; i<width; ++i){
-				bitmap = bitmaps.get(fields[j][i]);
-				if(bitmap!=null){
-					canvas.drawBitmap(bitmap, offsetX+Constants.TILE_SIZE*i, offsetY+Constants.TILE_SIZE*j, null);
+				drawableFieldType = fieldTypes.get(fields[j][i]);
+				if(drawableFieldType!=null){
+					canvas.drawBitmap(drawableFieldType.getBitmap(), offsetX+Constants.TILE_SIZE*i, offsetY+Constants.TILE_SIZE*j, null);
 				}
 			}
 		}
@@ -96,7 +96,10 @@ public class LandMap implements IRenderable {
 		//TODO jak gracz kliknie ponownie w czasie trasy - albo przerywac droge i wytyczac nowa albo ignorowac klik
 		Log.i(TAG, "Finding path from " + start + " to " + destination + " using recursive algorithm");
 		Queue<Point> path = new LinkedList<>();
-		boolean found = findPathInternal(start, destination, null, new HashSet<Point>(), path);
+		boolean found = findPathInternal(destination, start, null, new HashSet<Point>(), path);
+		if(found){
+			path.add(destination);
+		}
 		Log.i(TAG, path.toString());
 		if (!found) {
 			Log.w(TAG, "Path " + start + "->"+destination+" not found!");
@@ -106,11 +109,7 @@ public class LandMap implements IRenderable {
 
 	private boolean findPathInternal(Point current, Point destination, Point previous, Set<Point> visitedPoints, Queue<Point> path) {
 		if (current.x == destination.x && current.y == destination.y) {
-			if(path.isEmpty()){
-				path.add(current);
-				return true;
-			};
-			return false;
+			return path.isEmpty();
 		}
 
 		visitedPoints.add(current);
@@ -219,24 +218,13 @@ public class LandMap implements IRenderable {
 		return orderedNeighbourPoints;
 	}
 	
+	//TODO cos tu sie zjebalo - dla jakiegos typu fieldTypes.get zwraca nulla
 	public boolean isFieldPassable(int x, int y) {
-		return withinMapSegment(x, y) && hasType(x, y, PASSABLE, ROAD, CROSSROAD, PASSAGE, DUNGEON, TOWN);
+		return withinMapSegment(x, y) && fieldTypes.get(fields[y][x]).getFieldType().getPassable().booleanValue();
 	}
 	
 	private boolean withinMapSegment(int x, int y) {
 		return x >= 0 && y >= 0 && x < width && y < height;
 	}
 	
-	private boolean hasType(int x, int y, int... types) {
-		if(!withinMapSegment(x, y)){
-			return false;
-		}
-		for(int type: types){
-			if(fields[y][x] == type){
-				return true;
-			}
-		}
-		return false;
-	}
-
 }

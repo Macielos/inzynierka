@@ -66,7 +66,7 @@ public class WorldDump {
 					if(map[land.getMinY()-minY+y][land.getMinX()-minX+x]==WorldGenerator.EMPTY){
 						map[land.getMinY()-minY+y][land.getMinX()-minX+x] = f;
 					} else {
-						map[land.getMinY()-minY+y][land.getMinX()-minX+x] = WorldGenerator.PASSABLE;
+						map[land.getMinY()-minY+y][land.getMinX()-minX+x] = WorldGenerator.OVERLAPPING;
 					}
 				}
 				++i;

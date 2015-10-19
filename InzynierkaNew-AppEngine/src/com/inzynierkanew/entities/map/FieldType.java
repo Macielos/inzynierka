@@ -1,23 +1,20 @@
 package com.inzynierkanew.entities.map;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class FieldType {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
 	private boolean passable;
 	private String texture;
 	
-	public FieldType(String name, boolean passable, String texture) {
-		super();
+	public FieldType(Long id, String name, boolean passable, String texture) {
+		this.id = id;
 		this.name = name;
 		this.passable = passable;
 		this.texture = texture;

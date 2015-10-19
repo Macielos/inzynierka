@@ -21,6 +21,8 @@ public class Hero {
 	private int level;
 	
 	private Long currentLandId;
+	
+	private int[] army;
 
 	public int getX() {
 		return x;
@@ -53,7 +55,13 @@ public class Hero {
 	public void setCurrentLandId(Long currentLandId) {
 		this.currentLandId = currentLandId;
 	}
-	
-	
+
+	public int[] getArmy() {
+		return army;
+	}
+
+	public void setArmy(int[] army) {
+		this.army = army;
+	}
 	
 }

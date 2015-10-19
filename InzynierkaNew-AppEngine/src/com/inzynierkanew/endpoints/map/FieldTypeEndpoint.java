@@ -144,6 +144,16 @@ public class FieldTypeEndpoint {
 			mgr.close();
 		}
 	}
+	
+	@ApiMethod(name = "findByName")
+	public FieldType findByName(@Named("name") String name) {
+		EntityManager mgr = getEntityManager();
+		try {
+			return (FieldType) mgr.createQuery("select from FieldType as FieldType where FieldType.name = '"+name+"'").setMaxResults(1).getSingleResult();
+		} finally {
+			mgr.close();
+		}
+	}
 
 	private boolean containsFieldType(FieldType fieldtype) {
 		EntityManager mgr = getEntityManager();
