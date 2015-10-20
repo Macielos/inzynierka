@@ -10,11 +10,19 @@ import java.util.Queue;
 import java.util.Set;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.google.api.client.json.GenericJson;
+import com.inzynierkanew.R;
+import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
+import com.inzynierkanew.entities.map.landendpoint.model.Dungeon;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
+import com.inzynierkanew.entities.map.landendpoint.model.Passage;
+import com.inzynierkanew.entities.map.landendpoint.model.Town;
+import com.inzynierkanew.game.GameView;
 import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.Point;
 
@@ -22,35 +30,46 @@ public class LandMap implements IRenderable {
 
 	private static final String TAG = LandMap.class.getSimpleName();
 	
-	private int[][] fields;
-	private Land land;
+	private final int[][] fields;
+	private final Land land;
 	
-	private int height;
-	private int width;
+	private final int height;
+	private final int width;
 	
 	private final Map<Integer, DrawableFieldType> fieldTypes;
+	private final Map<Point, GenericJson> objects;
 	
 	private float offsetX;
 	private float offsetY;
 	
-	// FIELD TYPES - TEMP
-//	public static final int EMPTY = 0;
-//	public static final int PASSABLE = 1;
-//	public static final int NON_PASSABLE = 2;
-//	public static final int EXISTING_LAND = 3;
-//	public static final int EXISTING_LAND_PASSAGE = 4;
-//	public static final int CROSSROAD = 5;
-//
-//	public static final int ROAD = 6;
-//	public static final int PASSAGE = 7;
-//	public static final int TOWN = 8;
-//	public static final int DUNGEON = 9;
+	private final int cornerX;
+	private final int cornerY;
 	
-	public LandMap(Land land, Map<Integer, DrawableFieldType> fieldTypes){
+	private int PASSAGE;
+	private int TOWN;
+	private int DUNGEON;
+	
+	private final GameView gameView;
+
+	public LandMap(GameView gameView, Land land, List<FieldType> fieldTypes) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+		this.gameView = gameView;
 		this.land = land;
-		this.fieldTypes = fieldTypes;
 		this.height = land.getHeight();
 		this.width = land.getWidth();
+
+		this.fieldTypes = new HashMap<>(fieldTypes.size());
+		for(FieldType fieldType: fieldTypes){
+			this.fieldTypes.put(fieldType.getId().intValue(), new DrawableFieldType(fieldType, gameView.createBitmap(R.drawable.class.getField(fieldType.getName().toLowerCase()).getInt(null))));
+			if(fieldType.getName().equals("Dungeon")){
+				DUNGEON = fieldType.getId().intValue();
+			}
+			if(fieldType.getName().equals("Town")){
+				TOWN = fieldType.getId().intValue();
+			}			
+			if(fieldType.getName().equals("Passage")){
+				PASSAGE = fieldType.getId().intValue();
+			}
+		}
 		
 		fields = new int[height][];
 		for(int i=0; i<height; ++i){
@@ -64,8 +83,23 @@ public class LandMap implements IRenderable {
 			fields[y][x] = field;
 			++i;
 		}
+		
+		cornerX = land.getMinX();
+		cornerY = land.getMinY();
+		
+		objects = new HashMap<>(land.getPassages().size()+land.getDungeons().size()+(land.getHasTown()!=null && land.getHasTown().booleanValue() ? 1 : 0));
+		for(Passage passage: land.getPassages()){
+			objects.put(new Point(passage.getX()-cornerX, passage.getY()-cornerY), passage);
+		}
+		for(Dungeon dungeon: land.getDungeons()){
+			objects.put(new Point(dungeon.getX()-cornerX, dungeon.getY()-cornerY), dungeon);
+		}
+		Town town = land.getTown();
+		if(town!=null){
+			objects.put(new Point(town.getX()-cornerX, town.getY()-cornerY), town);
+		}
 	}
-	
+
 	@Override
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.LTGRAY);
@@ -218,9 +252,32 @@ public class LandMap implements IRenderable {
 		return orderedNeighbourPoints;
 	}
 	
-	//TODO cos tu sie zjebalo - dla jakiegos typu fieldTypes.get zwraca nulla
+	public GenericJson getObject(int x, int y){
+		return getObject(new Point(x, y));
+	}
+	
+	public GenericJson getObject(Point point){
+		return objects.get(point);
+	}
+	
 	public boolean isFieldPassable(int x, int y) {
-		return withinMapSegment(x, y) && fieldTypes.get(fields[y][x]).getFieldType().getPassable().booleanValue();
+		DrawableFieldType drawableFieldType = fieldTypes.get(fields[y][x]);
+		if(drawableFieldType == null){
+			return false;
+		}
+		return withinMapSegment(x, y) && drawableFieldType.getFieldType().getPassable().booleanValue();
+	}
+	
+	public boolean isDungeon(int x, int y){
+		return withinMapSegment(x, y) && fields[y][x] == DUNGEON;
+	}
+	
+	public boolean isPassage(int x, int y){
+		return withinMapSegment(x, y) && fields[y][x] == PASSAGE;
+	}
+	
+	public boolean isTown(int x, int y){
+		return withinMapSegment(x, y) && fields[y][x] == TOWN;
 	}
 	
 	private boolean withinMapSegment(int x, int y) {

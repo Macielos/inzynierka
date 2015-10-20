@@ -85,22 +85,6 @@
         "body" : "empty"
       }
     },
-    "passageendpoint.insertPassage" : {
-      "path" : "passage",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "passageendpoint.listPassage" : {
       "path" : "passage",
       "httpMethod" : "GET",
@@ -121,6 +105,22 @@
           }
         },
         "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "passageendpoint.insertPassage" : {
+      "path" : "passage",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -221,17 +221,17 @@
       },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
       },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.listPassage" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Passage"
+        }
+      },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage" : {
         "request" : {
           "$ref" : "Passage"
         },
         "response" : {
           "$ref" : "Passage"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.listPassage" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Passage"
         }
       }
     }

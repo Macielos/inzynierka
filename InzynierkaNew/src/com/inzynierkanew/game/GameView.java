@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,19 +22,25 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.google.api.client.json.GenericJson;
 import com.inzynierkanew.R;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
+import com.inzynierkanew.entities.map.landendpoint.model.Passage;
+import com.inzynierkanew.entities.map.landendpoint.model.Town;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
 import com.inzynierkanew.model.DrawableFieldType;
 import com.inzynierkanew.model.LandMap;
 import com.inzynierkanew.model.HeroObject;
+import com.inzynierkanew.utils.AndroidUtils;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.Constants;
+import com.inzynierkanew.utils.IOnChoice;
+import com.inzynierkanew.utils.IOnConfirm;
 import com.inzynierkanew.utils.Point;
 import com.inzynierkanew.utils.TimeUtils;
 
@@ -49,6 +58,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
 	private Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
 
+	private AtomicBoolean renderGame = new AtomicBoolean();
+	
 	private List<FieldType> fieldTypes;
 	
 	private Player player;
@@ -79,38 +90,52 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		//gestureDetector.setOnDoubleTapListener(this);
 		setFocusable(true);
 		try {
-			Log.i(TAG, "Waiting...");
-			//Thread.sleep(6000);
-			downloadGameStatus();
+			downloadPlayerStatus();
+			downloadTypes();
+			downloadNextLand(heroObject.getHero().getCurrentLandId());
 			Log.i(TAG, "Land id: " + land.getId());
 			Log.i(TAG, land.toPrettyString());
+			renderGame.set(true);
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to download game status from server, exception is" + e.getClass().getName() + ", message is: " + e.getMessage(),	e);
 		}
 	}
 
-	private Map<Integer, DrawableFieldType> createDrawableFieldTypes() throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
-		Map<Integer, DrawableFieldType> drawableFieldTypes = new HashMap<>(fieldTypes.size());
-		for(FieldType fieldType: fieldTypes){
-			drawableFieldTypes.put(fieldType.getId().intValue(), new DrawableFieldType(fieldType, createBitmap(R.drawable.class.getField(fieldType.getName().toLowerCase()).getInt(null))));
+	private void downloadTypes() throws InterruptedException, ExecutionException {
+		fieldTypes = new AsyncTask<Void, Void, List<FieldType>>(){
+
+			@Override
+			protected List<FieldType> doInBackground(Void... params) {
+				try {
+					return fieldTypeEndpoint.listFieldType().execute().getItems();
+				} catch (IOException e) {
+					Log.e(TAG, "Failed to download field types", e);
+					return null;
+				}
+			}
+			
+		}.execute(null, null).get();
+		if (fieldTypes == null) {
+			throw new RuntimeException("Failed to download field types");
 		}
-//	
-//		bitmaps.put(1, createBitmap(R.drawable.grass));
-//		bitmaps.put(2, createBitmap(R.drawable.mountains));
-//		bitmaps.put(5, createBitmap(R.drawable.road));
-//		bitmaps.put(6, createBitmap(R.drawable.road));
-//		bitmaps.put(7, createBitmap(R.drawable.passage));
-//		bitmaps.put(8, createBitmap(R.drawable.town));
-//		bitmaps.put(9, createBitmap(R.drawable.dungeon));
-//		return bitmaps;
-		return drawableFieldTypes;
 	}
 
-	private Bitmap createBitmap(int id) {
-		return BitmapFactory.decodeResource(getResources(), id);
+	private void downloadNextLand(Long id) throws InterruptedException, ExecutionException, IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+		land = new AsyncTask<Long, Void, Land>() {
+			protected Land doInBackground(Long[] params) {
+				try {
+					return landEndpoint.getLand(params[0]).execute();
+				} catch (IOException e) {
+					Log.e(TAG, "Failed to download land", e);
+					return null;
+				}
+			};
+		}.execute(id).get();
+		landMap = new LandMap(this, land, fieldTypes);
+		heroObject.setCornerCoordinates(land.getMinX(), land.getMinY());
 	}
-
-	private void downloadGameStatus() throws IOException, InterruptedException, ExecutionException, IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+	
+	private void downloadPlayerStatus() throws NumberFormatException, InterruptedException, ExecutionException {
 		player = new AsyncTask<Long, Void, Player>() {
 			protected Player doInBackground(Long[] params) {
 				try {
@@ -128,48 +153,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		if (player.getHero().getCurrentLandId() == null) {
 			throw new RuntimeException("Player assigned to this session id is not in any land on server");
 		}
-		land = new AsyncTask<Long, Void, Land>() {
-			protected Land doInBackground(Long[] params) {
-				try {
-					return landEndpoint.getLand(params[0]).execute();
-				} catch (IOException e) {
-					Log.e(TAG, "Failed to download land", e);
-					return null;
-				}
-			};
-		}.execute(player.getHero().getCurrentLandId()).get();
-		
-		fieldTypes = new AsyncTask<Void, Void, List<FieldType>>(){
-
-			@Override
-			protected List<FieldType> doInBackground(Void... params) {
-				try {
-					return fieldTypeEndpoint.listFieldType().execute().getItems();
-				} catch (IOException e) {
-					Log.e(TAG, "Failed to download field types", e);
-					return null;
-				}
-			}
-			
-		}.execute(null, null).get();
-		if (fieldTypes == null) {
-			throw new RuntimeException("Failed to download field types");
-		}
-		
-		heroObject = new HeroObject(getPlayerBitmap(), player.getHero(), land.getMinX(), land.getMinY());
-		landMap = new LandMap(land, createDrawableFieldTypes());
-		
-		//offsetX = player.getHero().getX();
-		//offsetY = player.getHero().getY();
+		heroObject = new HeroObject(getPlayerBitmap(), player.getHero());
+		centerCameraOnHero();
+	}
+	
+	private void centerCameraOnHero(){
+		offsetX = heroObject.getLocalX()*Constants.TILE_SIZE;
+		offsetY = heroObject.getLocalY()*Constants.TILE_SIZE;
 	}
 
+	public Bitmap createBitmap(int id) {
+		return BitmapFactory.decodeResource(getResources(), id);
+	}
+	
 	private Bitmap getPlayerBitmap() {
 		return BitmapFactory.decodeResource(getResources(), R.drawable.hero);
 	}
 
 	public void render(Canvas canvas) {
 		//if(scrolling){	//TODO zobaczy sie, kiedy renderowac, a kiedy nie trzeba
-			landMap.render(canvas);
+		landMap.render(canvas);
 		//}
 		heroObject.render(canvas);
 	}
@@ -177,11 +180,51 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public void update() {
 		landMap.update();
 		heroObject.update();
-	}
+		if(!heroObject.onObject()){
+			return;
+		}
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		// TODO Auto-generated method stub
+		GenericJson object = landMap.getObject(heroObject.getLocalX(), heroObject.getLocalY());
+		if(object==null){
+			return;
+		}
+		
+		if(object instanceof Town){
+			Log.i(TAG, "Entering town");
+		} else if(object instanceof Passage){
+			Log.i(TAG, "Crossing passage");
+			renderGame.set(true);
+			final Passage passage = (Passage) object;
+//			if(passage.getNextLandId()==null){
+//
+//				AndroidUtils.showDialog(getContext(), "Lands beyond this border are not available yet. Come back later", new IOnConfirm() {
+//					
+//					@Override
+//					public void onConfirm() {
+//						renderGame.set(true);
+//					}
+//				});
+//			} else {
+			AndroidUtils.showChoiceDialog(getContext(), "Do you want to move to the next land?", new IOnChoice() {
+				
+				@Override
+				public void onConfirm() {
+					try {
+						downloadNextLand(passage.getNextLandId());
+						heroObject.moveToNextLand(passage, land);
+						renderGame.set(true);
+					} catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | InterruptedException | ExecutionException e) {
+						Log.e(TAG, "Error while downloading next land", e);
+					}
+				}
+				
+				@Override
+				public void onDecline() {
+					renderGame.set(true);
+				}
+
+			});
+		}
 	}
 
 	@Override
@@ -189,6 +232,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		// TODO Auto-generated method stub
 		thread.setRunning(true);
 		thread.start();
+	}
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -218,7 +266,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				Point localDestinationPoint = new Point((int)((event.getX()-offsetX)/Constants.TILE_SIZE), (int)((event.getY()-offsetY)/Constants.TILE_SIZE));
 				Point localStartPoint = new Point(heroObject.getLocalX(), heroObject.getLocalY());
 				if(landMap.isFieldPassable(localDestinationPoint.x, localDestinationPoint.y)){
-					heroObject.setGlobalCoordinates(localDestinationPoint.x, localDestinationPoint.y);
+					if(heroObject.onTheMove()){
+						heroObject.haltMovement();
+					}
+					heroObject.setHeroCoordinates(localDestinationPoint.x, localDestinationPoint.y);
 					//TODO update player in central DB via endpoint
 					heroObject.setPath(landMap.findPath(localStartPoint, localDestinationPoint));
 				} else {
@@ -249,7 +300,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 	
-	
+	public boolean renderGame(){
+		return renderGame.get();
+	}
+
 //	
 //    @Override
 //    public boolean onDown(MotionEvent event) { 

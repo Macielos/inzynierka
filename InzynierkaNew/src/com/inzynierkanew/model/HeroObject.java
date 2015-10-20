@@ -1,11 +1,14 @@
 package com.inzynierkanew.model;
 
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.inzynierkanew.entities.map.landendpoint.model.Land;
+import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.players.playerendpoint.model.Hero;
 import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.Point;
@@ -27,9 +30,12 @@ public class HeroObject implements IRenderable {
 	private float offsetX;
 	private float offsetY;
 	
-	private float localX;
-	private float localY;
+	private float localFloatX;
+	private float localFloatY;
 	
+	private int localX;
+	private int localY;
+
 	private int direction = NONE;
 	
 	private Queue<Point> path = null;
@@ -38,13 +44,9 @@ public class HeroObject implements IRenderable {
 	private int cornerX;
 	private int cornerY;
 	
-	public HeroObject(Bitmap bitmap, Hero hero, int cornerX, int cornerY) {
+	public HeroObject(Bitmap bitmap, Hero hero) {
 		this.bitmap = bitmap;
 		this.hero = hero;
-		this.cornerX = cornerX;
-		this.cornerY = cornerY;
-		this.localX = hero.getX()-cornerX;
-		this.localY = hero.getY()-cornerY;
 	}
 
 	public Hero getHero() {
@@ -58,10 +60,14 @@ public class HeroObject implements IRenderable {
 	public Bitmap getBitmap() {
 		return bitmap;
 	}
+	
+	public Queue<Point> getPath() {
+		return path;
+	}
 
 	@Override
 	public void render(Canvas canvas) {
-		canvas.drawBitmap(bitmap, offsetX+Constants.TILE_SIZE*localX, offsetY+Constants.TILE_SIZE*localY, null);
+		canvas.drawBitmap(bitmap, offsetX+Constants.TILE_SIZE*localFloatX, offsetY+Constants.TILE_SIZE*localFloatY, null);
 	}
 
 	@Override
@@ -69,23 +75,23 @@ public class HeroObject implements IRenderable {
 		if(path==null){
 			return;
 		}
-		direction = getDirection();
+		setDirection();
 		switch(direction){
 		case LEFT:
-			localX-=SPEED;
+			localFloatX-=SPEED;
 			break;
 		case RIGHT:
-			localX+=SPEED;
+			localFloatX+=SPEED;
 			break;
 		case UP:
-			localY-=SPEED;
+			localFloatY-=SPEED;
 			break;
 		case DOWN:
-			localY+=SPEED;
+			localFloatY+=SPEED;
 			break;
 		case NONE:
-			localX = nextPoint.x;
-			localY = nextPoint.y;
+			localFloatX = localX = nextPoint.x;
+			localFloatY = localY = nextPoint.y;
 			nextPoint = path.poll();
 			if(nextPoint==null){
 				path = null;
@@ -102,6 +108,8 @@ public class HeroObject implements IRenderable {
 	public void setCornerCoordinates(int cornerX, int cornerY){
 		this.cornerX = cornerX;
 		this.cornerY = cornerY;
+		this.localFloatX = this.localX = hero.getX()-cornerX;
+		this.localFloatY = this.localY = hero.getY()-cornerY;
 	}
 	
 	public void setPath(Queue<Point> path){
@@ -113,39 +121,85 @@ public class HeroObject implements IRenderable {
 		}
 	}
 	
-	public void setGlobalCoordinates(int localX, int localY){
+	public void setHeroCoordinates(int localX, int localY){
+		//TODO
 		hero.setX(localX+cornerX);
 		hero.setY(localY+cornerY);
 	}
 	
-	private int getDirection(){
-		float diffX = nextPoint.x - localX;
-		float diffY = nextPoint.y - localY;
+	public void haltMovement(){
+		localX = Math.round(localX);
+		localY = Math.round(localY);
+		hero.setX((int)localX+cornerX);
+		hero.setY((int)localY+cornerY);
+		path = null;
+	}
+	
+	private void setDirection(){
+		float diffX = nextPoint.x - localFloatX;
+		float diffY = nextPoint.y - localFloatY;
 		if(Math.abs(diffX) > Math.abs(diffY)){
 			if(diffX > DELTA){
-				return RIGHT;
+				direction = RIGHT;
+				return;
 			} else if(diffX < -DELTA){
-				return LEFT;
+				direction = LEFT;
+				return;
 			} else {
-				return NONE;
+				direction = NONE;
+				return;
 			}
 		} else {
 			if(diffY > DELTA){
-				return DOWN;
+				direction = DOWN;
+				return;
 			} else if(diffY < -DELTA){
-				return UP;
+				direction = UP;
+				return;
 			} else {
-				return NONE;
+				direction = NONE;
+				return;
 			}
 		}
 	}
 	
+	public void moveToNextLand(Passage passage, Land nextLand){
+		hero.setCurrentLandId(nextLand.getId());
+		hero.setX(passage.getNextX());
+		hero.setY(passage.getNextY());
+		cornerX = nextLand.getMinX();
+		cornerY = nextLand.getMinY();
+		this.localFloatX = this.localX = hero.getX()-cornerX;
+		this.localFloatY = this.localY = hero.getY()-cornerY;
+	}
+	
+	public int getDirection(){
+		return direction;
+	}
+	
 	public int getLocalX(){
-		return hero.getX() - cornerX;
+		return localX;
 	}
 	
 	public int getLocalY(){
-		return hero.getY() - cornerY;
+		return localY;
+	}
+	
+	public float getLocalFloatX(){
+		return localFloatX;
+	}
+	
+	public float getLocalFloatY(){
+		return localFloatY;
+	}
+	
+	public boolean onTheMove(){
+		return path!=null && !path.isEmpty();
+	}
+	
+	//TODO 
+	public boolean onObject(){
+		return direction == NONE;
 	}
 	
 }

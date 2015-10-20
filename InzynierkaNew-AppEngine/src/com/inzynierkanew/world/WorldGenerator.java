@@ -43,14 +43,14 @@ public class WorldGenerator {
 
 	private static final double CHANCE_FOR_TOWN = 0.75;
 	private static final double CHANCE_FOR_EXTRA_DUNGEON = 0.6;
-	
+
 	private static final int MIN_ACCEPTABLE_PINNACLE_WIDTH = 3;
 
 	private static final int MIN_PASSAGES = 3;
 	private static final int MIN_PASSAGE_GAP = 2;
 	private static final int PASSAGE_MAX_RETRIES = 500;
 	private static final double CHANCE_FOR_PASSAGE = 0.12;
-	
+
 	private static final int TOWN_MAX_RETRIES = 100;
 
 	private static final int CROSSROAD_MIN_GAP = 5;
@@ -58,26 +58,26 @@ public class WorldGenerator {
 
 	private static final int DUNGEON_ARMY_MIN_STRENGTH = 400;
 	private static final int DUNGEON_ARMY_DIFF = 1200;
-	
+
 	// FIELD TYPES - TEMP
-	//TODO load field types from datastore
+	// TODO load field types from datastore
 	public static final int EMPTY = 0;
 	public static final int EXISTING_LAND = -1;
 	public static final int EXISTING_LAND_PASSAGE = -2;
 	public static final int CROSSROAD = -3;
-	
+
 	public static final int OVERLAPPING = -4;
-	
+
 	public static final int UP = 1;
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
 	public static final int RIGHT = 4;
-		
+
 	public static final long MAP_SEGMENT_FACTOR = 1000000000000L;
 
 	// LOG
 	private Log log = LogFactory.getLog(getClass());
-	
+
 	// ENDPOINTS
 	private final LandEndpoint landEndpoint;
 	private final PlayerEndpoint playerEndpoint;
@@ -92,7 +92,7 @@ public class WorldGenerator {
 	private int PASSAGE;
 	private int TOWN;
 	private int DUNGEON;
-	
+
 	private Map<Long, List<UnitType>> unitTypesByFactions;
 
 	// EXISTING ELEMENTS
@@ -104,19 +104,19 @@ public class WorldGenerator {
 
 	// TEMP PRODUCTS
 	private int[][] mapSegment;
-	
+
 	private int width;
 	private int height;
 
-	//private Point startBorderPoint;
+	// private Point startBorderPoint;
 	private List<Point> borderPoints = new ArrayList<>();
 	private Set<Point> borderPointSet = new HashSet<>();
-	
+
 	private List<Point> candidatesForPassage = new ArrayList<>();
-	
+
 	private List<Passage> passages = new ArrayList<>();
 	private Set<Point> passagePoints = new HashSet<>();
-	
+
 	private Point town = null;
 
 	private Set<GraphEdge> edges = new HashSet<>();
@@ -137,22 +137,21 @@ public class WorldGenerator {
 
 	private Set<Land> neighbourLandsToUpdate = new HashSet<>();
 	private List<Passage> neighbourPassagesToUpdate = new ArrayList<>();
-	
+
 	private final Random random;
 	private final long seed;
 
 	public WorldGenerator() {
 		this(new Random().nextLong());
 	}
-	
+
 	public WorldGenerator(long seed) {
-		this(seed, new LandEndpoint(), new PlayerEndpoint(), new PassageEndpoint(), new FieldTypeEndpoint(), new UnitTypeEndpoint(), new FactionEndpoint());
+		this(seed, new LandEndpoint(), new PlayerEndpoint(), new PassageEndpoint(), new FieldTypeEndpoint(), new UnitTypeEndpoint(),
+				new FactionEndpoint());
 	}
-	
-	public WorldGenerator(long seed, 
-			LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, 
-			PassageEndpoint passageEndpoint, FieldTypeEndpoint fieldTypeEndpoint, 
-			UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint) {
+
+	public WorldGenerator(long seed, LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, PassageEndpoint passageEndpoint,
+			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint) {
 		this.seed = seed;
 		this.random = new Random(seed);
 		this.landEndpoint = landEndpoint;
@@ -163,10 +162,8 @@ public class WorldGenerator {
 		this.factionEndpoint = factionEndpoint;
 	}
 
-	public WorldGenerator(int[][] mapSegment, 
-			LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, 
-			PassageEndpoint passageEndpoint, FieldTypeEndpoint fieldTypeEndpoint, 
-			UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint) {
+	public WorldGenerator(int[][] mapSegment, LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, PassageEndpoint passageEndpoint,
+			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint) {
 		this.seed = new Random().nextLong();
 		this.random = new Random(seed);
 		this.mapSegment = mapSegment;
@@ -177,50 +174,50 @@ public class WorldGenerator {
 		this.unitTypeEndpoint = unitTypeEndpoint;
 		this.factionEndpoint = factionEndpoint;
 	}
-	
-	public void generateAndPersistLand(){
+
+	public void generateAndPersistLand() {
 		try {
 			Land land = generateLand();
 			landEndpoint.insertLand(land);
 			new WorldDump(landEndpoint).dump();
 		} catch (WorldGenerationException e) {
-			log.error("Failed to generate new land with seed "+seed+". Error is displayed below: ");
+			log.error("Failed to generate new land with seed " + seed + ". Error is displayed below: ");
 			log.error(e, e);
-		} 
+		}
 	}
 
 	public Land generateLand() throws WorldGenerationException {
-		log.info("Generating land with seed "+seed+"...");
+		log.info("Generating land with seed " + seed + "...");
 		loadUnitAndMapData();
 		prepareMapSegment();
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		findBorderLand();
 		placeNeighbours();
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		selectFreePassages();
-		populateMapSegment();		
+		populateMapSegment();
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		smoothEdges();
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		reduceMapSegment();
 		prepareGroundForNeighbourPassages();
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
-		//TODO wez pasujace passage z sasiednich landow i zrob to samo!!!
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// TODO wez pasujace passage z sasiednich landow i zrob to samo!!!
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		prepareBorders();
 		createPassages();
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		createTown();
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		buildRoads();
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		placeDungeons();
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		Land land = toLand();
-		log.info("Successfully generated land with seed "+seed);
+		log.info("Successfully generated land with seed " + seed);
 		return land;
 	}
-	
+
 	private void loadUnitAndMapData() {
 		PASSABLE = (int) fieldTypeEndpoint.findByName("Grass").getId();
 		NON_PASSABLE = (int) fieldTypeEndpoint.findByName("Mountains").getId();
@@ -228,17 +225,17 @@ public class WorldGenerator {
 		PASSAGE = (int) fieldTypeEndpoint.findByName("Passage").getId();
 		TOWN = (int) fieldTypeEndpoint.findByName("Town").getId();
 		DUNGEON = (int) fieldTypeEndpoint.findByName("Dungeon").getId();
-		
+
 		List<Faction> factions = (List<Faction>) factionEndpoint.getFactionsForDungeons(null, null).getItems();
 		unitTypesByFactions = new HashMap<>(factions.size());
-		for(Faction faction: factions){
+		for (Faction faction : factions) {
 			unitTypesByFactions.put(faction.getId(), new ArrayList<UnitType>());
 		}
 		List<UnitType> unitTypes = (List<UnitType>) unitTypeEndpoint.listUnitType(null, null).getItems();
 		List<UnitType> unitTypesByFaction;
-		for(UnitType unitType: unitTypes){
+		for (UnitType unitType : unitTypes) {
 			unitTypesByFaction = unitTypesByFactions.get(unitType.getFactionId());
-			if(unitTypesByFaction!=null){
+			if (unitTypesByFaction != null) {
 				unitTypesByFaction.add(unitType);
 			}
 		}
@@ -281,15 +278,17 @@ public class WorldGenerator {
 				}
 			}
 		}
-		if(borderLand!=null && borderLandPassage==null){
-			throwException("Possible incorrect lands in datastore. Land "+borderLand.getId()+" is selected as having free passage, although it has none");
+		if (borderLand != null && borderLandPassage == null) {
+			throwException("Possible incorrect lands in datastore. Land " + borderLand.getId()
+					+ " is selected as having free passage, although it has none");
 		}
 		setBoundaries();
-		String info = "Selected borderland "+(borderLand==null ? null : borderLand.getId())+""
-				+ " and free passage "+(borderLandPassage==null ? null : borderLandPassage.getKey());
-		if(borderLandPassage!=null){
-			info+="\nFree passage global coordinates: "+new Point(borderLandPassage.getX(), borderLandPassage.getY());
-			info+="\nFree passage local coordinates: "+new Point(borderLandPassage.getX()-mapSegmentMinX, borderLandPassage.getY()-mapSegmentMinY);
+		String info = "Selected borderland " + (borderLand == null ? null : borderLand.getId()) + "" + " and free passage "
+				+ (borderLandPassage == null ? null : borderLandPassage.getKey());
+		if (borderLandPassage != null) {
+			info += "\nFree passage global coordinates: " + new Point(borderLandPassage.getX(), borderLandPassage.getY());
+			info += "\nFree passage local coordinates: "
+					+ new Point(borderLandPassage.getX() - mapSegmentMinX, borderLandPassage.getY() - mapSegmentMinY);
 		}
 		log.info(info);
 	}
@@ -328,16 +327,15 @@ public class WorldGenerator {
 		int maxX = minX + LAND_MAX_WIDTH;
 		int maxY = minY + LAND_MAX_HEIGHT;
 
-		neighbours = (borderLand == null)
-				? new ArrayList<Land>(0) 
-				: (List<Land>) landEndpoint.findLandsInNeighbourhood(WorldGenerationUtils.calcMapSegment(minX, minY, maxX, maxY)).getItems();
+		neighbours = (borderLand == null) ? new ArrayList<Land>(0) : (List<Land>) landEndpoint.findLandsInNeighbourhood(
+				WorldGenerationUtils.calcMapSegment(minX, minY, maxX, maxY)).getItems();
 
 		for (Land land : neighbours) {
 			placeLandOnMapSegment(land);
 		}
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 	}
-	
+
 	private void selectFreePassages() {
 		int localX;
 		int localY;
@@ -351,17 +349,18 @@ public class WorldGenerator {
 			}
 		}
 	}
-	
+
 	private void placeLandOnMapSegment(Land land) {
 		int localMinX = land.getMinX() - mapSegmentMinX;
 		int localMinY = land.getMinY() - mapSegmentMinY;
-		
-		//log.info(land.getWidth()+"x"+land.getHeight());
+
+		// log.info(land.getWidth()+"x"+land.getHeight());
 		int field;
 		for (int j = 0; j < land.getHeight(); ++j) {
 			for (int i = 0; i < land.getWidth(); ++i) {
-				//log.info(i+", "+j);
-				//log.info((j * land.getWidth() + i)+"/"+land.getFields().length);
+				// log.info(i+", "+j);
+				// log.info((j * land.getWidth() +
+				// i)+"/"+land.getFields().length);
 				if (withinMapSegment(localMinX + i, localMinY + j)) {
 					field = (int) land.getFields()[j * land.getWidth() + i];
 					if (field != EMPTY) {
@@ -375,41 +374,41 @@ public class WorldGenerator {
 			}
 		}
 	}
-	
-//	int[] fields = new int[mapSegment.length * mapSegment[0].length];
-//	for (int i = 0; i < mapSegment[0].length; ++i) {
-//		for (int j = 0; j < mapSegment.length; ++j) {
-//			fields[j * mapSegment[0].length + i] = mapSegment[j][i];
-//		}
-//	}
-	
+
+	// int[] fields = new int[mapSegment.length * mapSegment[0].length];
+	// for (int i = 0; i < mapSegment[0].length; ++i) {
+	// for (int j = 0; j < mapSegment.length; ++j) {
+	// fields[j * mapSegment[0].length + i] = mapSegment[j][i];
+	// }
+	// }
+
 	private void populateMapSegment() throws WorldGenerationException {
 		boolean startFromPassage = false;
 		Point startPoint = selectStartPoint(neighbourFreePassagePoints);
-		if(!hasType(startPoint.x, startPoint.y, EMPTY)){
+		if (!hasType(startPoint.x, startPoint.y, EMPTY)) {
 			int borderLandPassageLocalX = borderLandPassage.getX() - mapSegmentMinX;
 			int borderLandPassageLocalY = borderLandPassage.getY() - mapSegmentMinY;
 			startPoint = getNeighbourFieldOfType(borderLandPassageLocalX, borderLandPassageLocalY, EMPTY);
 			startFromPassage = true;
 		}
-		
-		if(startPoint==null){
+
+		if (startPoint == null) {
 			throwException("Failed to select start point for map generation");
 		}
 		minX = maxX = startPoint.x;
 		minY = maxY = startPoint.y;
-		populateMapSegmentInternal(startPoint.x, startPoint.y, INITIAL_CONTINUE_RATE+(startFromPassage ? 0.0 : 1.2));
+		populateMapSegmentInternal(startPoint.x, startPoint.y, INITIAL_CONTINUE_RATE + (startFromPassage ? 0.0 : 1.2));
 	}
-	
-	private Point selectStartPoint(List<Point> points) throws WorldGenerationException{
-		if(borderLand == null){
+
+	private Point selectStartPoint(List<Point> points) throws WorldGenerationException {
+		if (borderLand == null) {
 			return new Point(width / 2, height / 2);
-		} 
+		}
 		int borderLandPassageLocalX = borderLandPassage.getX() - mapSegmentMinX;
 		int borderLandPassageLocalY = borderLandPassage.getY() - mapSegmentMinY;
-		
-		int minDistance = (int) ((INITIAL_CONTINUE_RATE - 1.2)/CONTINUE_RATE_DROP);
-		
+
+		int minDistance = (int) ((INITIAL_CONTINUE_RATE - 1.2) / CONTINUE_RATE_DROP);
+
 		Point startPoint = null;
 		switch (borderLandPassage.getDirection()) {
 		case UP:
@@ -424,12 +423,13 @@ public class WorldGenerator {
 		case RIGHT:
 			startPoint = new Point(borderLandPassageLocalX + minDistance, borderLandPassageLocalY);
 			break;
-		default: 
-			throwException("Incorrect land passage: wrong direction: "+borderLandPassage.getDirection()+", passage: "+borderLandPassage);
+		default:
+			throwException("Incorrect land passage: wrong direction: " + borderLandPassage.getDirection() + ", passage: "
+					+ borderLandPassage);
 		}
 		return startPoint;
 	}
-	
+
 	private void populateMapSegmentInternal(int x, int y, double minResultToContinue) {
 		if (minResultToContinue <= 0 || x < 0 || y < 0 || x >= width || y >= height || mapSegment[y][x] != EMPTY) {
 			return;
@@ -452,32 +452,36 @@ public class WorldGenerator {
 			minY = y;
 		}
 
-		for(Point point: getOrderedPointsForMapPopulation(x, y, borderLandPassage == null ? 0 : borderLandPassage.getDirection())){
+		for (Point point : getOrderedPointsForMapPopulation(x, y, borderLandPassage == null ? 0 : borderLandPassage.getDirection())) {
 			populateMapSegmentInternal(point.x, point.y, minResultToContinue - CONTINUE_RATE_DROP);
 		}
-		
+
 		// log.info(WorldGenerationUtils.mapToString(mapSegment));
-//		populateMapSegmentInternal(x + 1, y, minResultToContinue - CONTINUE_RATE_DROP);
-//		populateMapSegmentInternal(x, y + 1, minResultToContinue - CONTINUE_RATE_DROP);
-//		populateMapSegmentInternal(x - 1, y, minResultToContinue - CONTINUE_RATE_DROP);
-//		populateMapSegmentInternal(x, y - 1, minResultToContinue - CONTINUE_RATE_DROP);
+		// populateMapSegmentInternal(x + 1, y, minResultToContinue -
+		// CONTINUE_RATE_DROP);
+		// populateMapSegmentInternal(x, y + 1, minResultToContinue -
+		// CONTINUE_RATE_DROP);
+		// populateMapSegmentInternal(x - 1, y, minResultToContinue -
+		// CONTINUE_RATE_DROP);
+		// populateMapSegmentInternal(x, y - 1, minResultToContinue -
+		// CONTINUE_RATE_DROP);
 	}
-	
-	private List<Point> getOrderedPointsForMapPopulation(int x, int y, int direction){
+
+	private List<Point> getOrderedPointsForMapPopulation(int x, int y, int direction) {
 		switch (direction) {
 		case UP:
-			return Arrays.asList(new Point(x, y+1), new Point(x-1, y), new Point(x+1, y), new Point(x, y-1));
+			return Arrays.asList(new Point(x, y + 1), new Point(x - 1, y), new Point(x + 1, y), new Point(x, y - 1));
 		case DOWN:
-			return Arrays.asList(new Point(x, y-1), new Point(x-1, y), new Point(x+1, y), new Point(x, y+1));
+			return Arrays.asList(new Point(x, y - 1), new Point(x - 1, y), new Point(x + 1, y), new Point(x, y + 1));
 		case LEFT:
-			return Arrays.asList(new Point(x+1, y), new Point(x, y+1), new Point(x, y-1), new Point(x-1, y));
+			return Arrays.asList(new Point(x + 1, y), new Point(x, y + 1), new Point(x, y - 1), new Point(x - 1, y));
 		case RIGHT:
-			return Arrays.asList(new Point(x-1, y), new Point(x, y+1), new Point(x, y-1), new Point(x+1, y));
+			return Arrays.asList(new Point(x - 1, y), new Point(x, y + 1), new Point(x, y - 1), new Point(x + 1, y));
 		default:
-			return Arrays.asList(new Point(x, y+1), new Point(x-1, y), new Point(x, y-1), new Point(x+1, y));
+			return Arrays.asList(new Point(x, y + 1), new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y));
 		}
 	}
-	
+
 	private void reduceMapSegment() {
 		width = maxX - minX + 1;
 		height = maxY - minY + 1;
@@ -499,21 +503,21 @@ public class WorldGenerator {
 
 	private void smoothEdges() {
 		erasePinnaclesVertically(NON_PASSABLE, EMPTY);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesHorizontally(NON_PASSABLE, EMPTY);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesVerticallyBackwards(NON_PASSABLE, EMPTY);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesHorizontallyBackwards(NON_PASSABLE, EMPTY);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesVertically(EMPTY, NON_PASSABLE);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesHorizontally(EMPTY, NON_PASSABLE);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesVerticallyBackwards(EMPTY, NON_PASSABLE);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 		erasePinnaclesHorizontallyBackwards(EMPTY, NON_PASSABLE);
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 	}
 
 	private void erasePinnaclesVertically(int typeToErase, int replacementType) {
@@ -522,8 +526,8 @@ public class WorldGenerator {
 		for (int i = 0; i < width; ++i) {
 			foundAreaSize = 0;
 			replacementTypeFound = false;
-			for (int j = 0; j < height/2; ++j) {
-				if(hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)){
+			for (int j = 0; j < height / 2; ++j) {
+				if (hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 					replacementTypeFound = true;
 				}
 				if (mapSegment[j][i] == typeToErase && j > 0 && replacementTypeFound) {
@@ -540,15 +544,15 @@ public class WorldGenerator {
 		}
 		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 	}
-	
+
 	private void erasePinnaclesVerticallyBackwards(int typeToErase, int replacementType) {
 		boolean replacementTypeFound;
 		int foundAreaSize;
 		for (int i = width - 1; i >= 0; --i) {
 			foundAreaSize = 0;
 			replacementTypeFound = false;
-			for (int j = height - 1; j >= height/2; --j) {
-				if(hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)){
+			for (int j = height - 1; j >= height / 2; --j) {
+				if (hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 					replacementTypeFound = true;
 				}
 				if (mapSegment[j][i] == typeToErase && j < height - 1 && replacementTypeFound) {
@@ -572,8 +576,8 @@ public class WorldGenerator {
 		for (int j = 0; j < height; ++j) {
 			foundAreaSize = 0;
 			replacementTypeFound = false;
-			for (int i = 0; i < width/2; ++i) {
-				if(hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)){
+			for (int i = 0; i < width / 2; ++i) {
+				if (hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 					replacementTypeFound = true;
 				}
 				if (mapSegment[j][i] == typeToErase && i > 0 && replacementTypeFound) {
@@ -597,8 +601,8 @@ public class WorldGenerator {
 		for (int j = height - 1; j >= 0; --j) {
 			foundAreaSize = 0;
 			replacementTypeFound = false;
-			for (int i = width - 1; i >= width/2; --i) {
-				if(hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)){
+			for (int i = width - 1; i >= width / 2; --i) {
+				if (hasType(i, j, replacementType, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 					replacementTypeFound = true;
 				}
 				if (mapSegment[j][i] == typeToErase && i < width - 1 && replacementTypeFound) {
@@ -615,7 +619,7 @@ public class WorldGenerator {
 		}
 		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 	}
-	
+
 	private void prepareGroundForNeighbourPassages() {
 		int localX;
 		int localY;
@@ -638,7 +642,7 @@ public class WorldGenerator {
 		Point point;
 		for (int i = 0; i < width; ++i) {
 			for (int j = 0; j < height; ++j) {
-				if(isBorder(i, j)){
+				if (isBorder(i, j)) {
 					point = new Point(i, j);
 					borderPoints.add(point);
 					borderPointSet.add(point);
@@ -742,7 +746,7 @@ public class WorldGenerator {
 		}
 		return neighbourLandFields;
 	}
-	
+
 	private int getNeighbourCountOfTypeCrossingIncluded(int x, int y, int... types) {
 		int neighbourLandFields = 0;
 		for (Point point : neighbourPointsCrossingIncluded(x, y)) {
@@ -763,43 +767,33 @@ public class WorldGenerator {
 	}
 
 	private boolean isSuitableForPassage(int x, int y) {
-		return x > 0 && y > 0 && x < width-1 && y < height - 1 && matchesPattern(x, y, 
-				new int[][]{
-					new int[]{EMPTY, EMPTY, EMPTY}, 
-					new int[]{NON_PASSABLE, NON_PASSABLE, NON_PASSABLE}, 
-					new int[]{NON_PASSABLE, NON_PASSABLE, NON_PASSABLE}
-				}, 
-				new int[][]{
-						new int[]{EMPTY, NON_PASSABLE, NON_PASSABLE}, 
-						new int[]{EMPTY, NON_PASSABLE, NON_PASSABLE}, 
-						new int[]{EMPTY, NON_PASSABLE, NON_PASSABLE}
-				},
-				new int[][]{
-						new int[]{NON_PASSABLE, NON_PASSABLE, EMPTY}, 
-						new int[]{NON_PASSABLE, NON_PASSABLE, EMPTY}, 
-						new int[]{NON_PASSABLE, NON_PASSABLE, EMPTY}
-				},
-				new int[][]{
-						new int[]{NON_PASSABLE, NON_PASSABLE, NON_PASSABLE}, 
-						new int[]{NON_PASSABLE, NON_PASSABLE, NON_PASSABLE}, 
-						new int[]{EMPTY, EMPTY, EMPTY}
-					}
-				);
+		return x > 0
+				&& y > 0
+				&& x < width - 1
+				&& y < height - 1
+				&& matchesPattern(x, y, new int[][] { new int[] { EMPTY, EMPTY, EMPTY },
+						new int[] { NON_PASSABLE, NON_PASSABLE, NON_PASSABLE }, new int[] { NON_PASSABLE, NON_PASSABLE, NON_PASSABLE } },
+						new int[][] { new int[] { EMPTY, NON_PASSABLE, NON_PASSABLE }, new int[] { EMPTY, NON_PASSABLE, NON_PASSABLE },
+								new int[] { EMPTY, NON_PASSABLE, NON_PASSABLE } }, new int[][] {
+								new int[] { NON_PASSABLE, NON_PASSABLE, EMPTY }, new int[] { NON_PASSABLE, NON_PASSABLE, EMPTY },
+								new int[] { NON_PASSABLE, NON_PASSABLE, EMPTY } }, new int[][] {
+								new int[] { NON_PASSABLE, NON_PASSABLE, NON_PASSABLE },
+								new int[] { NON_PASSABLE, NON_PASSABLE, NON_PASSABLE }, new int[] { EMPTY, EMPTY, EMPTY } });
 	}
-	
-	private boolean matchesPattern(int x, int y, int[][]... patterns){
-		for(int[][] pattern: patterns){
-			if(matchesPattern(x, y, pattern)){
+
+	private boolean matchesPattern(int x, int y, int[][]... patterns) {
+		for (int[][] pattern : patterns) {
+			if (matchesPattern(x, y, pattern)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	private boolean matchesPattern(int x, int y, int[][] pattern){
-		for(int i=-1; i<=1; ++i){
-			for(int j=-1; j<=1; ++j){
-				if(!withinMapSegment(x+i, y+j) || mapSegment[y+j][x+i]!=pattern[j+1][i+1]){
+
+	private boolean matchesPattern(int x, int y, int[][] pattern) {
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= 1; ++j) {
+				if (!withinMapSegment(x + i, y + j) || mapSegment[y + j][x + i] != pattern[j + 1][i + 1]) {
 					return false;
 				}
 			}
@@ -808,11 +802,11 @@ public class WorldGenerator {
 	}
 
 	private boolean hasType(int x, int y, int... types) {
-		if(!withinMapSegment(x, y)){
+		if (!withinMapSegment(x, y)) {
 			return false;
 		}
-		for(int type: types){
-			if(mapSegment[y][x] == type){
+		for (int type : types) {
+			if (mapSegment[y][x] == type) {
 				return true;
 			}
 		}
@@ -823,31 +817,31 @@ public class WorldGenerator {
 		return a && !b || !a && b;
 	}
 
-	private Point getPassageExitPoint(Passage passage){
+	private Point getPassageExitPoint(Passage passage) {
 		int x = passage.getX() - mapSegmentMinX;
 		int y = passage.getY() - mapSegmentMinY;
 		switch (passage.getDirection()) {
 		case UP:
-			return new Point(x, y-1);
+			return new Point(x, y - 1);
 		case DOWN:
-			return new Point(x, y+1);
+			return new Point(x, y + 1);
 		case LEFT:
-			return new Point(x-1, y);
+			return new Point(x - 1, y);
 		case RIGHT:
-			return new Point(x+1, y);
+			return new Point(x + 1, y);
 		default:
 			return null;
 		}
 	}
-	
+
 	private boolean withinMapSegment(Point point) {
 		return withinMapSegment(point.x, point.y);
 	}
-	
+
 	private boolean withinMapSegment(int x, int y) {
 		return x >= 0 && y >= 0 && x < width && y < height;
 	}
-	
+
 	private boolean isBorder(int x, int y) {
 		if (!withinMapSegment(x, y)) {
 			return false;
@@ -855,9 +849,9 @@ public class WorldGenerator {
 		if (hasType(x, y, EMPTY, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 			return false;
 		}
-//		if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-//			return true;
-//		}
+		// if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
+		// return true;
+		// }
 		if (hasType(x, y - 1, EMPTY, EXISTING_LAND, EXISTING_LAND_PASSAGE)) {
 			return true;
 		}
@@ -872,7 +866,7 @@ public class WorldGenerator {
 		}
 		return false;
 	}
-	
+
 	private void createPassages() throws WorldGenerationException {
 		Point newPassage = null;
 		int localX;
@@ -885,9 +879,9 @@ public class WorldGenerator {
 					newPassage = getNeighbourFieldOfType(localX, localY, NON_PASSABLE);
 					if (newPassage != null) {
 						mapSegment[newPassage.y][newPassage.x] = PASSAGE;
-						
-						passages.add(new Passage(newPassage.x+mapSegmentMinX, newPassage.y+mapSegmentMinY, PASSAGE,
-								opposite(passage.getDirection()), land.getId(), passage.getX(), passage.getY()));
+
+						passages.add(new Passage(newPassage.x + mapSegmentMinX, newPassage.y + mapSegmentMinY, PASSAGE, opposite(passage
+								.getDirection()), land.getId(), passage.getX(), passage.getY()));
 						passagePoints.add(newPassage);
 
 						passage.setNextX(newPassage.x + mapSegmentMinX);
@@ -900,16 +894,16 @@ public class WorldGenerator {
 				}
 			}
 		}
-		
-		if(candidatesForPassage.isEmpty() && passages.isEmpty()){
+
+		if (candidatesForPassage.isEmpty() && passages.isEmpty()) {
 			throwException("No points suitable for passage found in the generated land");
 		}
-		
-		int maxPassageCount = MIN_PASSAGES+(int)((double)candidatesForPassage.size() * CHANCE_FOR_PASSAGE);
+
+		int maxPassageCount = MIN_PASSAGES + (int) ((double) candidatesForPassage.size() * CHANCE_FOR_PASSAGE);
 		int x;
 		int y;
 		for (int i = 0; i < PASSAGE_MAX_RETRIES; ++i) {
-			if(candidatesForPassage.isEmpty()){
+			if (candidatesForPassage.isEmpty()) {
 				break;
 			}
 			newPassage = candidatesForPassage.get(random.nextInt(candidatesForPassage.size()));
@@ -918,98 +912,102 @@ public class WorldGenerator {
 			if (mapSegment[y][x] == NON_PASSABLE && getNeighbourFieldOfTypeCrossingIncluded(x, y, PASSAGE) == null) {
 				mapSegment[y][x] = PASSAGE;
 				excludePassageNeighbourPoints(x, y);
-				passages.add(new Passage(x+mapSegmentMinX, y+mapSegmentMinY, PASSAGE, directionForPassage(x, y)));
+				passages.add(new Passage(x + mapSegmentMinX, y + mapSegmentMinY, PASSAGE, directionForPassage(x, y)));
 				passagePoints.add(newPassage);
 			}
-			if(passages.size() >= maxPassageCount){
+			if (passages.size() >= maxPassageCount) {
 				break;
 			}
 		}
 
-//		boolean suitableForPassage;
-//		for (int i = 0; i < borderPoints.size(); i += (MIN_PASSAGE_GAP + random.nextInt(PASSAGE_GAP_DIFF))) {
-//			suitableForPassage = false;
-//			while (!suitableForPassage && i < borderPoints.size()) {
-//				newPassage = borderPoints.get(i);
-//				suitableForPassage = isSuitableForPassage(newPassage.x, newPassage.y)
-//						&& !pointsExcludedFromPlacingPassages.contains(newPassage);
-//				++i;
-//			}
-//			if (newPassage != null && isSuitableForPassage(newPassage.x, newPassage.y)
-//					&& !pointsExcludedFromPlacingPassages.contains(newPassage)) {
-//				passages.add(new Passage(newPassage.x+mapSegmentMinX, newPassage.y+mapSegmentMinY, PASSAGE, directionForPassage(newPassage.x, newPassage.y)));
-//				passagePoints.add(newPassage);
-//				mapSegment[newPassage.y][newPassage.x] = PASSAGE;
-//			}
-//		}
+		// boolean suitableForPassage;
+		// for (int i = 0; i < borderPoints.size(); i += (MIN_PASSAGE_GAP +
+		// random.nextInt(PASSAGE_GAP_DIFF))) {
+		// suitableForPassage = false;
+		// while (!suitableForPassage && i < borderPoints.size()) {
+		// newPassage = borderPoints.get(i);
+		// suitableForPassage = isSuitableForPassage(newPassage.x, newPassage.y)
+		// && !pointsExcludedFromPlacingPassages.contains(newPassage);
+		// ++i;
+		// }
+		// if (newPassage != null && isSuitableForPassage(newPassage.x,
+		// newPassage.y)
+		// && !pointsExcludedFromPlacingPassages.contains(newPassage)) {
+		// passages.add(new Passage(newPassage.x+mapSegmentMinX,
+		// newPassage.y+mapSegmentMinY, PASSAGE,
+		// directionForPassage(newPassage.x, newPassage.y)));
+		// passagePoints.add(newPassage);
+		// mapSegment[newPassage.y][newPassage.x] = PASSAGE;
+		// }
+		// }
 	}
 
 	private void excludePassageNeighbourPoints(int x, int y) {
 		for (int i = -MIN_PASSAGE_GAP; i <= MIN_PASSAGE_GAP; ++i) {
 			for (int j = -MIN_PASSAGE_GAP; j <= MIN_PASSAGE_GAP; ++j) {
-				if(i!=0 || j!=0){
-					candidatesForPassage.remove(new Point(x+i, y+j));
+				if (i != 0 || j != 0) {
+					candidatesForPassage.remove(new Point(x + i, y + j));
 				}
 			}
 		}
 	}
 
 	private void buildLandAroundExistingPassage(Passage existingPassage, Point newPassage) {
-		for(Point point: getPassageNearbyPointsForBuild(existingPassage, newPassage)){
-			if(withinMapSegment(point.x, point.y) && mapSegment[point.y][point.x] == EMPTY){
+		for (Point point : getPassageNearbyPointsForBuild(existingPassage, newPassage)) {
+			if (withinMapSegment(point.x, point.y) && mapSegment[point.y][point.x] == EMPTY) {
 				mapSegment[point.y][point.x] = NON_PASSABLE;
 			}
 		}
-		for(Point point: getPassageNearbyPointsForErasure(existingPassage, newPassage)){
-			if(withinMapSegment(point.x, point.y) && mapSegment[point.y][point.x] == NON_PASSABLE){
+		for (Point point : getPassageNearbyPointsForErasure(existingPassage, newPassage)) {
+			if (withinMapSegment(point.x, point.y) && mapSegment[point.y][point.x] == NON_PASSABLE) {
 				mapSegment[point.y][point.x] = EMPTY;
 			}
 		}
 	}
-	
-	private List<Point> getPassageNearbyPointsForBuild(Passage existingPassage, Point newPassage){
+
+	private List<Point> getPassageNearbyPointsForBuild(Passage existingPassage, Point newPassage) {
 		List<Point> points = new ArrayList<>(9);
 		int x = newPassage.x;
 		int y = newPassage.y;
-		for(int i=-1; i<=1; ++i){
-			for(int j=0; j<=2; ++j){
-				switch(existingPassage.getDirection()){
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = 0; j <= 2; ++j) {
+				switch (existingPassage.getDirection()) {
 				case UP:
-					points.add(new Point(x+i, y-j));
+					points.add(new Point(x + i, y - j));
 					break;
 				case DOWN:
-					points.add(new Point(x+i, y+j));
+					points.add(new Point(x + i, y + j));
 					break;
 				case LEFT:
-					points.add(new Point(x-j, y+i));
+					points.add(new Point(x - j, y + i));
 					break;
 				case RIGHT:
-					points.add(new Point(x+j, y+i));
+					points.add(new Point(x + j, y + i));
 					break;
 				}
 			}
 		}
 		return points;
 	}
-	
-	private List<Point> getPassageNearbyPointsForErasure(Passage existingPassage, Point newPassage){
+
+	private List<Point> getPassageNearbyPointsForErasure(Passage existingPassage, Point newPassage) {
 		List<Point> points = new ArrayList<>(9);
 		int x = newPassage.x;
 		int y = newPassage.y;
-		for(int i=-1; i<=1; ++i){
-			for(int j=-1; j<=-3; --j){
-				switch(existingPassage.getDirection()){
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= -3; --j) {
+				switch (existingPassage.getDirection()) {
 				case UP:
-					points.add(new Point(x+i, y-j));
+					points.add(new Point(x + i, y - j));
 					break;
 				case DOWN:
-					points.add(new Point(x+i, y+j));
+					points.add(new Point(x + i, y + j));
 					break;
 				case LEFT:
-					points.add(new Point(x-j, y+i));
+					points.add(new Point(x - j, y + i));
 					break;
 				case RIGHT:
-					points.add(new Point(x+j, y+i));
+					points.add(new Point(x + j, y + i));
 					break;
 				}
 			}
@@ -1064,7 +1062,7 @@ public class WorldGenerator {
 		}
 		return null;
 	}
-	
+
 	private Point getNonBorderNeighbourFieldOfType(int x, int y, int... fieldTypes) {
 		for (Point point : neighbourPoints(x, y)) {
 			if (withinMapSegment(point.x, point.y) && !isBorder(point.x, point.y) && hasType(point.x, point.y, fieldTypes)) {
@@ -1086,13 +1084,13 @@ public class WorldGenerator {
 	private void createTown() {
 		double createTown = random.nextDouble();
 		// TODO uzaleznic szanse na miasto od liczby miast w sasiednich landach
-		if (createTown <= CHANCE_FOR_TOWN || borderLand==null) {
+		if (createTown <= CHANCE_FOR_TOWN || borderLand == null) {
 			int x;
 			int y;
 			for (int i = 0; i < TOWN_MAX_RETRIES; ++i) {
 				x = random.nextInt(width);
 				y = random.nextInt(height);
-				if (mapSegment[y][x] == NON_PASSABLE && !isBorder(x, y)	&& getNeighbourFieldOfTypeCrossingIncluded(x, y, PASSAGE) == null) {
+				if (mapSegment[y][x] == NON_PASSABLE && !isBorder(x, y) && getNeighbourFieldOfTypeCrossingIncluded(x, y, PASSAGE) == null) {
 					mapSegment[y][x] = TOWN;
 					town = new Point(x, y);
 					break;
@@ -1132,7 +1130,7 @@ public class WorldGenerator {
 			}
 		}
 
-		//log.info(WorldGenerationUtils.mapToString(mapSegment));
+		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 
 		if (town != null) {
 			crossroads.add(town);
@@ -1143,9 +1141,9 @@ public class WorldGenerator {
 	private void connectCrossRoads() throws WorldGenerationException {
 		int i = CROSSROAD_MIN_GAP;
 		GraphBuilder graphBuilder = new GraphBuilder(crossroads);
-		while (connectCrossRoadsInternal(graphBuilder, i++)){
-			if(i > height+width){
-				throwException("Connecting roads went too far. Distance checked is: "+i+". Aborting.");
+		while (connectCrossRoadsInternal(graphBuilder, i++)) {
+			if (i > height + width) {
+				throwException("Connecting roads went too far. Distance checked is: " + i + ". Aborting.");
 			}
 		}
 		edges = graphBuilder.getEdgesIfConnected();
@@ -1153,15 +1151,15 @@ public class WorldGenerator {
 
 	private boolean connectCrossRoadsInternal(GraphBuilder graphBuilder, int maxDistance) {
 		Point[] crossRoadArray = crossroads.toArray(new Point[crossroads.size()]);
-	//	log.info("connectCrossRoadsInternal - iteration for max distance = " + maxDistance);
+		// log.info("connectCrossRoadsInternal - iteration for max distance = "
+		// + maxDistance);
 		Point point1;
 		Point point2;
 		for (int i = 0; i < crossRoadArray.length; ++i) {
 			for (int j = i + 1; j < crossRoadArray.length; ++j) {
 				point1 = crossRoadArray[i];
 				point2 = crossRoadArray[j];
-				if (inRange(point1, point2, maxDistance)
-						&& (!passagePoints.contains(point1) || !passagePoints.contains(point2))) {
+				if (inRange(point1, point2, maxDistance) && (!passagePoints.contains(point1) || !passagePoints.contains(point2))) {
 					graphBuilder.addConnection(point1, point2);
 				}
 			}
@@ -1170,7 +1168,7 @@ public class WorldGenerator {
 	}
 
 	private void fillInRoadsOnMap() throws WorldGenerationException {
-		 printGraph();
+		printGraph();
 		/*
 		 * log.info("Crossroads:"); for (Point point: crossRoads){
 		 * log.info(point); }
@@ -1188,86 +1186,92 @@ public class WorldGenerator {
 
 	}
 
-//	private boolean buildRoadSimple(GraphEdge edge, boolean updateMap) {
-//		int x = edge.point1.x;
-//		int y = edge.point1.y;
-//		int finishX = edge.point2.x;
-//		int finishY = edge.point2.y;
-//		int diffX;
-//		int diffY;
-//		boolean moving;
-//		if (updateMap) {
-//			// log.info("Building road from "+edge.point1+" to "+edge.point2+" using simple algorithm");
-//		}
-//		while ((x != finishX || y != finishY) && withinMapSegment(x, y)) {
-//			if (mapSegment[y][x] == EMPTY) {
-//				log.error("Road has gone to empty space! Point is: (" + x + ", " + y + ")");
-//				return false;
-//			}
-//			if (mapSegment[y][x] == EXISTING_LAND) {
-//				log.error("Road has gone to an existing land! Point is: (" + x + ", " + y + ")");
-//				return false;
-//			}
-//			if (mapSegment[y][x] != DUNGEON && mapSegment[y][x] != TOWN && mapSegment[y][x] != PASSAGE && mapSegment[y][x] != CROSSROAD) {
-//				if (updateMap) {
-//					mapSegment[y][x] = ROAD;
-//				}
-//			}
-//			diffX = finishX - x;
-//			diffY = finishY - y;
-//			moving = false;
-//			if (Math.abs(diffX) > Math.abs(diffY)) {
-//				if (x < finishX && isFieldValid(x + 1, y, true)) {
-//					++x;
-//					moving = true;
-//				} else if (x > finishX && isFieldValid(x - 1, y, true)) {
-//					--x;
-//					moving = true;
-//				} else if (y < finishY && isFieldValid(x, y + 1, true)) {
-//					++y;
-//					moving = true;
-//				} else if (y > finishY && isFieldValid(x, y - 1, true)) {
-//					--y;
-//					moving = true;
-//				}
-//			} else {
-//				if (y < finishY && isFieldValid(x, y + 1, true)) {
-//					++y;
-//					moving = true;
-//				} else if (y > finishY && isFieldValid(x, y - 1, true)) {
-//					--y;
-//					moving = true;
-//				} else if (x < finishX && isFieldValid(x + 1, y, true)) {
-//					++x;
-//					moving = true;
-//				} else if (x > finishX && isFieldValid(x - 1, y, true)) {
-//					--x;
-//					moving = true;
-//				}
-//			}
-//			if (!moving) {
-//				log.error("Cannot move! Interrupted! Point is: (" + x + ", " + y + ")");
-//				return false;
-//			}
-//			if (!withinMapSegment(x, y)) {
-//				log.error("Road has gone beyond map borders! Point is: (" + x + ", " + y + ")");
-//				return false;
-//			}
-//		}
-//		// log.info(WorldGenerationUtils.mapToString(mapSegment));
-//		return true;
-//	}
+	// private boolean buildRoadSimple(GraphEdge edge, boolean updateMap) {
+	// int x = edge.point1.x;
+	// int y = edge.point1.y;
+	// int finishX = edge.point2.x;
+	// int finishY = edge.point2.y;
+	// int diffX;
+	// int diffY;
+	// boolean moving;
+	// if (updateMap) {
+	// //
+	// log.info("Building road from "+edge.point1+" to "+edge.point2+" using simple algorithm");
+	// }
+	// while ((x != finishX || y != finishY) && withinMapSegment(x, y)) {
+	// if (mapSegment[y][x] == EMPTY) {
+	// log.error("Road has gone to empty space! Point is: (" + x + ", " + y +
+	// ")");
+	// return false;
+	// }
+	// if (mapSegment[y][x] == EXISTING_LAND) {
+	// log.error("Road has gone to an existing land! Point is: (" + x + ", " + y
+	// + ")");
+	// return false;
+	// }
+	// if (mapSegment[y][x] != DUNGEON && mapSegment[y][x] != TOWN &&
+	// mapSegment[y][x] != PASSAGE && mapSegment[y][x] != CROSSROAD) {
+	// if (updateMap) {
+	// mapSegment[y][x] = ROAD;
+	// }
+	// }
+	// diffX = finishX - x;
+	// diffY = finishY - y;
+	// moving = false;
+	// if (Math.abs(diffX) > Math.abs(diffY)) {
+	// if (x < finishX && isFieldValid(x + 1, y, true)) {
+	// ++x;
+	// moving = true;
+	// } else if (x > finishX && isFieldValid(x - 1, y, true)) {
+	// --x;
+	// moving = true;
+	// } else if (y < finishY && isFieldValid(x, y + 1, true)) {
+	// ++y;
+	// moving = true;
+	// } else if (y > finishY && isFieldValid(x, y - 1, true)) {
+	// --y;
+	// moving = true;
+	// }
+	// } else {
+	// if (y < finishY && isFieldValid(x, y + 1, true)) {
+	// ++y;
+	// moving = true;
+	// } else if (y > finishY && isFieldValid(x, y - 1, true)) {
+	// --y;
+	// moving = true;
+	// } else if (x < finishX && isFieldValid(x + 1, y, true)) {
+	// ++x;
+	// moving = true;
+	// } else if (x > finishX && isFieldValid(x - 1, y, true)) {
+	// --x;
+	// moving = true;
+	// }
+	// }
+	// if (!moving) {
+	// log.error("Cannot move! Interrupted! Point is: (" + x + ", " + y + ")");
+	// return false;
+	// }
+	// if (!withinMapSegment(x, y)) {
+	// log.error("Road has gone beyond map borders! Point is: (" + x + ", " + y
+	// + ")");
+	// return false;
+	// }
+	// }
+	// // log.info(WorldGenerationUtils.mapToString(mapSegment));
+	// return true;
+	// }
 
 	public void buildRoadRecursive(GraphEdge edge) throws WorldGenerationException {
-		//log.info("Building road from " + edge.point1 + " to " + edge.point2 + " using recursive algorithm");
+		// log.info("Building road from " + edge.point1 + " to " + edge.point2 +
+		// " using recursive algorithm");
 		List<Point> path = new ArrayList<Point>();
 		boolean found = buildRoadRecursiveInternal(edge.point1, edge.point2, null, new HashSet<Point>(), path);
 		if (!found) {
 			throwException("Path " + edge + " not found!");
 		}
-		//log.info("Path found! ");
+		// log.info("Path found! ");
 		for (Point point : path) {
-			//log.info(point);
+			// log.info(point);
 			if (mapSegment[point.y][point.x] != DUNGEON && mapSegment[point.y][point.x] != TOWN && mapSegment[point.y][point.x] != PASSAGE
 					&& mapSegment[point.y][point.x] != CROSSROAD) {
 				mapSegment[point.y][point.x] = ROAD;
@@ -1275,7 +1279,8 @@ public class WorldGenerator {
 			int x = point.x;
 			int y = point.y;
 			if (path.contains(new Point(x + 1, y)) && path.contains(new Point(x, y + 1)) && path.contains(new Point(x + 1, y + 1))) {
-				log.warn("'Square' detected: "+point+", "+new Point(x + 1, y)+", "+new Point(x, y + 1)+", "+new Point(x + 1, y + 1));
+				log.warn("'Square' detected: " + point + ", " + new Point(x + 1, y) + ", " + new Point(x, y + 1) + ", "
+						+ new Point(x + 1, y + 1));
 			}
 		}
 	}
@@ -1397,55 +1402,59 @@ public class WorldGenerator {
 		double chanceForExtraDungeon;
 		Point neighbourFreePoint;
 		for (Point point : crossroads) {
-			if (mapSegment[point.y][point.x] == CROSSROAD && !isBorder(point.x, point.y) && getNeighbourCountOfTypeCrossingIncluded(point.x, point.y, TOWN, DUNGEON, PASSAGE) == 0) {
+			if (mapSegment[point.y][point.x] == CROSSROAD) {
 				mapSegment[point.y][point.x] = ROAD;
-				neighbourRoadFieldCount = getNeighbourCountOfType(point.x, point.y, ROAD, CROSSROAD);
-				switch(neighbourRoadFieldCount){
-				case 1: 
-					dungeons.add(point);
-					mapSegment[point.y][point.x] = DUNGEON;
-					break;
-				case 2: case 3:
-					chanceForExtraDungeon = random.nextDouble();
-					if(chanceForExtraDungeon < CHANCE_FOR_EXTRA_DUNGEON){
-						neighbourFreePoint = getNonBorderNeighbourFieldOfType(point.x, point.y, NON_PASSABLE);
-						if(neighbourFreePoint!=null){
-							dungeons.add(neighbourFreePoint);
-							mapSegment[neighbourFreePoint.y][neighbourFreePoint.x] = DUNGEON;
+				if (!isBorder(point.x, point.y) && getNeighbourCountOfTypeCrossingIncluded(point.x, point.y, TOWN, DUNGEON, PASSAGE) == 0) {
+					neighbourRoadFieldCount = getNeighbourCountOfType(point.x, point.y, ROAD, CROSSROAD);
+					switch (neighbourRoadFieldCount) {
+					case 1:
+						dungeons.add(point);
+						mapSegment[point.y][point.x] = DUNGEON;
+						break;
+					case 2:
+					case 3:
+						chanceForExtraDungeon = random.nextDouble();
+						if (chanceForExtraDungeon < CHANCE_FOR_EXTRA_DUNGEON) {
+							neighbourFreePoint = getNonBorderNeighbourFieldOfType(point.x, point.y, NON_PASSABLE);
+							if (neighbourFreePoint != null) {
+								dungeons.add(neighbourFreePoint);
+								mapSegment[neighbourFreePoint.y][neighbourFreePoint.x] = DUNGEON;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	private Land toLand() {
-//		for(Passage toCheckForUpdate: neighbourPassagesToUpdate){
-//			passageEndpoint.updatePassage(toCheckForUpdate);
-//		}
-		for(Land toUpdate: neighbourLandsToUpdate){
+		// for(Passage toCheckForUpdate: neighbourPassagesToUpdate){
+		// passageEndpoint.updatePassage(toCheckForUpdate);
+		// }
+		for (Land toUpdate : neighbourLandsToUpdate) {
 			toUpdate.setHasFreePassage(hasFreePassage(toUpdate));
 			landEndpoint.updateLand(toUpdate);
 		}
 
 		Land land = new Land();
-		land.setMinX(minX+mapSegmentMinX);
-		land.setMinY(minY+mapSegmentMinY);
-		land.setMaxX(maxX+mapSegmentMinX);
-		land.setMaxY(maxY+mapSegmentMinY);
+		land.setMinX(minX + mapSegmentMinX);
+		land.setMinY(minY + mapSegmentMinY);
+		land.setMaxX(maxX + mapSegmentMinX);
+		land.setMaxY(maxY + mapSegmentMinY);
 
 		int[] fields = new int[height * width];
 		for (int j = 0; j < height; ++j) {
 			for (int i = 0; i < width; ++i) {
-				fields[j * width + i] = mapSegment[j][i] == EXISTING_LAND || mapSegment[j][i] == EXISTING_LAND_PASSAGE ? EMPTY : mapSegment[j][i];
+				fields[j * width + i] = mapSegment[j][i] == EXISTING_LAND || mapSegment[j][i] == EXISTING_LAND_PASSAGE ? EMPTY
+						: mapSegment[j][i];
 			}
 		}
 		land.setFields(fields);
-		land.setTown(town == null ? null : new Town(town.x+mapSegmentMinX, town.y+mapSegmentMinY, TOWN, "qwerty"));
+		land.setTown(town == null ? null : new Town(town.x + mapSegmentMinX, town.y + mapSegmentMinY, TOWN, "qwerty"));
 		land.setPassages(passages);
 		List<Dungeon> dungeons = new ArrayList<>(this.dungeons.size());
-		for(Point point: this.dungeons){
-			dungeons.add(new Dungeon(point.x+mapSegmentMinX, point.y+mapSegmentMinY, DUNGEON, createArmy()));
+		for (Point point : this.dungeons) {
+			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, createArmy()));
 		}
 		land.setDungeons(dungeons);
 
@@ -1454,32 +1463,33 @@ public class WorldGenerator {
 		land.setMapSegment(WorldGenerationUtils.calcMapSegment(land));
 		return land;
 	}
-	
+
 	private int[] createArmy() {
 		List<Long> factionsForDungeon = new ArrayList<>(unitTypesByFactions.keySet());
 		Long selectedFactionId = factionsForDungeon.get(random.nextInt(factionsForDungeon.size()));
 		List<UnitType> unitTypesForSelectedFaction = unitTypesByFactions.get(selectedFactionId);
-		Collections.sort(unitTypesForSelectedFaction, new Comparator<UnitType>(){
+		Collections.sort(unitTypesForSelectedFaction, new Comparator<UnitType>() {
 
 			@Override
 			public int compare(UnitType o1, UnitType o2) {
 				int unit1Strength = o1.calcUnitStrength();
 				int unit2Strength = o2.calcUnitStrength();
-				if(unit1Strength < unit2Strength){
+				if (unit1Strength < unit2Strength) {
 					return -1;
-				} if(unit1Strength > unit2Strength){
+				}
+				if (unit1Strength > unit2Strength) {
 					return 1;
-				} 
+				}
 				return 0;
 			}
 		});
-		List<Integer> army = new ArrayList<>(unitTypesForSelectedFaction.size()*2);
+		List<Integer> army = new ArrayList<>(unitTypesForSelectedFaction.size() * 2);
 		int totalArmyStrength = DUNGEON_ARMY_MIN_STRENGTH + random.nextInt(DUNGEON_ARMY_DIFF);
 		double chanceForNextUnit = 1.0;
 		double rand;
-		for(UnitType unitType: unitTypesForSelectedFaction){
+		for (UnitType unitType : unitTypesForSelectedFaction) {
 			rand = random.nextDouble();
-			if(rand < chanceForNextUnit){
+			if (rand < chanceForNextUnit) {
 				army.add(unitType.getId().intValue());
 				army.add(calcUnitCount(totalArmyStrength, unitType));
 				chanceForNextUnit /= 2;
@@ -1488,8 +1498,8 @@ public class WorldGenerator {
 			}
 		}
 		int[] armyArray = new int[army.size()];
-		int i=0;
-		for(Integer unit: army){
+		int i = 0;
+		for (Integer unit : army) {
 			armyArray[i] = unit;
 			++i;
 		}
@@ -1497,35 +1507,34 @@ public class WorldGenerator {
 	}
 
 	private int calcUnitCount(int totalArmyStrength, UnitType unitType) {
-		return totalArmyStrength/unitType.calcUnitStrength();
+		return totalArmyStrength / unitType.calcUnitStrength();
 	}
 
-	private boolean hasFreePassage(Land land){
+	private boolean hasFreePassage(Land land) {
 		return hasFreePassage(land.getPassages());
 	}
 
-	private boolean hasFreePassage(List<Passage> passages){
-		for(Passage passage: passages){
-			if(passage.getNextLandId()==null){
+	private boolean hasFreePassage(List<Passage> passages) {
+		for (Passage passage : passages) {
+			if (passage.getNextLandId() == null) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private static Point[] neighbourPoints(int x, int y){
+	private static Point[] neighbourPoints(int x, int y) {
 		return new Point[] { new Point(x + 1, y), new Point(x - 1, y), new Point(x, y + 1), new Point(x, y - 1) };
 	}
-	
-	private static Point[] neighbourPointsCrossingIncluded(int x, int y){
-		return new Point[] { new Point(x + 1, y), new Point(x - 1, y), new Point(x, y + 1), new Point(x, y - 1),
-				new Point(x + 1, y + 1), new Point(x - 1, y + 1), new Point(x + 1, y - 1), new Point(x - 1, y - 1) };
+
+	private static Point[] neighbourPointsCrossingIncluded(int x, int y) {
+		return new Point[] { new Point(x + 1, y), new Point(x - 1, y), new Point(x, y + 1), new Point(x, y - 1), new Point(x + 1, y + 1),
+				new Point(x - 1, y + 1), new Point(x + 1, y - 1), new Point(x - 1, y - 1) };
 	}
-	
-	//TODO check correctness
+
+	// TODO check correctness
 	private boolean isFieldValid(int x, int y, boolean acceptPassages) {
-		return withinMapSegment(x, y)
-				&& (!isBorder(x, y) || (acceptPassages && passagePoints.contains(new Point(x, y))))
+		return withinMapSegment(x, y) && (!isBorder(x, y) || (acceptPassages && passagePoints.contains(new Point(x, y))))
 				&& mapSegment[y][x] != EXISTING_LAND && mapSegment[y][x] != EXISTING_LAND_PASSAGE && mapSegment[y][x] != EMPTY;
 	}
 
@@ -1538,7 +1547,7 @@ public class WorldGenerator {
 		for (GraphEdge edge : edges) {
 			sb.append(edge + "\n");
 		}
-		//log.info(sb.toString());
+		// log.info(sb.toString());
 	}
 
 	private void throwException(String message) throws WorldGenerationException {

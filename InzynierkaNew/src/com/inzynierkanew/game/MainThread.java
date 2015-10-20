@@ -1,6 +1,8 @@
 package com.inzynierkanew.game;
 
 
+import com.inzynierkanew.utils.TimeUtils;
+
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -66,9 +68,11 @@ public class MainThread extends Thread {
 					this.gameView.update();
 					// render state to the screen
 					// draws the canvas on the panel
-					this.gameView.render(canvas);
+					if(gameView.renderGame()){
+						this.gameView.render(canvas);
+					}
 					// calculate how long did the cycle take
-					timeDiff = System.currentTimeMillis() - beginTime;
+					timeDiff = TimeUtils.now() - beginTime;
 					// calculate sleep time
 					sleepTime = (int)(FRAME_PERIOD - timeDiff);
 					

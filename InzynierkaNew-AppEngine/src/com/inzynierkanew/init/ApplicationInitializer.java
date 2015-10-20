@@ -28,7 +28,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
 	private final Log log = LogFactory.getLog(getClass());
 		
-	private boolean cleanDatastoreOnInit = false;
+	private boolean cleanDatastoreOnInit = true;
 	private boolean cleanTypesOnInit = false;
 	private int landsGeneratedOnInit = 3;
 	
