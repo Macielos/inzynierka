@@ -33,14 +33,22 @@ public class MainThread extends Thread {
 
 	// flag to hold game state 
 	private boolean running;
-	public void setRunning(boolean running) {
+	private boolean paused;
+	
+	public synchronized void setRunning(boolean running) {
 		this.running = running;
 	}
-
+	
+	public synchronized void setPaused(boolean paused) {
+		this.paused = paused;
+	}
+	
 	public MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
 		super();
 		this.surfaceHolder = surfaceHolder;
 		this.gameView = gameView;
+		running = false;
+		paused = false;
 	}
 
 	@Override
@@ -56,50 +64,56 @@ public class MainThread extends Thread {
 		sleepTime = 0;
 		
 		while (running) {
-			canvas = null;
-			// try locking the canvas for exclusive pixel editing
-			// in the surface
-			try {
-				canvas = this.surfaceHolder.lockCanvas();
-				synchronized (surfaceHolder) {
-					beginTime = System.currentTimeMillis();
-					framesSkipped = 0;	// resetting the frames skipped
-					// update game state 
-					this.gameView.update();
-					// render state to the screen
-					// draws the canvas on the panel
-					if(gameView.renderGame()){
+			if(paused){
+				try {
+					Thread.sleep(FRAME_PERIOD);
+				} catch (InterruptedException e) {}
+			} else {
+				canvas = null;
+				// try locking the canvas for exclusive pixel editing
+				// in the surface
+				try {
+					canvas = this.surfaceHolder.lockCanvas();
+					synchronized (surfaceHolder) {
+						beginTime = System.currentTimeMillis();
+						framesSkipped = 0;	// resetting the frames skipped
+						// update game state 
+						this.gameView.update();
+						// render state to the screen
+						// draws the canvas on the panel
 						this.gameView.render(canvas);
+						// calculate how long did the cycle take
+						timeDiff = TimeUtils.now() - beginTime;
+						// calculate sleep time
+						sleepTime = (int)(FRAME_PERIOD - timeDiff);
+						
+						if (sleepTime > 0) {
+							// if sleepTime > 0 we're OK
+							try {
+								// send the thread to sleep for a short period
+								// very useful for battery saving
+								Thread.sleep(sleepTime);	
+							} catch (InterruptedException e) {}
+						}
+						
+						while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
+							// we need to catch up
+							this.gameView.update(); // update without rendering
+							sleepTime += FRAME_PERIOD;	// add frame period to check if in next frame
+							framesSkipped++;
+						}
 					}
-					// calculate how long did the cycle take
-					timeDiff = TimeUtils.now() - beginTime;
-					// calculate sleep time
-					sleepTime = (int)(FRAME_PERIOD - timeDiff);
-					
-					if (sleepTime > 0) {
-						// if sleepTime > 0 we're OK
-						try {
-							// send the thread to sleep for a short period
-							// very useful for battery saving
-							Thread.sleep(sleepTime);	
-						} catch (InterruptedException e) {}
+				} finally {
+					// in case of an exception the surface is not left in 
+					// an inconsistent state
+					if (canvas != null) {
+						surfaceHolder.unlockCanvasAndPost(canvas);
 					}
-					
-					while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-						// we need to catch up
-						this.gameView.update(); // update without rendering
-						sleepTime += FRAME_PERIOD;	// add frame period to check if in next frame
-						framesSkipped++;
-					}
-				}
-			} finally {
-				// in case of an exception the surface is not left in 
-				// an inconsistent state
-				if (canvas != null) {
-					surfaceHolder.unlockCanvasAndPost(canvas);
-				}
-			}	// end finally
+				}	// end finally
+			}
 		}
 	}
+	
+	
 	
 }

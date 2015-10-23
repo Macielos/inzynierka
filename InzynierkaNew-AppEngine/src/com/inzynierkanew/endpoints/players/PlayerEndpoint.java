@@ -235,6 +235,39 @@ public class PlayerEndpoint {
 			mgr.close();
 		}
 	}
+	
+	@ApiMethod(name = "updateHeroPosition")
+	public void updateHeroPosition(@Named("id")Long id, @Named("x")Integer x, @Named("y")Integer y){
+		EntityManager mgr = null;
+		try {
+			mgr = getEntityManager();
+			Hero hero = mgr.find(Hero.class, id);
+			if(hero!=null){
+				hero.setX(x);
+				hero.setY(y);
+				mgr.persist(hero);
+			}
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	@ApiMethod(name = "moveHeroToDifferentLand")
+	public void moveHeroToDifferentLand(@Named("id")Long id, @Named("nextLandId")Long nextLandId, @Named("x")Integer x, @Named("y")Integer y){
+		EntityManager mgr = null;
+		try {
+			mgr = getEntityManager();
+			Hero hero = mgr.find(Hero.class, id);
+			if(hero!=null){
+				hero.setX(x);
+				hero.setY(y);
+				hero.setCurrentLandId(nextLandId);
+				mgr.persist(hero);
+			}
+		} finally {
+			mgr.close();
+		}
+	}
 
 	private boolean containsPlayer(Player player) {
 		Long id = player.getId();

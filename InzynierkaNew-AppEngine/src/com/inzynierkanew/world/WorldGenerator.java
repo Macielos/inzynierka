@@ -179,6 +179,10 @@ public class WorldGenerator {
 		try {
 			Land land = generateLand();
 			landEndpoint.insertLand(land);
+			for(Passage passage: neighbourPassagesToUpdate){
+				passage.setNextLandId(land.getId());
+				passageEndpoint.updatePassage(passage);
+			}
 			new WorldDump(landEndpoint).dump();
 		} catch (WorldGenerationException e) {
 			log.error("Failed to generate new land with seed " + seed + ". Error is displayed below: ");
@@ -871,25 +875,24 @@ public class WorldGenerator {
 		Point newPassage = null;
 		int localX;
 		int localY;
-		for (Land land : neighbours) {
-			for (Passage passage : land.getPassages()) {
-				localX = passage.getX() - mapSegmentMinX;
-				localY = passage.getY() - mapSegmentMinY;
-				if (passage.getNextLandId() == null && withinMapSegment(getPassageExitPoint(passage))) {
+		for (Land neighbourLand : neighbours) {
+			for (Passage neighbourPassage : neighbourLand.getPassages()) {
+				localX = neighbourPassage.getX() - mapSegmentMinX;
+				localY = neighbourPassage.getY() - mapSegmentMinY;
+				if (neighbourPassage.getNextLandId() == null && withinMapSegment(getPassageExitPoint(neighbourPassage))) {
 					newPassage = getNeighbourFieldOfType(localX, localY, NON_PASSABLE);
 					if (newPassage != null) {
 						mapSegment[newPassage.y][newPassage.x] = PASSAGE;
 
-						passages.add(new Passage(newPassage.x + mapSegmentMinX, newPassage.y + mapSegmentMinY, PASSAGE, opposite(passage
-								.getDirection()), land.getId(), passage.getX(), passage.getY()));
+						passages.add(new Passage(newPassage.x + mapSegmentMinX, newPassage.y + mapSegmentMinY, PASSAGE, opposite(neighbourPassage
+								.getDirection()), neighbourLand.getId(), neighbourPassage.getX(), neighbourPassage.getY()));
 						passagePoints.add(newPassage);
 
-						passage.setNextX(newPassage.x + mapSegmentMinX);
-						passage.setNextY(newPassage.y + mapSegmentMinY);
-						passage.setNextLandId(land.getId());
+						neighbourPassage.setNextX(newPassage.x + mapSegmentMinX);
+						neighbourPassage.setNextY(newPassage.y + mapSegmentMinY);
 						excludePassageNeighbourPoints(newPassage.x, newPassage.y);
-						neighbourLandsToUpdate.add(land);
-						neighbourPassagesToUpdate.add(passage);
+						neighbourLandsToUpdate.add(neighbourLand);
+						neighbourPassagesToUpdate.add(neighbourPassage);
 					}
 				}
 			}
@@ -1433,7 +1436,6 @@ public class WorldGenerator {
 		// }
 		for (Land toUpdate : neighbourLandsToUpdate) {
 			toUpdate.setHasFreePassage(hasFreePassage(toUpdate));
-			landEndpoint.updateLand(toUpdate);
 		}
 
 		Land land = new Land();
@@ -1457,7 +1459,6 @@ public class WorldGenerator {
 			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, createArmy()));
 		}
 		land.setDungeons(dungeons);
-
 		land.setHasFreePassage(hasFreePassage(passages));
 		land.setHasTown(town != null);
 		land.setMapSegment(WorldGenerationUtils.calcMapSegment(land));

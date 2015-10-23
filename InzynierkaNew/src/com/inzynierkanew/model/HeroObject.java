@@ -10,6 +10,7 @@ import android.util.Log;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.players.playerendpoint.model.Hero;
+import com.inzynierkanew.game.GameView;
 import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.Point;
 
@@ -24,12 +25,10 @@ public class HeroObject implements IRenderable {
 	private static final float DELTA = 0.1f;
 	private static final float SPEED = 0.1f;
 	
+	private GameView gameView;
 	private final Bitmap bitmap;
 	private Hero hero;
 
-	private float offsetX;
-	private float offsetY;
-	
 	private float localFloatX;
 	private float localFloatY;
 	
@@ -44,7 +43,8 @@ public class HeroObject implements IRenderable {
 	private int cornerX;
 	private int cornerY;
 	
-	public HeroObject(Bitmap bitmap, Hero hero) {
+	public HeroObject(GameView gameView, Bitmap bitmap, Hero hero) {
+		this.gameView = gameView;
 		this.bitmap = bitmap;
 		this.hero = hero;
 	}
@@ -67,7 +67,7 @@ public class HeroObject implements IRenderable {
 
 	@Override
 	public void render(Canvas canvas) {
-		canvas.drawBitmap(bitmap, offsetX+Constants.TILE_SIZE*localFloatX, offsetY+Constants.TILE_SIZE*localFloatY, null);
+		canvas.drawBitmap(bitmap, gameView.getOffsetX()+Constants.TILE_SIZE*localFloatX, gameView.getOffsetY()+Constants.TILE_SIZE*localFloatY, null);
 	}
 
 	@Override
@@ -98,11 +98,6 @@ public class HeroObject implements IRenderable {
 			}
 			break;
 		}
-	}
-
-	public void setOffset(float offsetX, float offsetY){
-		this.offsetX = offsetX;
-		this.offsetY = offsetY;
 	}
 	
 	public void setCornerCoordinates(int cornerX, int cornerY){

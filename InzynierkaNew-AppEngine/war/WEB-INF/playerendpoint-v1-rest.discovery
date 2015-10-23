@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Ysy9HKQw8GoTh-pLdBOPFcj5imQ\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/5mK-OIcYrr7OAU5Sg3RO_CJjTbo\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -104,6 +104,9 @@
      "type": "string",
      "format": "int64"
     },
+    "key": {
+     "$ref": "Key"
+    },
     "level": {
      "type": "integer",
      "format": "int32"
@@ -115,6 +118,34 @@
     "y": {
      "type": "integer",
      "format": "int32"
+    }
+   }
+  },
+  "Key": {
+   "id": "Key",
+   "type": "object",
+   "properties": {
+    "appId": {
+     "type": "string"
+    },
+    "complete": {
+     "type": "boolean"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "kind": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "namespace": {
+     "type": "string"
+    },
+    "parent": {
+     "$ref": "Key"
     }
    }
   },
@@ -269,6 +300,46 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
+  "moveHeroToDifferentLand": {
+   "id": "playerendpoint.moveHeroToDifferentLand",
+   "path": "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
+   "httpMethod": "POST",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "nextLandId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "x": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "y": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id",
+    "nextLandId",
+    "x",
+    "y"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "removePlayer": {
    "id": "playerendpoint.removePlayer",
    "path": "player/{id}",
@@ -301,6 +372,39 @@
    },
    "parameterOrder": [
     "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateHeroPosition": {
+   "id": "playerendpoint.updateHeroPosition",
+   "path": "void/{id}/{x}/{y}",
+   "httpMethod": "PUT",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "x": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "y": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id",
+    "x",
+    "y"
    ],
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

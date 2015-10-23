@@ -11,6 +11,7 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
+import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
 
@@ -150,6 +151,15 @@ public class CloudEndpointUtils {
 		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
 	}
 	
+	public static Heroendpoint newHeroEndpoint(){
+		Heroendpoint.Builder endpointBuilder = new Heroendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+	}
+		
 	public static MessageEndpoint newMessageEndpoint(){
 		MessageEndpoint.Builder endpointBuilder = new MessageEndpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {

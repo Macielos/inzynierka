@@ -24,6 +24,10 @@ public class Hero {
 	
 	private int[] army;
 
+	public Key getKey() {
+		return key;
+	}
+
 	public int getX() {
 		return x;
 	}

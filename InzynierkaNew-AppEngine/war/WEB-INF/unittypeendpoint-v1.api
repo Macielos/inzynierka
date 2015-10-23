@@ -27,14 +27,14 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "unittypeendpoint.updateUnitType" : {
+    "unittypeendpoint.insertUnitType" : {
       "path" : "unittype",
-      "httpMethod" : "PUT",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -64,25 +64,20 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "unittypeendpoint.removeUnitType" : {
-      "path" : "unittype/{id}",
-      "httpMethod" : "DELETE",
+    "unittypeendpoint.updateUnitType" : {
+      "path" : "unittype",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "unittypeendpoint.listUnitType" : {
@@ -110,20 +105,25 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "unittypeendpoint.insertUnitType" : {
-      "path" : "unittype",
-      "httpMethod" : "POST",
+    "unittypeendpoint.removeUnitType" : {
+      "path" : "unittype/{id}",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     }
   },
@@ -187,7 +187,7 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType" : {
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType" : {
         "request" : {
           "$ref" : "UnitType"
         },
@@ -200,20 +200,20 @@
           "$ref" : "UnitType"
         }
       },
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType" : {
-      },
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.listUnitType" : {
-        "response" : {
-          "$ref" : "CollectionResponse_UnitType"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType" : {
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType" : {
         "request" : {
           "$ref" : "UnitType"
         },
         "response" : {
           "$ref" : "UnitType"
         }
+      },
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.listUnitType" : {
+        "response" : {
+          "$ref" : "CollectionResponse_UnitType"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType" : {
       }
     }
   }

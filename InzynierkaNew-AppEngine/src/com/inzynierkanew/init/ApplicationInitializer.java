@@ -27,63 +27,60 @@ import com.inzynierkanew.world.WorldGeneratorFactory;
 public class ApplicationInitializer implements ServletContextListener {
 
 	private final Log log = LogFactory.getLog(getClass());
-		
-	private boolean cleanDatastoreOnInit = true;
+
+	private boolean cleanDatastoreOnInit = false;
 	private boolean cleanTypesOnInit = false;
 	private int landsGeneratedOnInit = 3;
-	
+
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		log.info("Application is starting...");
-		
-		if(cleanDatastoreOnInit){
+
+		if (cleanDatastoreOnInit) {
 			cleanDatastore();
 		}
-		if(cleanTypesOnInit){
-			cleanTypes();
-		}
-
+		
 		FactionEndpoint factionEndpoint = new FactionEndpoint();
 		FieldTypeEndpoint fieldTypeEndpoint = new FieldTypeEndpoint();
 		UnitTypeEndpoint unitTypeEndpoint = new UnitTypeEndpoint();
 		LandEndpoint landEndpoint = new LandEndpoint();
+		
+		if (cleanTypesOnInit) {
+			cleanTypes();
 
-		if(factionEndpoint.listFaction(null, 1).getItems().isEmpty()){
-			log.info("Initializing datastore with factions, unit and field types...");
-	
-			Faction humans = new Faction(1L, "Humans", true, false); 
-			Faction monsters = new Faction(2L, "Monsters", false, true);
-			
-			List<Faction> factions = Arrays.asList(humans, monsters);
-			
-			List<UnitType> unitTypes = Arrays.asList(
-					//				  name			cost	texture			faction	mindmg maxdmg	hp 		speed ranged missiles
-					new UnitType(1L, "Goblin", 		100, "goblin.png", 		monsters.getId(), 	3, 	6, 		50, 	6, 	true, 	10), 
-					new UnitType(2L, "Orc", 		400, "orc.png", 		monsters.getId(), 	10, 15, 	200, 	5, 	false, 	0), 
-					new UnitType(3L, "Troll", 		2000, "troll.png", 		monsters.getId(), 	30, 100, 	1000, 	3, 	false, 	0), 
-					new UnitType(101L, "Swordsman", 	300, "swordsman.png", 	humans.getId(), 	3, 	6, 	50, 	5, 	false, 	0), 
-					new UnitType(102L, "Archer", 		450, "archer.png", 		humans.getId(), 	3, 	6, 	50, 	5, 	true, 	10), 
-					new UnitType(103L, "Knight", 		1500, "knight.png", 	humans.getId(), 	3, 	6, 	50, 	7, 	false, 	0));
-	
-			List<FieldType> fieldTypes = Arrays.asList(
-					new FieldType(1L, "Road", true, "road.png"), 
-					new FieldType(2L, "Passage", true, "passage.png"), 
-					new FieldType(3L, "Town", true, "town.png"), 
-					new FieldType(4L, "Dungeon", true, "dungeon.png"), 
-					new FieldType(100L, "Grass", true, "grass.png"), 
-					new FieldType(110L, "Mountains", false, "mountains.png")
-					);
-			
-			for(Faction faction: factions){
-				factionEndpoint.insertFaction(faction);
-			}
-			
-			for(UnitType unitType: unitTypes){
-				unitTypeEndpoint.insertUnitType(unitType);
-			}
-			
-			for(FieldType fieldType: fieldTypes){
-				fieldTypeEndpoint.insertFieldType(fieldType);
+			if (factionEndpoint.listFaction(null, 1).getItems().isEmpty()) {
+				log.info("Initializing datastore with factions, unit and field types...");
+
+				Faction humans = new Faction(1L, "Humans", true, false);
+				Faction monsters = new Faction(2L, "Monsters", false, true);
+
+				List<Faction> factions = Arrays.asList(humans, monsters);
+
+				List<UnitType> unitTypes = Arrays.asList(
+						// name cost texture faction mindmg maxdmg hp speed
+						// ranged missiles
+						new UnitType(1L, "Goblin", 100, "goblin.png", monsters.getId(), 3, 6, 50, 6, true, 10), new UnitType(2L, "Orc",
+								400, "orc.png", monsters.getId(), 10, 15, 200, 5, false, 0), new UnitType(3L, "Troll", 2000, "troll.png",
+								monsters.getId(), 30, 100, 1000, 3, false, 0),
+						new UnitType(101L, "Swordsman", 300, "swordsman.png", humans.getId(), 3, 6, 50, 5, false, 0), new UnitType(102L,
+								"Archer", 450, "archer.png", humans.getId(), 3, 6, 50, 5, true, 10), new UnitType(103L, "Knight", 1500,
+								"knight.png", humans.getId(), 3, 6, 50, 7, false, 0));
+
+				List<FieldType> fieldTypes = Arrays.asList(new FieldType(1L, "Road", true, "road.png"), new FieldType(2L, "Passage", true,
+						"passage.png"), new FieldType(3L, "Town", true, "town.png"), new FieldType(4L, "Dungeon", true, "dungeon.png"),
+						new FieldType(100L, "Grass", true, "grass.png"), new FieldType(110L, "Mountains", false, "mountains.png"));
+
+				for (Faction faction : factions) {
+					factionEndpoint.insertFaction(faction);
+				}
+
+				for (UnitType unitType : unitTypes) {
+					unitTypeEndpoint.insertUnitType(unitType);
+				}
+
+				for (FieldType fieldType : fieldTypes) {
+					fieldTypeEndpoint.insertFieldType(fieldType);
+				}
 			}
 		}
 
@@ -94,10 +91,11 @@ public class ApplicationInitializer implements ServletContextListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		log.info("Firing world generation...");
 
-		if(landEndpoint.listLand(null, 1).getItems().isEmpty()){
-			for(int i=0; i<landsGeneratedOnInit; ++i){
+		if (landEndpoint.listLand(null, 1).getItems().isEmpty()) {
+			for (int i = 0; i < landsGeneratedOnInit; ++i) {
 				WorldGeneratorFactory.fireWorldGeneration();
 			}
 		}
@@ -106,7 +104,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
 	private Map<Integer, String> createPrintableSymbols() {
 		Map<Integer, String> printableSymbols = new HashMap<>();
-		
+
 		printableSymbols.put(WorldGenerator.EMPTY, " ");
 		printableSymbols.put(WorldGenerator.EXISTING_LAND, "E");
 		printableSymbols.put(WorldGenerator.EXISTING_LAND_PASSAGE, "I");
@@ -119,14 +117,14 @@ public class ApplicationInitializer implements ServletContextListener {
 		printableSymbols.put(4, "D");
 		printableSymbols.put(100, ".");
 		printableSymbols.put(110, "^");
-		
+
 		return printableSymbols;
 	}
 
 	private void cleanDatastore() {
 		log.info("Cleaning world and players...");
 		EntityManager manager = null;
-		try { 
+		try {
 			manager = EMF.get().createEntityManager();
 			manager.createQuery("delete from Player as Player").executeUpdate();
 			manager.createQuery("delete from PlayerSession as PlayerSession").executeUpdate();
@@ -139,12 +137,12 @@ public class ApplicationInitializer implements ServletContextListener {
 			manager.close();
 		}
 	}
-	
+
 	private void cleanTypes() {
 		log.info("Cleaning unit & field types and factions...");
-		
+
 		EntityManager manager = null;
-		try { 
+		try {
 			manager = EMF.get().createEntityManager();
 			manager.createQuery("delete from Faction as Faction").executeUpdate();
 			manager.createQuery("delete from UnitType as UnitType").executeUpdate();
@@ -154,12 +152,11 @@ public class ApplicationInitializer implements ServletContextListener {
 		}
 	}
 
-
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		log.info("Application is stopping...");
-		
+
 		log.info("Application stopped");
 	}
-	
+
 }

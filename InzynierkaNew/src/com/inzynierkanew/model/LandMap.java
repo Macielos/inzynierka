@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
@@ -31,16 +29,12 @@ public class LandMap implements IRenderable {
 	private static final String TAG = LandMap.class.getSimpleName();
 	
 	private final int[][] fields;
-	private final Land land;
-	
+
 	private final int height;
 	private final int width;
 	
 	private final Map<Integer, DrawableFieldType> fieldTypes;
 	private final Map<Point, GenericJson> objects;
-	
-	private float offsetX;
-	private float offsetY;
 	
 	private final int cornerX;
 	private final int cornerY;
@@ -53,7 +47,6 @@ public class LandMap implements IRenderable {
 
 	public LandMap(GameView gameView, Land land, List<FieldType> fieldTypes) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
 		this.gameView = gameView;
-		this.land = land;
 		this.height = land.getHeight();
 		this.width = land.getWidth();
 
@@ -108,7 +101,7 @@ public class LandMap implements IRenderable {
 			for(int i=0; i<width; ++i){
 				drawableFieldType = fieldTypes.get(fields[j][i]);
 				if(drawableFieldType!=null){
-					canvas.drawBitmap(drawableFieldType.getBitmap(), offsetX+Constants.TILE_SIZE*i, offsetY+Constants.TILE_SIZE*j, null);
+					canvas.drawBitmap(drawableFieldType.getBitmap(), gameView.getOffsetX()+Constants.TILE_SIZE*i, gameView.getOffsetY()+Constants.TILE_SIZE*j, null);
 				}
 			}
 		}
@@ -118,11 +111,6 @@ public class LandMap implements IRenderable {
 	public void update() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public void setOffset(float offsetX, float offsetY){
-		this.offsetX = offsetX;
-		this.offsetY = offsetY;
 	}
 	
 	public Queue<Point> findPath(Point start, Point destination){
@@ -261,11 +249,14 @@ public class LandMap implements IRenderable {
 	}
 	
 	public boolean isFieldPassable(int x, int y) {
+		if(!withinMapSegment(x, y)){
+			return false;
+		}
 		DrawableFieldType drawableFieldType = fieldTypes.get(fields[y][x]);
 		if(drawableFieldType == null){
 			return false;
 		}
-		return withinMapSegment(x, y) && drawableFieldType.getFieldType().getPassable().booleanValue();
+		return drawableFieldType.getFieldType().getPassable().booleanValue();
 	}
 	
 	public boolean isDungeon(int x, int y){
@@ -283,5 +274,12 @@ public class LandMap implements IRenderable {
 	private boolean withinMapSegment(int x, int y) {
 		return x >= 0 && y >= 0 && x < width && y < height;
 	}
-	
+
+	public int getCornerX() {
+		return cornerX;
+	}
+
+	public int getCornerY() {
+		return cornerY;
+	}
 }

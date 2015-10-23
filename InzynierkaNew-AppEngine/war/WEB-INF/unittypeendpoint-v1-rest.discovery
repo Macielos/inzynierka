@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/safh32szuUccGhmICSg8t2zAE7Q\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Q6mudsulxY06_mXx0ME2_iCrY7c\"",
  "discoveryVersion": "v1",
  "id": "unittypeendpoint:v1",
  "name": "unittypeendpoint",
@@ -89,25 +89,6 @@
     }
    }
   },
-  "Faction": {
-   "id": "Faction",
-   "type": "object",
-   "properties": {
-    "appearsInDungeons": {
-     "type": "boolean"
-    },
-    "appearsInTowns": {
-     "type": "boolean"
-    },
-    "id": {
-     "type": "string",
-     "format": "int64"
-    },
-    "name": {
-     "type": "string"
-    }
-   }
-  },
   "UnitType": {
    "id": "UnitType",
    "type": "object",
@@ -116,8 +97,9 @@
      "type": "integer",
      "format": "int32"
     },
-    "faction": {
-     "$ref": "Faction"
+    "factionId": {
+     "type": "string",
+     "format": "int64"
     },
     "hitpoints": {
      "type": "integer",

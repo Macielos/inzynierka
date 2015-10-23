@@ -27,57 +27,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "landendpoint.findLandsInNeighbourhood" : {
-      "path" : "findLandsInNeighbourhood/{mapSegment}",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood",
-      "request" : {
-        "parameters" : {
-          "mapSegment" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "landendpoint.landEndpoint.findLandForNewPlayer" : {
-      "path" : "findLandForNewPlayer",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "landendpoint.findLandsWithFreePassages" : {
-      "path" : "findLandsWithFreePassages",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "landendpoint.getLand" : {
       "path" : "land/{id}",
       "httpMethod" : "GET",
@@ -176,25 +125,61 @@
       "response" : {
         "body" : "empty"
       }
+    },
+    "landendpoint.findLandsInNeighbourhood" : {
+      "path" : "findLandsInNeighbourhood/{mapSegment}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood",
+      "request" : {
+        "parameters" : {
+          "mapSegment" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.landEndpoint.findLandForNewPlayer" : {
+      "path" : "findLandForNewPlayer",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.findLandsWithFreePassages" : {
+      "path" : "findLandsWithFreePassages",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_Land" : {
-        "id" : "CollectionResponse_Land",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Land"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "Land" : {
         "id" : "Land",
         "type" : "object",
@@ -246,10 +231,10 @@
               "type" : "integer"
             }
           },
-          "width" : {
+          "height" : {
             "type" : "integer"
           },
-          "height" : {
+          "width" : {
             "type" : "integer"
           }
         }
@@ -354,24 +339,24 @@
             "format" : "int64"
           }
         }
+      },
+      "CollectionResponse_Land" : {
+        "id" : "CollectionResponse_Land",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Land"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Land"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer" : {
-        "response" : {
-          "$ref" : "Land"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Land"
-        }
-      },
       "com.inzynierkanew.endpoints.map.LandEndpoint.getLand" : {
         "response" : {
           "$ref" : "Land"
@@ -399,6 +384,21 @@
         }
       },
       "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand" : {
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer" : {
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
       }
     }
   }
