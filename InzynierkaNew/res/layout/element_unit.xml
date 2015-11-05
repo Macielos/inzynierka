@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".TownActivity" >
+
+    <SeekBar
+        android:id="@+id/unitsToRecruit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unitImage" />
+
+    <Button
+        android:id="@+id/recruitButton"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_alignRight="@+id/unitsToRecruit"
+        android:layout_below="@+id/unitsToRecruit"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="73dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scrollHorizontally="true"
+        android:text="Recruit" />
+
+    <TextView
+        android:id="@+id/unitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/unitImage"
+        android:layout_below="@+id/unitImage"
+        android:layout_marginLeft="23dp"
+        android:text="Name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/unitImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/swordsman" />
+
+    <EditText
+        android:id="@+id/unitCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/unitsToRecruit"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@+id/unitImage"
+        android:ems="10" />
+
+</RelativeLayout>

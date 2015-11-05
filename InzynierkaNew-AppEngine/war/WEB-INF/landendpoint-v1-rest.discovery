@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/rl5mHviWcmuPs5sH0Rp8nW3q5DM\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/XRkqzt5b4KQ-UcmQS9OBd6zvvhk\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -93,8 +93,22 @@
    "id": "Dungeon",
    "type": "object",
    "properties": {
+    "army": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
     "key": {
      "$ref": "Key"
+    },
+    "maxArmy": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
     },
     "type": {
      "type": "string",
@@ -245,8 +259,26 @@
    "id": "Town",
    "type": "object",
    "properties": {
+    "army": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
+    "factionId": {
+     "type": "string",
+     "format": "int64"
+    },
     "key": {
      "$ref": "Key"
+    },
+    "maxArmy": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
     },
     "name": {
      "type": "string"
@@ -317,6 +349,28 @@
    ],
    "response": {
     "$ref": "Land"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getTown": {
+   "id": "landendpoint.getTown",
+   "path": "town/{landId}",
+   "httpMethod": "GET",
+   "parameters": {
+    "landId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "landId"
+   ],
+   "response": {
+    "$ref": "Town"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

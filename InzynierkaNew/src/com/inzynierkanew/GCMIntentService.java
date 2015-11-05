@@ -9,9 +9,9 @@ import android.util.Log;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.util.DateTime;
-import com.inzynierkanew.activities.RegisterActivity;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
+import com.inzynierkanew.init.RegisterActivity;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 
 /**

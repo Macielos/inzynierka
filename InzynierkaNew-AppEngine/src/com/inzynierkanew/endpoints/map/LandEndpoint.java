@@ -21,6 +21,7 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.Land;
+import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.utils.DatastoreUtils;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.world.WorldGenerator;
@@ -90,6 +91,21 @@ public class LandEndpoint {
 			mgr.close();
 		}
 		return land;
+	}
+	
+	@ApiMethod(name = "getTown")
+	public Town getTown(@Named("landId") Long id) {
+		EntityManager mgr = getEntityManager();
+		Town town = null;
+		try {
+			Land land = mgr.find(Land.class, id);
+			if(land!=null){
+				town = land.getTown();
+			}
+		} finally {
+			mgr.close();
+		}
+		return town;
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -184,6 +200,17 @@ public class LandEndpoint {
 		}
 		return land;
 	}
+	
+//	@ApiMethod(name = "updateTown")
+//	public Town updateTown(Town town) {
+//		EntityManager mgr = getEntityManager();
+//		try {
+//			mgr.merge(town);
+//		} finally {
+//			mgr.close();
+//		}
+//		return town;
+//	}
 
 	/**
 	 * This method removes the entity with primary key id.

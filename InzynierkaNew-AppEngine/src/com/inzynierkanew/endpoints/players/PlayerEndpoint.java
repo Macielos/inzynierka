@@ -141,7 +141,7 @@ public class PlayerEndpoint {
 			if (!containsPlayer(player)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.persist(player);
+			mgr.merge(player);
 		} finally {
 			mgr.close();
 		}

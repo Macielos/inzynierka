@@ -15,9 +15,13 @@ import org.apache.juli.logging.LogFactory;
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.players.FactionEndpoint;
+import com.inzynierkanew.endpoints.players.HeroEndpoint;
+import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.entities.players.Faction;
+import com.inzynierkanew.entities.players.Hero;
+import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.utils.WorldGenerationUtils;
@@ -32,6 +36,9 @@ public class ApplicationInitializer implements ServletContextListener {
 	private boolean cleanTypesOnInit = false;
 	private int landsGeneratedOnInit = 3;
 
+	public static final long HUMANS_ID = 1L;
+	public static final long MONSTERS_ID = 2L;
+	
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		log.info("Application is starting...");
@@ -44,31 +51,37 @@ public class ApplicationInitializer implements ServletContextListener {
 		FieldTypeEndpoint fieldTypeEndpoint = new FieldTypeEndpoint();
 		UnitTypeEndpoint unitTypeEndpoint = new UnitTypeEndpoint();
 		LandEndpoint landEndpoint = new LandEndpoint();
-		
+		PlayerEndpoint playerEndpoint = new PlayerEndpoint();
+		HeroEndpoint heroEndpoint = new HeroEndpoint();
+
 		if (cleanTypesOnInit) {
 			cleanTypes();
 
 			if (factionEndpoint.listFaction(null, 1).getItems().isEmpty()) {
 				log.info("Initializing datastore with factions, unit and field types...");
 
-				Faction humans = new Faction(1L, "Humans", true, false);
-				Faction monsters = new Faction(2L, "Monsters", false, true);
+				Faction humans = new Faction(HUMANS_ID, "Humans", true, false);
+				Faction monsters = new Faction(MONSTERS_ID, "Monsters", false, true);
 
 				List<Faction> factions = Arrays.asList(humans, monsters);
 
 				List<UnitType> unitTypes = Arrays.asList(
 						// name cost texture faction mindmg maxdmg hp speed
 						// ranged missiles
-						new UnitType(1L, "Goblin", 100, "goblin.png", monsters.getId(), 3, 6, 50, 6, true, 10), new UnitType(2L, "Orc",
-								400, "orc.png", monsters.getId(), 10, 15, 200, 5, false, 0), new UnitType(3L, "Troll", 2000, "troll.png",
-								monsters.getId(), 30, 100, 1000, 3, false, 0),
-						new UnitType(101L, "Swordsman", 300, "swordsman.png", humans.getId(), 3, 6, 50, 5, false, 0), new UnitType(102L,
-								"Archer", 450, "archer.png", humans.getId(), 3, 6, 50, 5, true, 10), new UnitType(103L, "Knight", 1500,
-								"knight.png", humans.getId(), 3, 6, 50, 7, false, 0));
+						new UnitType(1L, "Goblin", 100, "goblin", monsters.getId(), 3, 6, 50, 6, true, 10), 
+						new UnitType(2L, "Orc",	400, "orc", monsters.getId(), 10, 15, 200, 5, false, 0), 
+						new UnitType(3L, "Troll", 2000, "troll", monsters.getId(), 30, 100, 1000, 3, false, 0),
+						new UnitType(101L, "Swordsman", 300, "swordsman", humans.getId(), 3, 6, 50, 5, false, 0), 
+						new UnitType(102L, "Archer", 450, "archer", humans.getId(), 3, 6, 50, 5, true, 10), 
+						new UnitType(103L, "Knight", 1500, "knight", humans.getId(), 3, 6, 50, 7, false, 0));
 
-				List<FieldType> fieldTypes = Arrays.asList(new FieldType(1L, "Road", true, "road.png"), new FieldType(2L, "Passage", true,
-						"passage.png"), new FieldType(3L, "Town", true, "town.png"), new FieldType(4L, "Dungeon", true, "dungeon.png"),
-						new FieldType(100L, "Grass", true, "grass.png"), new FieldType(110L, "Mountains", false, "mountains.png"));
+				List<FieldType> fieldTypes = Arrays.asList(
+						new FieldType(1L, "Road", true, "road"), 
+						new FieldType(2L, "Passage", true, "passage"), 
+						new FieldType(3L, "Town", true, "town"), 
+						new FieldType(4L, "Dungeon", true, "dungeon"),
+						new FieldType(100L, "Grass", true, "grass"), 
+						new FieldType(110L, "Mountains", false, "mountains"));
 
 				for (Faction faction : factions) {
 					factionEndpoint.insertFaction(faction);
@@ -82,6 +95,12 @@ public class ApplicationInitializer implements ServletContextListener {
 					fieldTypeEndpoint.insertFieldType(fieldType);
 				}
 			}
+		}
+		
+		log.info("Giving gold to players...");
+		for(Player player: playerEndpoint.listPlayer(null, null).getItems()){
+			//player.setGold(player.getGold()+50000000);
+			playerEndpoint.updatePlayer(player);
 		}
 
 		WorldGenerationUtils.init(createPrintableSymbols());

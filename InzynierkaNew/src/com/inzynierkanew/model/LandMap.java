@@ -39,30 +39,21 @@ public class LandMap implements IRenderable {
 	private final int cornerX;
 	private final int cornerY;
 	
-	private int PASSAGE;
-	private int TOWN;
-	private int DUNGEON;
+	private final int passage;
+	private final int town;
+	private final int dungeon;
 	
 	private final GameView gameView;
 
-	public LandMap(GameView gameView, Land land, List<FieldType> fieldTypes) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+	public LandMap(GameView gameView, Land land, Map<Integer, DrawableFieldType> fieldTypes, int townIndex, int passageIndex,int dungeonIndex) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
 		this.gameView = gameView;
 		this.height = land.getHeight();
 		this.width = land.getWidth();
 
-		this.fieldTypes = new HashMap<>(fieldTypes.size());
-		for(FieldType fieldType: fieldTypes){
-			this.fieldTypes.put(fieldType.getId().intValue(), new DrawableFieldType(fieldType, gameView.createBitmap(R.drawable.class.getField(fieldType.getName().toLowerCase()).getInt(null))));
-			if(fieldType.getName().equals("Dungeon")){
-				DUNGEON = fieldType.getId().intValue();
-			}
-			if(fieldType.getName().equals("Town")){
-				TOWN = fieldType.getId().intValue();
-			}			
-			if(fieldType.getName().equals("Passage")){
-				PASSAGE = fieldType.getId().intValue();
-			}
-		}
+		this.fieldTypes = fieldTypes;
+		this.passage = passageIndex;
+		this.town = townIndex;
+		this.dungeon = dungeonIndex;
 		
 		fields = new int[height][];
 		for(int i=0; i<height; ++i){
@@ -260,15 +251,15 @@ public class LandMap implements IRenderable {
 	}
 	
 	public boolean isDungeon(int x, int y){
-		return withinMapSegment(x, y) && fields[y][x] == DUNGEON;
+		return withinMapSegment(x, y) && fields[y][x] == dungeon;
 	}
 	
 	public boolean isPassage(int x, int y){
-		return withinMapSegment(x, y) && fields[y][x] == PASSAGE;
+		return withinMapSegment(x, y) && fields[y][x] == passage;
 	}
 	
 	public boolean isTown(int x, int y){
-		return withinMapSegment(x, y) && fields[y][x] == TOWN;
+		return withinMapSegment(x, y) && fields[y][x] == town;
 	}
 	
 	private boolean withinMapSegment(int x, int y) {

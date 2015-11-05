@@ -3,6 +3,8 @@ package com.inzynierkanew.entities.players;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.google.appengine.api.datastore.Key;
+
 @Entity
 public class Faction {
 

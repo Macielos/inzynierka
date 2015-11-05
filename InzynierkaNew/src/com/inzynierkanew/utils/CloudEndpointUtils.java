@@ -1,5 +1,11 @@
 package com.inzynierkanew.utils;
 
+import java.io.IOException;
+
+import android.app.Activity;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -11,15 +17,12 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
+import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
+import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
+import com.inzynierkanew.entities.players.unittypeendpoint.Unittypeendpoint;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
-
-import android.app.Activity;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.io.IOException;
 
 /**
  * Common utilities for working with Cloud Endpoints.
@@ -148,7 +151,7 @@ public class CloudEndpointUtils {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+		return updateBuilder(endpointBuilder).build();
 	}
 	
 	public static Heroendpoint newHeroEndpoint(){
@@ -157,7 +160,7 @@ public class CloudEndpointUtils {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+		return updateBuilder(endpointBuilder).build();
 	}
 		
 	public static MessageEndpoint newMessageEndpoint(){
@@ -166,7 +169,7 @@ public class CloudEndpointUtils {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+		return updateBuilder(endpointBuilder).build();
 	}
 	
 	public static Landendpoint newLandEndpoint(){
@@ -175,7 +178,7 @@ public class CloudEndpointUtils {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+		return updateBuilder(endpointBuilder).build();
 	}
 	
 	public static Fieldtypeendpoint newFieldTypeEndpoint(){
@@ -184,8 +187,33 @@ public class CloudEndpointUtils {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+		return updateBuilder(endpointBuilder).build();
 	}
 	
+	public static Unittypeendpoint newUnitTypeEndpoint(){
+		Unittypeendpoint.Builder endpointBuilder = new Unittypeendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return updateBuilder(endpointBuilder).build();
+	}
 	
+	public static Townendpoint newTownEndpoint(){
+		Townendpoint.Builder endpointBuilder = new Townendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return updateBuilder(endpointBuilder).build();
+	}
+	
+	public static Factionendpoint newFactionEndpoint(){
+		Factionendpoint.Builder endpointBuilder = new Factionendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return updateBuilder(endpointBuilder).build();
+	}
 }

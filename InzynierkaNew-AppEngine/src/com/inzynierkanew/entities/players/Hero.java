@@ -10,6 +10,13 @@ import com.google.appengine.api.datastore.Key;
 @Entity
 public class Hero {
 
+	/**
+	 * TODO:
+	 * player.hero -> nie referencja tylko id
+	 * szukaj hero, a nie player.getHero
+	 * rozkmiñ czemu po kliku pasek rekrut. jednostek siê nie zmienia
+	 */
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;

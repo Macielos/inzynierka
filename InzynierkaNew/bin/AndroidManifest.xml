@@ -11,7 +11,7 @@
    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
-        <activity android:label="@string/app_name" android:name=".activities.MainActivity">
+        <activity android:label="@string/app_name" android:name="com.inzynierkanew.init.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -30,9 +30,9 @@
             </intent-filter>
         </receiver>
     
-        <activity android:launchMode="singleTop" android:name=".activities.RegisterActivity"/>
-        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.activities.LoginActivity"/>
-        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.activities.GameActivity"/>
+        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.init.RegisterActivity"/>
+        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.init.LoginActivity"/>
+        <activity android:launchMode="singleTop" android:name="com.inzynierkanew.game.GameActivity"/>
 </application>
 
 </manifest>

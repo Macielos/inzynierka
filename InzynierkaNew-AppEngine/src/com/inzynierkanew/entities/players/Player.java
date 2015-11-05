@@ -14,30 +14,32 @@ import org.datanucleus.api.jpa.annotations.PersistenceAware;
 @PersistenceAware
 @Entity
 public class Player {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
-	
+
 	private String password;
-	
+
 	private String deviceRegistrationID;
 
 	private Date registrationTime;
-	
+
 	private String sessionId;
-	
+
 	private Date lastLogin;
-	
-	@OneToOne(cascade=CascadeType.ALL)
+
+	private int gold;
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private Hero hero;
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -69,7 +71,7 @@ public class Player {
 	public void setRegistrationTime(Date registrationTime) {
 		this.registrationTime = registrationTime;
 	}
-	
+
 	public String getSessionId() {
 		return sessionId;
 	}
@@ -93,5 +95,13 @@ public class Player {
 	public void setHero(Hero hero) {
 		this.hero = hero;
 	}
-	
+
+	public int getGold() {
+		return gold;
+	}
+
+	public void setGold(int gold) {
+		this.gold = gold;
+	}
+
 }

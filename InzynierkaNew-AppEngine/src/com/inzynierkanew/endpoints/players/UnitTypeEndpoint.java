@@ -145,6 +145,9 @@ public class UnitTypeEndpoint {
 
 	private boolean containsUnitType(UnitType unittype) {
 		EntityManager mgr = getEntityManager();
+		if(unittype.getId()==null){
+			return false;
+		}
 		boolean contains = true;
 		try {
 			UnitType item = mgr.find(UnitType.class, unittype.getId());

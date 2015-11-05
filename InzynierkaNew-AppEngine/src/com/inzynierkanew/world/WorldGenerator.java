@@ -28,6 +28,7 @@ import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.entities.players.Faction;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.UnitType;
+import com.inzynierkanew.init.ApplicationInitializer;
 import com.inzynierkanew.utils.Point;
 import com.inzynierkanew.utils.Statistics;
 import com.inzynierkanew.utils.WorldGenerationUtils;
@@ -56,8 +57,8 @@ public class WorldGenerator {
 	private static final int CROSSROAD_MIN_GAP = 5;
 	private static final int CROSSROAD_GAP_DIFF = 3;
 
-	private static final int DUNGEON_ARMY_MIN_STRENGTH = 400;
-	private static final int DUNGEON_ARMY_DIFF = 1200;
+	private static final int ARMY_MIN_STRENGTH = 400;
+	private static final int ARMY_DIFF = 1200;
 
 	// FIELD TYPES - TEMP
 	// TODO load field types from datastore
@@ -93,7 +94,9 @@ public class WorldGenerator {
 	private int TOWN;
 	private int DUNGEON;
 
-	private Map<Long, List<UnitType>> unitTypesByFactions;
+	private Map<Long, List<UnitType>> dungeonUnitTypesByFactions;
+	private Map<Long, List<UnitType>> townUnitTypesByFactions;
+	private Map<Long, Faction> factions = new HashMap<>();
 
 	// EXISTING ELEMENTS
 	private Land borderLand = null;
@@ -230,21 +233,34 @@ public class WorldGenerator {
 		TOWN = (int) fieldTypeEndpoint.findByName("Town").getId();
 		DUNGEON = (int) fieldTypeEndpoint.findByName("Dungeon").getId();
 
-		List<Faction> factions = (List<Faction>) factionEndpoint.getFactionsForDungeons(null, null).getItems();
-		unitTypesByFactions = new HashMap<>(factions.size());
-		for (Faction faction : factions) {
-			unitTypesByFactions.put(faction.getId(), new ArrayList<UnitType>());
+		List<Faction> factionsForDungeons = (List<Faction>) factionEndpoint.getFactionsForDungeons(null, null).getItems();
+		dungeonUnitTypesByFactions = new HashMap<>(factionsForDungeons.size());
+		for (Faction faction : factionsForDungeons) {
+			dungeonUnitTypesByFactions.put(faction.getId(), new ArrayList<UnitType>());
+			factions.put(faction.getId(), faction);
 		}
+		
+		List<Faction> factionsForTowns = (List<Faction>) factionEndpoint.getFactionsForTowns(null, null).getItems();
+		townUnitTypesByFactions = new HashMap<>(factionsForTowns.size());
+		for (Faction faction : factionsForTowns) {
+			townUnitTypesByFactions.put(faction.getId(), new ArrayList<UnitType>());
+			factions.put(faction.getId(), faction);
+		}
+		
 		List<UnitType> unitTypes = (List<UnitType>) unitTypeEndpoint.listUnitType(null, null).getItems();
 		List<UnitType> unitTypesByFaction;
 		for (UnitType unitType : unitTypes) {
-			unitTypesByFaction = unitTypesByFactions.get(unitType.getFactionId());
+			unitTypesByFaction = dungeonUnitTypesByFactions.get(unitType.getFactionId());
+			if (unitTypesByFaction != null) {
+				unitTypesByFaction.add(unitType);
+			}
+			unitTypesByFaction = townUnitTypesByFactions.get(unitType.getFactionId());
 			if (unitTypesByFaction != null) {
 				unitTypesByFaction.add(unitType);
 			}
 		}
 	}
-
+	
 	private void prepareMapSegment() {
 		mapSegment = newMapSegment(LAND_MAX_HEIGHT, LAND_MAX_WIDTH);
 		height = LAND_MAX_HEIGHT;
@@ -1452,11 +1468,13 @@ public class WorldGenerator {
 			}
 		}
 		land.setFields(fields);
-		land.setTown(town == null ? null : new Town(town.x + mapSegmentMinX, town.y + mapSegmentMinY, TOWN, "qwerty"));
+		Long factionId = randomKey(townUnitTypesByFactions);
+		land.setTown(town == null ? null : new Town(town.x + mapSegmentMinX, town.y + mapSegmentMinY, TOWN, "Aringrad", factionId, createTownArmy(factionId)));
 		land.setPassages(passages);
 		List<Dungeon> dungeons = new ArrayList<>(this.dungeons.size());
+		
 		for (Point point : this.dungeons) {
-			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, createArmy()));
+			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, createDungeonArmy(randomKey(dungeonUnitTypesByFactions))));
 		}
 		land.setDungeons(dungeons);
 		land.setHasFreePassage(hasFreePassage(passages));
@@ -1465,10 +1483,24 @@ public class WorldGenerator {
 		return land;
 	}
 
-	private int[] createArmy() {
-		List<Long> factionsForDungeon = new ArrayList<>(unitTypesByFactions.keySet());
-		Long selectedFactionId = factionsForDungeon.get(random.nextInt(factionsForDungeon.size()));
-		List<UnitType> unitTypesForSelectedFaction = unitTypesByFactions.get(selectedFactionId);
+	private int[] createTownArmy(Long factionId) {
+		return createArmy(townUnitTypesByFactions, factionId);
+	}
+	
+	private int[] createDungeonArmy(Long factionId) {
+		return createArmy(dungeonUnitTypesByFactions, factionId);
+	}
+	
+	private Long randomKey(Map<Long, List<UnitType>> map){
+		List<Long> factions = new ArrayList<>(map.keySet());
+		return factions.get(random.nextInt(factions.size()));
+	}
+	
+	private int[] createArmy(Map<Long, List<UnitType>> unitTypesByFactions, Long factionId) {
+		return createArmy(unitTypesByFactions.get(factionId));
+	}
+	
+	private int[] createArmy(List<UnitType> unitTypesForSelectedFaction) {
 		Collections.sort(unitTypesForSelectedFaction, new Comparator<UnitType>() {
 
 			@Override
@@ -1485,7 +1517,7 @@ public class WorldGenerator {
 			}
 		});
 		List<Integer> army = new ArrayList<>(unitTypesForSelectedFaction.size() * 2);
-		int totalArmyStrength = DUNGEON_ARMY_MIN_STRENGTH + random.nextInt(DUNGEON_ARMY_DIFF);
+		int totalArmyStrength = ARMY_MIN_STRENGTH + random.nextInt(ARMY_DIFF);
 		double chanceForNextUnit = 1.0;
 		double rand;
 		for (UnitType unitType : unitTypesForSelectedFaction) {

@@ -1,0 +1,107 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical|center_horizontal|center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/unitsAvailable"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="Units available"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ListView
+        android:id="@+id/listUnitsView"
+        android:layout_width="match_parent"
+        android:layout_height="286dp"
+        android:layout_below="@+id/unitsAvailable"
+        android:layout_marginTop="5dp"
+        android:layout_weight="0.17" />
+
+    <LinearLayout
+        android:id="@+id/playerUnits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/unit0"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/unit1"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/unit2"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/unit3"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/unit4"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/playerUnitCounts"
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/unitCount0"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit1" />
+
+        <TextView
+            android:id="@+id/unitCount1"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit2" />
+
+        <TextView
+            android:id="@+id/unitCount2"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit3" />
+
+        <TextView
+            android:id="@+id/unitCount3"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit4" />
+
+        <TextView
+            android:id="@+id/unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit5" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/barracksBackButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Back" />
+
+</LinearLayout>

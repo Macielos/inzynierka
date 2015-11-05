@@ -5,24 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -39,10 +30,12 @@ import com.inzynierkanew.entities.map.landendpoint.model.Town;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
+import com.inzynierkanew.entities.players.unittypeendpoint.Unittypeendpoint;
+import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
 import com.inzynierkanew.model.DrawableFieldType;
-import com.inzynierkanew.model.LandMap;
 import com.inzynierkanew.model.HeroObject;
+import com.inzynierkanew.model.LandMap;
 import com.inzynierkanew.utils.AndroidUtils;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.Constants;
@@ -60,18 +53,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final int LOOP = 0;
 	private static final int SHOW_DIALOG = 1;
 	private static final int DIALOG_CHOSEN = 2;
-	
+
 	private MainThread thread;
-	
+
 	private MessageEndpoint messageEndpoint = CloudEndpointUtils.newMessageEndpoint();
 	private Playerendpoint playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
 	private Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
 	private Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
 	private Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
+	private Unittypeendpoint unitTypeEndpoint = CloudEndpointUtils.newUnitTypeEndpoint();
 
-	private AtomicInteger renderMode = new AtomicInteger();
+	private AtomicInteger renderMode = new AtomicInteger(DIALOG_CHOSEN);
 
-	private List<FieldType> fieldTypes;
+	private Map<Integer, DrawableFieldType> fieldTypes;
+	private Map<Integer, UnitType> unitTypes;
+
+	private int townIndex;
+	private int passageIndex;
+	private int dungeonIndex;
 
 	private Player player;
 	private Land land;
@@ -88,7 +87,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private float startX;
 	private float startY;
-	
+
 	private int lastDialogX;
 	private int lastDialogY;
 
@@ -96,6 +95,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public GameView(Context context, String sessionId) {
 		super(context);
+
 		this.sessionId = sessionId;
 		Log.i(TAG, "sessionId: " + sessionId);
 		getHolder().addCallback(this);
@@ -108,10 +108,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			Log.i(TAG, "Land id: " + land.getId());
 			Log.i(TAG, land.toPrettyString());
 		} catch (Exception e) {
-			Log.e(TAG,"Failed to download game status from server, exception is" + e.getClass().getName() + ", message is: " + e.getMessage(), e);
+			Log.e(TAG,
+					"Failed to download game status from server, exception is" + e.getClass().getName() + ", message is: " + e.getMessage(),
+					e);
 		}
 	}
 
+	// TODO fieldTypes->texture, a nie toLowerCase()
 	private void downloadPlayerStatus() throws NumberFormatException, InterruptedException, ExecutionException {
 		player = new AsyncTask<Long, Void, Player>() {
 			protected Player doInBackground(Long[] params) {
@@ -132,9 +135,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		heroObject = new HeroObject(this, getPlayerBitmap(), player.getHero());
 	}
-	
-	private void downloadTypes() throws InterruptedException, ExecutionException {
-		fieldTypes = new AsyncTask<Void, Void, List<FieldType>>() {
+
+	private void downloadTypes() throws InterruptedException, ExecutionException, IllegalAccessException, IllegalArgumentException,
+			NoSuchFieldException {
+		List<FieldType> fieldTypeList = new AsyncTask<Void, Void, List<FieldType>>() {
 
 			@Override
 			protected List<FieldType> doInBackground(Void... params) {
@@ -147,9 +151,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 
 		}.execute(null, null).get();
-		if (fieldTypes == null) {
+		if (fieldTypeList == null) {
 			throw new RuntimeException("Failed to download field types");
 		}
+		List<UnitType> unitTypeList = new AsyncTask<Void, Void, List<UnitType>>() {
+			@Override
+			protected List<UnitType> doInBackground(Void... params) {
+				try {
+					return unitTypeEndpoint.listUnitType().execute().getItems();
+				} catch (IOException e) {
+					Log.e(TAG, "Failed to download unit types", e);
+					return null;
+				}
+			}
+
+		}.execute(null, null).get();
+		if (unitTypeList == null) {
+			throw new RuntimeException("Failed to download field types");
+		}
+		fieldTypes = createFieldtypes(fieldTypeList);
+		unitTypes = createUnitTypes(unitTypeList);
 	}
 
 	private void downloadNextLand(Long id) throws InterruptedException, ExecutionException, IllegalAccessException,
@@ -164,19 +185,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			};
 		}.execute(id).get();
-		landMap = new LandMap(this, land, fieldTypes);
+		landMap = new LandMap(this, land, fieldTypes, townIndex, passageIndex, dungeonIndex);
 		heroObject.setCornerCoordinates(land.getMinX(), land.getMinY());
 		centerCameraOnHero();
 	}
 
 	private void centerCameraOnHero() {
 		DisplayMetrics size = getSize();
-		int q = size.widthPixels;
-		int w = size.heightPixels;
-		offsetX = - heroObject.getLocalX() * Constants.TILE_SIZE + size.widthPixels/2;
-		offsetY = - heroObject.getLocalY() * Constants.TILE_SIZE + size.heightPixels/2;
+		offsetX = -heroObject.getLocalX() * Constants.TILE_SIZE + size.widthPixels / 2;
+		offsetY = -heroObject.getLocalY() * Constants.TILE_SIZE + size.heightPixels / 2;
+		lastDialogX = heroObject.getLocalX();
+		lastDialogY = heroObject.getLocalY();
 	}
-	
+
 	public Bitmap createBitmap(int id) {
 		return BitmapFactory.decodeResource(getResources(), id);
 	}
@@ -184,8 +205,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private Bitmap getPlayerBitmap() {
 		return BitmapFactory.decodeResource(getResources(), R.drawable.hero);
 	}
-	
-	private DisplayMetrics getSize(){
+
+	private DisplayMetrics getSize() {
 		DisplayMetrics metrics = new DisplayMetrics();
 		((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
 		return metrics;
@@ -205,12 +226,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		if (!heroObject.onObject()) {
 			return;
 		}
-		
-		if(renderMode.get()==DIALOG_CHOSEN && (heroObject.getLocalX()!=lastDialogX || heroObject.getLocalY()!=lastDialogY)){
+
+		if (heroObject.onTheMove()) {
+			return;
+		}
+
+		if (renderMode.get() == DIALOG_CHOSEN && (heroObject.getLocalX() != lastDialogX || heroObject.getLocalY() != lastDialogY)) {
 			renderMode.set(LOOP);
 		}
-		
-		if(renderMode.get()!=LOOP){
+
+		if (renderMode.get() != LOOP) {
 			return;
 		}
 
@@ -219,8 +244,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			return;
 		}
 
+		// TODO wchodzenie do miasta/passagu - onClick?
 		if (object instanceof Town) {
-			//Log.i(TAG, "Entering town");
+			Log.i(TAG, "Entering town");
+			renderMode.set(SHOW_DIALOG);
+			thread.setPaused(true);
+			// getHolder().removeCallback(this);
+			GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
+			activity.enterTown();
 		} else if (object instanceof Passage) {
 			Log.i(TAG, "Crossing passage");
 			renderMode.set(SHOW_DIALOG);
@@ -228,8 +259,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			try {
 				if (passage.getNextLandId() == null) {
 
-					AndroidUtils.showDialog(getActivity(), "Lands beyond this border are not available yet. Come back later",
-							new IOnConfirm() {
+					AndroidUtils.showDialog(AndroidUtils.getActivity(getContext()),
+							"Lands beyond this border are not available yet. Come back later", new IOnConfirm() {
 
 								@Override
 								public void onConfirm() {
@@ -239,38 +270,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 								}
 							});
 				} else {
-					AndroidUtils.showChoiceDialog(getActivity(), "Do you want to move to the next land?", new IOnChoice() {
+					AndroidUtils.showChoiceDialog(AndroidUtils.getActivity(getContext()), "Do you want to move to the next land?",
+							new IOnChoice() {
 
-						@Override
-						public void onConfirm() {
-							try {
-								thread.setPaused(true);
-								downloadNextLand(passage.getNextLandId());
-								heroObject.moveToNextLand(passage, land);
-								try {
-									playerEndpoint.moveHeroToDifferentLand(heroObject.getHero().getKey().getId(), passage.getNextLandId(),
-											passage.getNextX(), passage.getNextY());
-								} catch (IOException e) {
-									Log.e(TAG, "Failed to move Hero to land " + passage.getNextLandId(), e);
+								@Override
+								public void onConfirm() {
+									try {
+										thread.setPaused(true);
+										downloadNextLand(passage.getNextLandId());
+										heroObject.moveToNextLand(passage, land);
+										try {
+											playerEndpoint.moveHeroToDifferentLand(heroObject.getHero().getKey().getId(),
+													passage.getNextLandId(), passage.getNextX(), passage.getNextY());
+										} catch (IOException e) {
+											Log.e(TAG, "Failed to move Hero to land " + passage.getNextLandId(), e);
+										}
+										renderMode.set(DIALOG_CHOSEN);
+										lastDialogX = heroObject.getLocalX();
+										lastDialogY = heroObject.getLocalY();
+										thread.setPaused(false);
+									} catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException
+											| InterruptedException | ExecutionException e) {
+										Log.e(TAG, "Error while downloading next land", e);
+									}
 								}
-								renderMode.set(DIALOG_CHOSEN);
-								lastDialogX = heroObject.getLocalX();
-								lastDialogY = heroObject.getLocalY();
-								thread.setPaused(false);
-							} catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | InterruptedException
-									| ExecutionException e) {
-								Log.e(TAG, "Error while downloading next land", e);
-							}
-						}
 
-						@Override
-						public void onDecline() {
-							renderMode.set(DIALOG_CHOSEN);
-							lastDialogX = heroObject.getLocalX();
-							lastDialogY = heroObject.getLocalY();
-						}
-					
-					});
+								@Override
+								public void onDecline() {
+									renderMode.set(DIALOG_CHOSEN);
+									lastDialogX = heroObject.getLocalX();
+									lastDialogY = heroObject.getLocalY();
+								}
+
+							});
 				}
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to display dialog", e);
@@ -293,15 +325,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
-		boolean retry = true;
-		while (retry) {
-			try {
-				thread.join();
-				retry = false;
-			} catch (InterruptedException e) {
-				// try again shutting down the thread
-			}
-		}
+		thread.setRunning(false);
+		// boolean retry = true;
+		// while (retry) {
+		// try {
+		// thread.join();
+		// retry = false;
+		// } catch (InterruptedException e) {
+		// // try again shutting down the thread
+		// }
+		// }
 	}
 
 	@Override
@@ -314,10 +347,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			startY = event.getY();
 			scrolling = true;
 			if (TimeUtils.timeElapsed(lastTouch) < DELTA_FOR_DOUBLE_TAP) {
-				Log.i(TAG, "moving");
 				Point localDestinationPoint = new Point((int) ((event.getX() - offsetX) / Constants.TILE_SIZE),
 						(int) ((event.getY() - offsetY) / Constants.TILE_SIZE));
 				Point localStartPoint = new Point(heroObject.getLocalX(), heroObject.getLocalY());
+
+//				if (localDestinationPoint.equals(localStartPoint)
+//						&& landMap.getObject(heroObject.getLocalX(), heroObject.getLocalY()) instanceof Town) {
+//					Log.i(TAG, "Enter town onClick");
+//					GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
+//					activity.enterTown();
+//					return true;
+//				}
 				if (landMap.isFieldPassable(localDestinationPoint.x, localDestinationPoint.y)) {
 					if (heroObject.onTheMove()) {
 						heroObject.haltMovement();
@@ -358,15 +398,31 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 
-	private Activity getActivity() {
-		Context context = getContext();
-		while (context instanceof ContextWrapper) {
-			if (context instanceof Activity) {
-				return (Activity) context;
-			}
-			context = ((ContextWrapper) context).getBaseContext();
+	private Map<Integer, UnitType> createUnitTypes(List<UnitType> unitTypes) {
+		Map<Integer, UnitType> map = new HashMap<>();
+		for (UnitType unitType : unitTypes) {
+			map.put(unitType.getId().intValue(), unitType);
 		}
-		return null;
+		return map;
+	}
+
+	private Map<Integer, DrawableFieldType> createFieldtypes(List<FieldType> fieldTypes) throws IllegalAccessException,
+			IllegalArgumentException, NoSuchFieldException {
+		Map<Integer, DrawableFieldType> fieldTypeMap = new HashMap<>(fieldTypes.size());
+		for (FieldType fieldType : fieldTypes) {
+			fieldTypeMap.put(fieldType.getId().intValue(),
+					new DrawableFieldType(fieldType, createBitmap(R.drawable.class.getField(fieldType.getTexture()).getInt(null))));
+			if (fieldType.getName().equals("Town")) {
+				townIndex = fieldType.getId().intValue();
+			}
+			if (fieldType.getName().equals("Passage")) {
+				passageIndex = fieldType.getId().intValue();
+			}
+			if (fieldType.getName().equals("Dungeon")) {
+				dungeonIndex = fieldType.getId().intValue();
+			}
+		}
+		return fieldTypeMap;
 	}
 
 	public float getOffsetX() {
@@ -376,7 +432,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public float getOffsetY() {
 		return offsetY;
 	}
-	
-	
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public Long getTownId() {
+		return land == null || land.getTown() == null ? null : land.getTown().getKey().getId();
+	}
+
+	public Map<Integer, DrawableFieldType> getFieldTypes() {
+		return fieldTypes;
+	}
+
+	public Map<Integer, UnitType> getUnitTypes() {
+		return unitTypes;
+	}
 
 }
