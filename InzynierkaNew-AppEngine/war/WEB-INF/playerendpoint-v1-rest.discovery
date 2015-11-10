@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Nn1t4UkNrxAgLEkOseiZx7KFQWU\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/eiIUyBrpHsVuoJDIJZsrDV395G8\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -267,21 +267,6 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "insertPlayer": {
-   "id": "playerendpoint.insertPlayer",
-   "path": "player",
-   "httpMethod": "POST",
-   "request": {
-    "$ref": "Player",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "Player"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "listPlayer": {
    "id": "playerendpoint.listPlayer",
    "path": "player",
@@ -340,6 +325,21 @@
     "x",
     "y"
    ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "registerPlayer": {
+   "id": "playerendpoint.registerPlayer",
+   "path": "registerPlayer",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "Player",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Player"
+   },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]

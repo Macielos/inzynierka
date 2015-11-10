@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.inzynierkanew.R;
 import com.inzynierkanew.activities.BaseActivity;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
-import com.inzynierkanew.entities.map.townendpoint.model.Town;
+import com.inzynierkanew.entities.map.landendpoint.model.Town;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
@@ -55,7 +55,7 @@ public class GameActivity extends BaseActivity {
 	private Town town;
 	private Faction faction;
 	private Player player;
-	//private Hero hero;
+	private Hero hero;
 	private List<AvailableUnit> availableUnits;
 
 	private boolean recruitmentTookPlace = false;
@@ -84,19 +84,20 @@ public class GameActivity extends BaseActivity {
 		unitTypes = gameView.getUnitTypes();
 		player = gameView.getPlayer();
 		try {
-			town = new AsyncTask<Long, Void, Town>() {
+			town = new AsyncTask<Void, Void, Town>() {
 
 				@Override
-				protected Town doInBackground(Long... params) {
+				protected Town doInBackground(Void... params) {
 					try {
-						return townEndpoint.getTown(params[0]).execute();
+						return landEndpoint.getTown(gameView.getLandId()).execute();
+						//return townEndpoint.getTown(gameView.getTownKey().getId()).execute();
 					} catch (IOException e) {
 						Log.e(TAG, "failed to download town data", e);
 						return null;
 					}
 				}
 
-			}.execute(gameView.getTownId()).get();
+			}.execute().get();
 		} catch (InterruptedException | ExecutionException e) {
 			Log.e(TAG, "failed to download town data in an async task", e);
 		}
@@ -311,7 +312,7 @@ public class GameActivity extends BaseActivity {
 						protected Void doInBackground(Void... params) {
 							try {
 								playerEndpoint.updatePlayer(player).execute();
-								townEndpoint.updateTown(town).execute();
+								landEndpoint.updateTown(town).execute();
 							} catch (IOException e) {
 								Log.e(TAG, "failed to update entities after recruitment", e);
 							}
@@ -367,6 +368,7 @@ public class GameActivity extends BaseActivity {
 
 	public void leaveTown() {
 		setContentView(gameView);
+		gameView.setRenderMode(GameView.DIALOG_CHOSEN);
 	}
 
 	private List<AvailableUnit> armyToAvailableUnitList(List<Integer> army) {

@@ -10,6 +10,7 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="D:/Users/Maciej/workspace/java/appcompat_v7/libs/android-support-v4.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="endpoint-libs/libfactionendpoint-v1/factionendpoint/factionendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libfieldtypeendpoint-v1/fieldtypeendpoint/fieldtypeendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libheroendpoint-v1/heroendpoint/heroendpoint-v1-generated-source"/>
@@ -19,6 +20,5 @@
 	<classpathentry kind="src" path="endpoint-libs/libplayerendpoint-v1/playerendpoint/playerendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libtownendpoint-v1/townendpoint/townendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libunittypeendpoint-v1/unittypeendpoint/unittypeendpoint-v1-generated-source"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

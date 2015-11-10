@@ -14,13 +14,14 @@ import org.apache.juli.logging.LogFactory;
 
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
+import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.endpoints.players.FactionEndpoint;
 import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.map.FieldType;
+import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.entities.players.Faction;
-import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.utils.EMF;
@@ -43,17 +44,18 @@ public class ApplicationInitializer implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) {
 		log.info("Application is starting...");
 
-		if (cleanDatastoreOnInit) {
-			cleanDatastore();
-		}
-		
 		FactionEndpoint factionEndpoint = new FactionEndpoint();
 		FieldTypeEndpoint fieldTypeEndpoint = new FieldTypeEndpoint();
 		UnitTypeEndpoint unitTypeEndpoint = new UnitTypeEndpoint();
 		LandEndpoint landEndpoint = new LandEndpoint();
 		PlayerEndpoint playerEndpoint = new PlayerEndpoint();
 		HeroEndpoint heroEndpoint = new HeroEndpoint();
+		TownEndpoint townEndpoint = new TownEndpoint();
 
+		if (cleanDatastoreOnInit) {
+			cleanDatastore();
+		}
+		
 		if (cleanTypesOnInit) {
 			cleanTypes();
 
@@ -99,7 +101,7 @@ public class ApplicationInitializer implements ServletContextListener {
 		
 		log.info("Giving gold to players...");
 		for(Player player: playerEndpoint.listPlayer(null, null).getItems()){
-			//player.setGold(player.getGold()+50000000);
+			player.setGold(player.getGold()+50000000);
 			playerEndpoint.updatePlayer(player);
 		}
 

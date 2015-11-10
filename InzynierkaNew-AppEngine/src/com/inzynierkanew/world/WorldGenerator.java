@@ -75,6 +75,8 @@ public class WorldGenerator {
 	public static final int RIGHT = 4;
 
 	public static final long MAP_SEGMENT_FACTOR = 1000000000000L;
+	
+	public static final int PLAYER_INITIAL_GOLD = 100000000;
 
 	// LOG
 	private Log log = LogFactory.getLog(getClass());
@@ -182,7 +184,7 @@ public class WorldGenerator {
 		try {
 			Land land = generateLand();
 			landEndpoint.insertLand(land);
-			for(Passage passage: neighbourPassagesToUpdate){
+			for (Passage passage : neighbourPassagesToUpdate) {
 				passage.setNextLandId(land.getId());
 				passageEndpoint.updatePassage(passage);
 			}
@@ -239,14 +241,14 @@ public class WorldGenerator {
 			dungeonUnitTypesByFactions.put(faction.getId(), new ArrayList<UnitType>());
 			factions.put(faction.getId(), faction);
 		}
-		
+
 		List<Faction> factionsForTowns = (List<Faction>) factionEndpoint.getFactionsForTowns(null, null).getItems();
 		townUnitTypesByFactions = new HashMap<>(factionsForTowns.size());
 		for (Faction faction : factionsForTowns) {
 			townUnitTypesByFactions.put(faction.getId(), new ArrayList<UnitType>());
 			factions.put(faction.getId(), faction);
 		}
-		
+
 		List<UnitType> unitTypes = (List<UnitType>) unitTypeEndpoint.listUnitType(null, null).getItems();
 		List<UnitType> unitTypesByFaction;
 		for (UnitType unitType : unitTypes) {
@@ -260,7 +262,7 @@ public class WorldGenerator {
 			}
 		}
 	}
-	
+
 	private void prepareMapSegment() {
 		mapSegment = newMapSegment(LAND_MAX_HEIGHT, LAND_MAX_WIDTH);
 		height = LAND_MAX_HEIGHT;
@@ -278,8 +280,7 @@ public class WorldGenerator {
 			playerPresenceInLands.add(land.getId(), 0);
 		}
 		for (Player player : players) {
-			if (player.getHero() != null && player.getHero().getCurrentLandId() != null
-					&& landIds.contains(player.getHero().getCurrentLandId())) {
+			if (player.getHero() != null && landIds.contains(player.getHero().getCurrentLandId())) {
 				playerPresenceInLands.increment(player.getHero().getCurrentLandId());
 			}
 		}
@@ -900,8 +901,9 @@ public class WorldGenerator {
 					if (newPassage != null) {
 						mapSegment[newPassage.y][newPassage.x] = PASSAGE;
 
-						passages.add(new Passage(newPassage.x + mapSegmentMinX, newPassage.y + mapSegmentMinY, PASSAGE, opposite(neighbourPassage
-								.getDirection()), neighbourLand.getId(), neighbourPassage.getX(), neighbourPassage.getY()));
+						passages.add(new Passage(newPassage.x + mapSegmentMinX, newPassage.y + mapSegmentMinY, PASSAGE,
+								opposite(neighbourPassage.getDirection()), neighbourLand.getId(), neighbourPassage.getX(), neighbourPassage
+										.getY()));
 						passagePoints.add(newPassage);
 
 						neighbourPassage.setNextX(newPassage.x + mapSegmentMinX);
@@ -1469,12 +1471,14 @@ public class WorldGenerator {
 		}
 		land.setFields(fields);
 		Long factionId = randomKey(townUnitTypesByFactions);
-		land.setTown(town == null ? null : new Town(town.x + mapSegmentMinX, town.y + mapSegmentMinY, TOWN, "Aringrad", factionId, createTownArmy(factionId)));
+		land.setTown(town == null ? null : new Town(town.x + mapSegmentMinX, town.y + mapSegmentMinY, TOWN, "Aringrad", factionId,
+				createTownArmy(factionId)));
 		land.setPassages(passages);
 		List<Dungeon> dungeons = new ArrayList<>(this.dungeons.size());
-		
+
 		for (Point point : this.dungeons) {
-			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, createDungeonArmy(randomKey(dungeonUnitTypesByFactions))));
+			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON,
+					createDungeonArmy(randomKey(dungeonUnitTypesByFactions))));
 		}
 		land.setDungeons(dungeons);
 		land.setHasFreePassage(hasFreePassage(passages));
@@ -1486,20 +1490,20 @@ public class WorldGenerator {
 	private int[] createTownArmy(Long factionId) {
 		return createArmy(townUnitTypesByFactions, factionId);
 	}
-	
+
 	private int[] createDungeonArmy(Long factionId) {
 		return createArmy(dungeonUnitTypesByFactions, factionId);
 	}
-	
-	private Long randomKey(Map<Long, List<UnitType>> map){
+
+	private Long randomKey(Map<Long, List<UnitType>> map) {
 		List<Long> factions = new ArrayList<>(map.keySet());
 		return factions.get(random.nextInt(factions.size()));
 	}
-	
+
 	private int[] createArmy(Map<Long, List<UnitType>> unitTypesByFactions, Long factionId) {
 		return createArmy(unitTypesByFactions.get(factionId));
 	}
-	
+
 	private int[] createArmy(List<UnitType> unitTypesForSelectedFaction) {
 		Collections.sort(unitTypesForSelectedFaction, new Comparator<UnitType>() {
 

@@ -33,7 +33,7 @@ public class Player {
 
 	private int gold;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	private Hero hero;
 
 	public Long getId() {

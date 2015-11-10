@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/XRkqzt5b4KQ-UcmQS9OBd6zvvhk\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/3T8uBsnFsWjQ3rozkAvsnEUi8zE\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -442,6 +442,21 @@
    },
    "response": {
     "$ref": "Land"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateTown": {
+   "id": "landendpoint.updateTown",
+   "path": "town",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "Town",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Town"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

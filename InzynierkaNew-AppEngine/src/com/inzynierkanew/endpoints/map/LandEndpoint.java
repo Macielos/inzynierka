@@ -201,16 +201,16 @@ public class LandEndpoint {
 		return land;
 	}
 	
-//	@ApiMethod(name = "updateTown")
-//	public Town updateTown(Town town) {
-//		EntityManager mgr = getEntityManager();
-//		try {
-//			mgr.merge(town);
-//		} finally {
-//			mgr.close();
-//		}
-//		return town;
-//	}
+	@ApiMethod(name = "updateTown")
+	public Town updateTown(Town town) {
+		EntityManager mgr = getEntityManager();
+		try {
+			mgr.merge(town);
+		} finally {
+			mgr.close();
+		}
+		return town;
+	}
 
 	/**
 	 * This method removes the entity with primary key id.

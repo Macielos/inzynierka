@@ -120,7 +120,7 @@ public class PassageEndpoint {
 			if (!containsPassage(passage)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.persist(passage);
+			mgr.merge(passage);
 		} finally {
 			mgr.close();
 		}

@@ -24,9 +24,11 @@ import com.inzynierkanew.R;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
+import com.inzynierkanew.entities.map.landendpoint.model.Key;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.map.landendpoint.model.Town;
+import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
@@ -50,9 +52,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static final long DELTA_FOR_DOUBLE_TAP = 500L;
 
-	private static final int LOOP = 0;
-	private static final int SHOW_DIALOG = 1;
-	private static final int DIALOG_CHOSEN = 2;
+	public static final int LOOP = 0;
+	public static final int SHOW_DIALOG = 1;
+	public static final int DIALOG_CHOSEN = 2;
 
 	private MainThread thread;
 
@@ -62,6 +64,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
 	private Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
 	private Unittypeendpoint unitTypeEndpoint = CloudEndpointUtils.newUnitTypeEndpoint();
+	private Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
 
 	private AtomicInteger renderMode = new AtomicInteger(DIALOG_CHOSEN);
 
@@ -188,6 +191,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		landMap = new LandMap(this, land, fieldTypes, townIndex, passageIndex, dungeonIndex);
 		heroObject.setCornerCoordinates(land.getMinX(), land.getMinY());
 		centerCameraOnHero();
+//		com.inzynierkanew.entities.map.townendpoint.model.Town town = null;
+//		try {
+//			town = townEndpoint.getTown(land.getTown().getKey().getId()).execute();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				Log.i(TAG, town.toPrettyString());
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
 	}
 
 	private void centerCameraOnHero() {
@@ -248,10 +266,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		if (object instanceof Town) {
 			Log.i(TAG, "Entering town");
 			renderMode.set(SHOW_DIALOG);
-			thread.setPaused(true);
+			thread.setRunning(false);
+			final GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
+			activity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					activity.enterTown();
+				}
+			});
+			//thread.interrupt();
 			// getHolder().removeCallback(this);
-			GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
-			activity.enterTown();
+			//GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
+			//activity.enterTown();
 		} else if (object instanceof Passage) {
 			Log.i(TAG, "Crossing passage");
 			renderMode.set(SHOW_DIALOG);
@@ -313,6 +340,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
+		thread = new MainThread(getHolder(), this);
 		thread.setRunning(true);
 		thread.start();
 	}
@@ -437,8 +465,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		return player;
 	}
 
-	public Long getTownId() {
-		return land == null || land.getTown() == null ? null : land.getTown().getKey().getId();
+	public Key getTownKey() {
+		return land == null || land.getTown() == null ? null : land.getTown().getKey();
+	}
+	
+	public Long getLandId(){
+		return land == null ? null : land.getId();
 	}
 
 	public Map<Integer, DrawableFieldType> getFieldTypes() {
@@ -448,5 +480,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public Map<Integer, UnitType> getUnitTypes() {
 		return unitTypes;
 	}
-
+	
+	public void setRenderMode(int renderMode){
+		this.renderMode.set(renderMode);
+	}
 }

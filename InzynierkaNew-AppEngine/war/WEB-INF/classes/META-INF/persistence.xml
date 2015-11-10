@@ -14,7 +14,7 @@
 		<class>com.inzynierkanew.entities.players.PlayerSession</class>
         <class>com.inzynierkanew.entities.players.Faction</class>
         <class>com.inzynierkanew.entities.map.Land</class>
-        <class>com.inzynierkanew.entities.map.BaseField</class>
+        <!-- class>com.inzynierkanew.entities.map.BaseField</class-->
         <class>com.inzynierkanew.entities.map.Town</class>
         <class>com.inzynierkanew.entities.map.Dungeon</class>
         <class>com.inzynierkanew.entities.map.Passage</class>
