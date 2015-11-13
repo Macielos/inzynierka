@@ -1,12 +1,6 @@
 package com.inzynierkanew.init;
 
-import java.io.IOException;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,15 +15,10 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.inzynierkanew.GCMIntentService;
 import com.inzynierkanew.R;
-import com.inzynierkanew.R.id;
-import com.inzynierkanew.R.layout;
 import com.inzynierkanew.activities.BaseActivity;
-import com.inzynierkanew.entities.players.playerendpoint.model.Hero;
-import com.inzynierkanew.entities.players.playerendpoint.model.LoginResponse;
+import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
-import com.inzynierkanew.messageEndpoint.model.CollectionResponseMessageData;
-import com.inzynierkanew.messageEndpoint.model.MessageData;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.RequestValidator;
 import com.inzynierkanew.utils.ValidationResult;
@@ -111,7 +100,6 @@ public class RegisterActivity extends BaseActivity {
 								Player player = new Player();
 								player.setName(name);
 								player.setPassword(RequestValidator.hashPassword(passwordBytes));
-								player.setHero(new Hero().setLevel(1));
 								GCMIntentService.register(getApplicationContext(), player);
 							} catch (Exception e) {
 								Log.e(RegisterActivity.class.getName(), "Exception received when attempting to register for Google Cloud "

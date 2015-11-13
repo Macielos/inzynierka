@@ -1,12 +1,12 @@
 {
   "extends" : "thirdParty.api",
   "abstract" : false,
-  "root" : "https://myapp.appspot.com/_ah/api",
+  "root" : "https://1059.appspot.com/_ah/api",
   "name" : "heroendpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
-    "bns" : "https://myapp.appspot.com/_ah/spi",
+    "bns" : "https://1059.appspot.com/_ah/spi",
     "deadline" : 65.0,
     "type" : "lily"
   },
@@ -27,22 +27,17 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "heroendpoint.getHero" : {
-      "path" : "hero/{id}",
-      "httpMethod" : "GET",
+    "heroendpoint.updateHero" : {
+      "path" : "hero",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -73,17 +68,38 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "heroendpoint.updateHero" : {
+    "heroendpoint.insertHero" : {
       "path" : "hero",
-      "httpMethod" : "PUT",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.getHero" : {
+      "path" : "hero/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -109,22 +125,6 @@
       "response" : {
         "body" : "empty"
       }
-    },
-    "heroendpoint.insertHero" : {
-      "path" : "hero",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
     }
   },
   "descriptor" : {
@@ -133,8 +133,9 @@
         "id" : "Hero",
         "type" : "object",
         "properties" : {
-          "key" : {
-            "$ref" : "Key"
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
           },
           "x" : {
             "type" : "integer"
@@ -143,6 +144,9 @@
             "type" : "integer"
           },
           "level" : {
+            "type" : "integer"
+          },
+          "experience" : {
             "type" : "integer"
           },
           "currentLandId" : {
@@ -154,34 +158,12 @@
             "items" : {
               "type" : "integer"
             }
-          }
-        }
-      },
-      "Key" : {
-        "id" : "Key",
-        "type" : "object",
-        "properties" : {
-          "kind" : {
-            "type" : "string"
           },
-          "appId" : {
-            "type" : "string"
-          },
-          "id" : {
-            "type" : "string",
-            "format" : "int64"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "parent" : {
-            "$ref" : "Key"
-          },
-          "namespace" : {
-            "type" : "string"
-          },
-          "complete" : {
-            "type" : "boolean"
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
           }
         }
       },
@@ -202,7 +184,10 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero" : {
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero" : {
+        "request" : {
+          "$ref" : "Hero"
+        },
         "response" : {
           "$ref" : "Hero"
         }
@@ -212,16 +197,6 @@
           "$ref" : "CollectionResponse_Hero"
         }
       },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero" : {
-        "request" : {
-          "$ref" : "Hero"
-        },
-        "response" : {
-          "$ref" : "Hero"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
-      },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero" : {
         "request" : {
           "$ref" : "Hero"
@@ -229,6 +204,13 @@
         "response" : {
           "$ref" : "Hero"
         }
+      },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero" : {
+        "response" : {
+          "$ref" : "Hero"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
       }
     }
   }

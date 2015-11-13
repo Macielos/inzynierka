@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".TownActivity" >
+
+    <TextView
+        android:id="@+id/dungeon_dialog_title"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="Dungeon"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/dungeon_dialog_faction"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dungeon_dialog_title"
+        android:text="(faction)"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:id="@+id/dungeon_dialog_playerUnits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dungeon_dialog_faction"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_unit0"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_unit1"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_unit2"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_unit3"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_unit4"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dungeon_dialog_playerUnitCounts"
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:layout_below="@+id/dungeon_dialog_playerUnits"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/dungeon_dialog_unitCount0"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit1" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_unitCount1"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit2" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_unitCount2"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit3" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_unitCount3"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit4" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit5" />
+    </LinearLayout>
+        
+    <Button
+        android:id="@+id/dungeon_dialog_combatButton"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dungeon_dialog_playerUnitCounts"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scrollHorizontally="true"
+        android:text="Start combat" />
+
+    <Button
+        android:id="@+id/dungeon_dialog_withdrawButton"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dungeon_dialog_combatButton"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scrollHorizontally="true"
+        android:text="Back to land" />
+
+</RelativeLayout>

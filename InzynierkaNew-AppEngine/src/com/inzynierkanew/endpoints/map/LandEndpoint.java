@@ -93,20 +93,20 @@ public class LandEndpoint {
 		return land;
 	}
 	
-	@ApiMethod(name = "getTown")
-	public Town getTown(@Named("landId") Long id) {
-		EntityManager mgr = getEntityManager();
-		Town town = null;
-		try {
-			Land land = mgr.find(Land.class, id);
-			if(land!=null){
-				town = land.getTown();
-			}
-		} finally {
-			mgr.close();
-		}
-		return town;
-	}
+//	@ApiMethod(name = "getTown")
+//	public Town getTown(@Named("landId") Long id) {
+//		EntityManager mgr = getEntityManager();
+//		Town town = null;
+//		try {
+//			Land land = mgr.find(Land.class, id);
+//			if(land!=null){
+//				town = land.getTown();
+//			}
+//		} finally {
+//			mgr.close();
+//		}
+//		return town;
+//	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "findLandsInNeighbourhood")
@@ -131,7 +131,7 @@ public class LandEndpoint {
 	
 	public Land findLandForNewPlayer(){
 		EntityManager entityManager = EMF.get().createEntityManager();
-		List<Land> lands = entityManager.createQuery("select from Land as Land where Land.hasTown = true").setMaxResults(1).getResultList();
+		List<Land> lands = entityManager.createQuery("select from Land as Land where Land.townId > NULL").setMaxResults(1).getResultList();
 		Land land = lands.isEmpty() ? null : lands.get(0);
 		DatastoreUtils.fetchLand(land);
 		return land;

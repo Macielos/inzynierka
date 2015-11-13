@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/XRkqzt5b4KQ-UcmQS9OBd6zvvhk\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/I1p0WGCwrbjqW1eayrFKoRVnJ1k\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -14,9 +14,9 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://myapp.appspot.com/_ah/api/landendpoint/v1/",
+ "baseUrl": "https://1059.appspot.com/_ah/api/landendpoint/v1/",
  "basePath": "/_ah/api/landendpoint/v1/",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
  "servicePath": "landendpoint/v1/",
  "batchPath": "batch",
  "parameters": {
@@ -100,6 +100,10 @@
       "format": "int32"
      }
     },
+    "factionId": {
+     "type": "string",
+     "format": "int64"
+    },
     "key": {
      "$ref": "Key"
     },
@@ -172,9 +176,6 @@
     "hasFreePassage": {
      "type": "boolean"
     },
-    "hasTown": {
-     "type": "boolean"
-    },
     "height": {
      "type": "integer",
      "format": "int32"
@@ -209,8 +210,9 @@
       "$ref": "Passage"
      }
     },
-    "town": {
-     "$ref": "Town"
+    "townId": {
+     "type": "string",
+     "format": "int64"
     },
     "width": {
      "type": "integer",
@@ -240,48 +242,6 @@
     "nextY": {
      "type": "integer",
      "format": "int32"
-    },
-    "type": {
-     "type": "string",
-     "format": "int64"
-    },
-    "x": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "y": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
-  "Town": {
-   "id": "Town",
-   "type": "object",
-   "properties": {
-    "army": {
-     "type": "array",
-     "items": {
-      "type": "integer",
-      "format": "int32"
-     }
-    },
-    "factionId": {
-     "type": "string",
-     "format": "int64"
-    },
-    "key": {
-     "$ref": "Key"
-    },
-    "maxArmy": {
-     "type": "array",
-     "items": {
-      "type": "integer",
-      "format": "int32"
-     }
-    },
-    "name": {
-     "type": "string"
     },
     "type": {
      "type": "string",
@@ -349,28 +309,6 @@
    ],
    "response": {
     "$ref": "Land"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "getTown": {
-   "id": "landendpoint.getTown",
-   "path": "town/{landId}",
-   "httpMethod": "GET",
-   "parameters": {
-    "landId": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "landId"
-   ],
-   "response": {
-    "$ref": "Town"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

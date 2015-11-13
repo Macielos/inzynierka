@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/qttlKY6b8VfHC4eUw-7_3s-0S-E\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/CQj7_ig1zYdMFleVfiHHT0PwPjY\"",
  "discoveryVersion": "v1",
  "id": "passageendpoint:v1",
  "name": "passageendpoint",
@@ -14,9 +14,9 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://myapp.appspot.com/_ah/api/passageendpoint/v1/",
+ "baseUrl": "https://1059.appspot.com/_ah/api/passageendpoint/v1/",
  "basePath": "/_ah/api/passageendpoint/v1/",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
  "servicePath": "passageendpoint/v1/",
  "batchPath": "batch",
  "parameters": {

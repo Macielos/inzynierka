@@ -153,7 +153,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 				playerForRegistration
 					.setDeviceRegistrationID(registrationId)
 					.setRegistrationTime(new DateTime(System.currentTimeMillis()));
-				playerEndpoint.insertPlayer(playerForRegistration).execute();
+				playerEndpoint.registerPlayer(playerForRegistration).execute();
 			//}
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),

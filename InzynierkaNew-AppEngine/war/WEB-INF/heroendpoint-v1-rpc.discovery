@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/kOKc1ZhwWPkRj3UAZNVhq0k35ck\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/54dUHG3ZiY3cKclaegdy7gvU8bE\"",
  "discoveryVersion": "v1",
  "id": "heroendpoint:v1",
  "name": "heroendpoint",
@@ -14,8 +14,8 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rpc",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
- "rpcUrl": "https://myapp.appspot.com/_ah/api/rpc",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
+ "rpcUrl": "https://1059.appspot.com/_ah/api/rpc",
  "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {
@@ -102,8 +102,20 @@
      "type": "string",
      "format": "int64"
     },
-    "key": {
-     "$ref": "Key"
+    "experience": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
     },
     "level": {
      "type": "integer",
@@ -116,34 +128,6 @@
     "y": {
      "type": "integer",
      "format": "int32"
-    }
-   }
-  },
-  "Key": {
-   "id": "Key",
-   "type": "object",
-   "properties": {
-    "appId": {
-     "type": "string"
-    },
-    "complete": {
-     "type": "boolean"
-    },
-    "id": {
-     "type": "string",
-     "format": "int64"
-    },
-    "kind": {
-     "type": "string"
-    },
-    "name": {
-     "type": "string"
-    },
-    "namespace": {
-     "type": "string"
-    },
-    "parent": {
-     "$ref": "Key"
     }
    }
   }

@@ -1,8 +1,6 @@
 package com.inzynierkanew.endpoints.players;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -19,13 +17,16 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.dumps.WorldDump;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
+import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.entities.map.Land;
+import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.PlayerSession;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.utils.RequestValidator;
 import com.inzynierkanew.utils.StringUtils;
+import com.inzynierkanew.world.WorldGenerator;
 import com.inzynierkanew.world.WorldGeneratorFactory;
 import com.inzynierkanew.wrappers.LoginResponse;
 
@@ -33,6 +34,8 @@ import com.inzynierkanew.wrappers.LoginResponse;
 public class PlayerEndpoint {
 
 	private final LandEndpoint landEndpoint = new LandEndpoint();
+	private final TownEndpoint townEndpoint = new TownEndpoint();
+	private final HeroEndpoint heroEndpoint = new HeroEndpoint();
 	
 	/**
 	 * This method lists all the entities inserted in datastore.
@@ -69,9 +72,9 @@ public class PlayerEndpoint {
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Player obj : execute){
-				obj.getHero();
-			}
+//			for (Player obj : execute){
+//				obj.getHero();
+//			}
 		} finally {
 			mgr.close();
 		}
@@ -105,19 +108,20 @@ public class PlayerEndpoint {
 	 * @param player the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertPlayer")
-	public Player insertPlayer(Player player) {
+	@ApiMethod(name = "registerPlayer")
+	public Player registerPlayer(Player player) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (containsPlayer(player)) {
 				throw new EntityExistsException("Object already exists");
 			}
 			WorldGeneratorFactory.fireWorldGeneration();
+			player.setGold(WorldGenerator.PLAYER_INITIAL_GOLD);
 			Land startingLand = landEndpoint.findLandForNewPlayer();
-			Hero hero = player.getHero();
-			hero.setCurrentLandId(startingLand.getId());
-			hero.setX(startingLand.getTown().getX());
-			hero.setY(startingLand.getTown().getY());
+			Town startingTown = townEndpoint.getTown(startingLand.getTownId());
+			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId());
+			hero = heroEndpoint.insertHero(hero);
+			player.setHeroId(hero.getId());
 			mgr.persist(player);
 		} finally {
 			mgr.close();
@@ -200,7 +204,7 @@ public class PlayerEndpoint {
 				return null;
 			}
 			Player player = getPlayer(playerSessions.get(0).getId());
-			player.getHero();
+			//player.getHero();
 			return player;
 		} finally {
 			mgr.close();

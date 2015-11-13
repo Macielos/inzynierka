@@ -1,14 +1,145 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.MainActivity" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical|center_horizontal|center"
+    android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/main_statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/main_goldIcon"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gold" />
+
+        <TextView
+            android:id="@+id/main_goldCount"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/main_level"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:textSize="32sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ProgressBar
+                android:id="@+id/main_experienceBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/main_experienceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+        </FrameLayout>
+
+        <!-- <ProgressBar -->
+        <!-- android:id="@+id/main_experienceBar" -->
+        <!-- style="?android:attr/progressBarStyleHorizontal" -->
+        <!-- android:layout_width="30dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:layout_weight="0.21" /> -->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_gameSurface"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+    </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/main_playerUnits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/main_unit0"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/main_unit1"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/main_unit2"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/main_unit3"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/main_unit4"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_playerUnitCounts"
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/main_unitCount0"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit1" />
+
+        <TextView
+            android:id="@+id/main_unitCount1"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit2" />
+
+        <TextView
+            android:id="@+id/main_unitCount2"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit3" />
+
+        <TextView
+            android:id="@+id/main_unitCount3"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit4" />
+
+        <TextView
+            android:id="@+id/main_unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit5" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,12 +1,19 @@
 package com.inzynierkanew.entities.map;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Passage extends BaseField {
 
 	private static final long serialVersionUID = -4364131150495077922L;
 	
+//	@Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+		
 	private int direction;
 	
 	private Long nextLandId;
@@ -14,7 +21,7 @@ public class Passage extends BaseField {
 	private int nextX;
 	
 	private int nextY;
-
+	
 	public Passage(int x, int y, long type, int direction) {
 		super(x, y, type);
 		this.direction = direction;
@@ -27,6 +34,10 @@ public class Passage extends BaseField {
 		this.nextX = nextX;
 		this.nextY = nextY;
 	}
+	
+//	public Long getId() {
+//		return id;
+//	}
 
 	public Long getNextLandId() {
 		return nextLandId;

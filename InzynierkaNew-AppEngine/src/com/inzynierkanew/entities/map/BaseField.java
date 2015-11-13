@@ -15,7 +15,7 @@ import com.google.appengine.api.datastore.Key;
 public abstract class BaseField implements Serializable {
 
 	private static final long serialVersionUID = 3107055016837598861L;
-
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key key;
@@ -29,7 +29,7 @@ public abstract class BaseField implements Serializable {
 		this.y = y;
 		this.type = type;
 	}
-
+	
 	public int getX() {
 		return x;
 	}

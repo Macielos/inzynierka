@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Q6mudsulxY06_mXx0ME2_iCrY7c\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/YP5esqNXilNwLKr7Bqpy2dIQQSM\"",
  "discoveryVersion": "v1",
  "id": "unittypeendpoint:v1",
  "name": "unittypeendpoint",
@@ -14,9 +14,9 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://myapp.appspot.com/_ah/api/unittypeendpoint/v1/",
+ "baseUrl": "https://1059.appspot.com/_ah/api/unittypeendpoint/v1/",
  "basePath": "/_ah/api/unittypeendpoint/v1/",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
  "servicePath": "unittypeendpoint/v1/",
  "batchPath": "batch",
  "parameters": {

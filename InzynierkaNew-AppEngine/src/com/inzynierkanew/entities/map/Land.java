@@ -18,8 +18,7 @@ public class Land {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(cascade=CascadeType.ALL)
-	private Town town;
+	private Long townId;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Passage> passages = new ArrayList<>();
@@ -28,7 +27,7 @@ public class Land {
 	private List<Dungeon> dungeons = new ArrayList<>();
 	
 	private boolean hasFreePassage;
-	private boolean hasTown;
+//	private boolean hasTown;
 	
 	private long mapSegment;
 	
@@ -46,12 +45,12 @@ public class Land {
 		return id;
 	}
 
-	public Town getTown() {
-		return town;
+	public Long getTownId() {
+		return townId;
 	}
 
-	public void setTown(Town town) {
-		this.town = town;
+	public void setTownId(Long townId) {
+		this.townId = townId;
 	}
 
 	public List<Passage> getPassages() {
@@ -133,13 +132,13 @@ public class Land {
 	public void setMapSegment(long mapSegment) {
 		this.mapSegment = mapSegment;
 	}
-
-	public boolean hasTown() {
-		return hasTown;
-	}
-
-	public void setHasTown(boolean hasTown) {
-		this.hasTown = hasTown;
-	}
+//
+//	public boolean hasTown() {
+//		return hasTown;
+//	}
+//
+//	public void setHasTown(boolean hasTown) {
+//		this.hasTown = hasTown;
+//	}
 
 }

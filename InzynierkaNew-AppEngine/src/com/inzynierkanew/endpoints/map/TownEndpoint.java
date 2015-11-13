@@ -7,6 +7,7 @@ import javax.inject.Named;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.FlushModeType;
 import javax.persistence.Query;
 
 import com.google.api.server.spi.config.Api;
@@ -15,6 +16,7 @@ import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.utils.EMF;
@@ -77,14 +79,17 @@ public class TownEndpoint {
 		EntityManager mgr = getEntityManager();
 		Town town = null;
 		try {
-			for(Town townFromList: listTown(null, null).getItems()){
-				if(townFromList.getKey().getId()==id){
-					town = townFromList;
-					break;
-				}
-			}
+			
+//			for(Town townFromList: listTown(null, null).getItems()){
+//				if(townFromList.getKey().getId()==id){
+//					town = townFromList;
+//					break;
+//				}
+//			}
 	
-			//town = mgr.find(Town.class, id);
+//			Key key = KeyFactory.createKey(Town.class.getSimpleName(), id);
+			
+			town = mgr.find(Town.class, id);
 		} finally {
 			mgr.close();
 		}
@@ -153,10 +158,13 @@ public class TownEndpoint {
 	}
 
 	private boolean containsTown(Town town) {
+		if(town==null || town.getId()==null){
+			return false;
+		}
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			Town item = mgr.find(Town.class, town.getKey().getId());
+			Town item = mgr.find(Town.class, town.getId());
 			if (item == null) {
 				contains = false;
 			}
