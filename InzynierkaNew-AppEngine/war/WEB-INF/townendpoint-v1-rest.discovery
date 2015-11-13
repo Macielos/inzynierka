@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/M1rycjLZ_3J4ii8lsHQ5zUggobE\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/DiC-EKnt7LapbsHsvmrS0Go0nDA\"",
  "discoveryVersion": "v1",
  "id": "townendpoint:v1",
  "name": "townendpoint",
@@ -14,9 +14,9 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://myapp.appspot.com/_ah/api/townendpoint/v1/",
+ "baseUrl": "https://1059.appspot.com/_ah/api/townendpoint/v1/",
  "basePath": "/_ah/api/townendpoint/v1/",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
  "servicePath": "townendpoint/v1/",
  "batchPath": "batch",
  "parameters": {
@@ -89,34 +89,6 @@
     }
    }
   },
-  "Key": {
-   "id": "Key",
-   "type": "object",
-   "properties": {
-    "appId": {
-     "type": "string"
-    },
-    "complete": {
-     "type": "boolean"
-    },
-    "id": {
-     "type": "string",
-     "format": "int64"
-    },
-    "kind": {
-     "type": "string"
-    },
-    "name": {
-     "type": "string"
-    },
-    "namespace": {
-     "type": "string"
-    },
-    "parent": {
-     "$ref": "Key"
-    }
-   }
-  },
   "Town": {
    "id": "Town",
    "type": "object",
@@ -132,8 +104,9 @@
      "type": "string",
      "format": "int64"
     },
-    "key": {
-     "$ref": "Key"
+    "id": {
+     "type": "string",
+     "format": "int64"
     },
     "maxArmy": {
      "type": "array",

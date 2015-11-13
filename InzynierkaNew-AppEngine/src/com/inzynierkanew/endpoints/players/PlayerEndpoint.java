@@ -17,7 +17,9 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.dumps.WorldDump;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
+import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.entities.map.Land;
+import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.PlayerSession;
@@ -32,6 +34,8 @@ import com.inzynierkanew.wrappers.LoginResponse;
 public class PlayerEndpoint {
 
 	private final LandEndpoint landEndpoint = new LandEndpoint();
+	private final TownEndpoint townEndpoint = new TownEndpoint();
+	private final HeroEndpoint heroEndpoint = new HeroEndpoint();
 	
 	/**
 	 * This method lists all the entities inserted in datastore.
@@ -114,11 +118,10 @@ public class PlayerEndpoint {
 			WorldGeneratorFactory.fireWorldGeneration();
 			player.setGold(WorldGenerator.PLAYER_INITIAL_GOLD);
 			Land startingLand = landEndpoint.findLandForNewPlayer();
-			Hero hero = player.getHero();
-			hero.setCurrentLandId(startingLand.getId());
-			hero.setX(startingLand.getTown().getX());
-			hero.setY(startingLand.getTown().getY());
-			//mgr.merge(hero);
+			Town startingTown = townEndpoint.getTown(startingLand.getTownId());
+			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId());
+			hero = heroEndpoint.insertHero(hero);
+			player.setHeroId(hero.getId());
 			mgr.persist(player);
 		} finally {
 			mgr.close();

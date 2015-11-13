@@ -12,8 +12,7 @@ public abstract class DatastoreUtils {
 		
 	}
 	
-	public static void fetchLand(Land land){
-		land.getTown();
+	public static void fetchLand(Land land){;
 		for(Passage passage: land.getPassages());
 		for(Dungeon dungeon: land.getDungeons());
 	}

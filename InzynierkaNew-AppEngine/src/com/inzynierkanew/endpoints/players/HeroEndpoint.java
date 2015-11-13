@@ -120,7 +120,7 @@ public class HeroEndpoint {
 			if (!containsHero(hero)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.persist(hero);
+			mgr.merge(hero);
 		} finally {
 			mgr.close();
 		}
@@ -145,10 +145,13 @@ public class HeroEndpoint {
 	}
 
 	private boolean containsHero(Hero hero) {
+		if(hero.getId() == null){
+			return false;
+		}
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			Hero item = mgr.find(Hero.class, hero.getKey());
+			Hero item = mgr.find(Hero.class, hero.getId());
 			if (item == null) {
 				contains = false;
 			}

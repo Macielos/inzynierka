@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/eiIUyBrpHsVuoJDIJZsrDV395G8\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/wUD1oflFk6IMI1uXy4BsYSaRTgc\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -14,8 +14,8 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rpc",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
- "rpcUrl": "https://myapp.appspot.com/_ah/api/rpc",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
+ "rpcUrl": "https://1059.appspot.com/_ah/api/rpc",
  "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {
@@ -87,66 +87,6 @@
     }
    }
   },
-  "Hero": {
-   "id": "Hero",
-   "type": "object",
-   "properties": {
-    "army": {
-     "type": "array",
-     "items": {
-      "type": "integer",
-      "format": "int32"
-     }
-    },
-    "currentLandId": {
-     "type": "string",
-     "format": "int64"
-    },
-    "key": {
-     "$ref": "Key"
-    },
-    "level": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "x": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "y": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
-  "Key": {
-   "id": "Key",
-   "type": "object",
-   "properties": {
-    "appId": {
-     "type": "string"
-    },
-    "complete": {
-     "type": "boolean"
-    },
-    "id": {
-     "type": "string",
-     "format": "int64"
-    },
-    "kind": {
-     "type": "string"
-    },
-    "name": {
-     "type": "string"
-    },
-    "namespace": {
-     "type": "string"
-    },
-    "parent": {
-     "$ref": "Key"
-    }
-   }
-  },
   "LoginResponse": {
    "id": "LoginResponse",
    "type": "object",
@@ -167,8 +107,9 @@
      "type": "integer",
      "format": "int32"
     },
-    "hero": {
-     "$ref": "Hero"
+    "heroId": {
+     "type": "string",
+     "format": "int64"
     },
     "id": {
      "type": "string",

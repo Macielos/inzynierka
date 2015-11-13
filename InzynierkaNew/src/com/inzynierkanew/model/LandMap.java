@@ -14,12 +14,10 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.google.api.client.json.GenericJson;
-import com.inzynierkanew.R;
-import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
 import com.inzynierkanew.entities.map.landendpoint.model.Dungeon;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
-import com.inzynierkanew.entities.map.landendpoint.model.Town;
+import com.inzynierkanew.entities.map.townendpoint.model.Town;
 import com.inzynierkanew.game.GameView;
 import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.Point;
@@ -29,6 +27,7 @@ public class LandMap implements IRenderable {
 	private static final String TAG = LandMap.class.getSimpleName();
 	
 	private final int[][] fields;
+	private final Town town;
 
 	private final int height;
 	private final int width;
@@ -39,21 +38,22 @@ public class LandMap implements IRenderable {
 	private final int cornerX;
 	private final int cornerY;
 	
-	private final int passage;
-	private final int town;
-	private final int dungeon;
+	private final int passageIndex;
+	private final int townIndex;
+	private final int dungeonIndex;
 	
 	private final GameView gameView;
 
-	public LandMap(GameView gameView, Land land, Map<Integer, DrawableFieldType> fieldTypes, int townIndex, int passageIndex,int dungeonIndex) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+	public LandMap(GameView gameView, Land land, Town town, Map<Integer, DrawableFieldType> fieldTypes, int townIndex, int passageIndex,int dungeonIndex) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
 		this.gameView = gameView;
 		this.height = land.getHeight();
 		this.width = land.getWidth();
+		this.town = town;
 
 		this.fieldTypes = fieldTypes;
-		this.passage = passageIndex;
-		this.town = townIndex;
-		this.dungeon = dungeonIndex;
+		this.passageIndex = passageIndex;
+		this.townIndex = townIndex;
+		this.dungeonIndex = dungeonIndex;
 		
 		fields = new int[height][];
 		for(int i=0; i<height; ++i){
@@ -71,14 +71,13 @@ public class LandMap implements IRenderable {
 		cornerX = land.getMinX();
 		cornerY = land.getMinY();
 		
-		objects = new HashMap<>(land.getPassages().size()+land.getDungeons().size()+(land.getHasTown()!=null && land.getHasTown().booleanValue() ? 1 : 0));
+		objects = new HashMap<>(land.getPassages().size()+land.getDungeons().size()+(town!=null ? 1 : 0));
 		for(Passage passage: land.getPassages()){
 			objects.put(new Point(passage.getX()-cornerX, passage.getY()-cornerY), passage);
 		}
 		for(Dungeon dungeon: land.getDungeons()){
 			objects.put(new Point(dungeon.getX()-cornerX, dungeon.getY()-cornerY), dungeon);
 		}
-		Town town = land.getTown();
 		if(town!=null){
 			objects.put(new Point(town.getX()-cornerX, town.getY()-cornerY), town);
 		}
@@ -251,15 +250,15 @@ public class LandMap implements IRenderable {
 	}
 	
 	public boolean isDungeon(int x, int y){
-		return withinMapSegment(x, y) && fields[y][x] == dungeon;
+		return withinMapSegment(x, y) && fields[y][x] == dungeonIndex;
 	}
 	
 	public boolean isPassage(int x, int y){
-		return withinMapSegment(x, y) && fields[y][x] == passage;
+		return withinMapSegment(x, y) && fields[y][x] == passageIndex;
 	}
 	
 	public boolean isTown(int x, int y){
-		return withinMapSegment(x, y) && fields[y][x] == town;
+		return withinMapSegment(x, y) && fields[y][x] == townIndex;
 	}
 	
 	private boolean withinMapSegment(int x, int y) {

@@ -12,13 +12,13 @@ public class Town {
 
 	private static final long serialVersionUID = -4364131150495077922L;
 
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
-	// private Long id;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
+	private Long id;
+
+	// @Id
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
+	// private Key key;
 
 	private int x;
 	private int y;
@@ -39,14 +39,14 @@ public class Town {
 		this.maxArmy = army;
 	}
 
-	// public Long getId() {
-	// return id;
+	public Long getId() {
+		return id;
+	}
+
+	// public Key getKey() {
+	// return key;
 	// }
 
-	public Key getKey() {
-		return key;
-	}
-	
 	public int getX() {
 		return x;
 	}

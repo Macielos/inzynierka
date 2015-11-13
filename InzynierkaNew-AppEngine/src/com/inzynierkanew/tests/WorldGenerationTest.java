@@ -20,7 +20,9 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.map.PassageEndpoint;
+import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.endpoints.players.FactionEndpoint;
+import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.map.Dungeon;
@@ -59,15 +61,9 @@ public class WorldGenerationTest {
 		
 		//while(true){
 		long x = new Random().nextLong();
-		
-		LandEndpoint landEndpoint = mockLandEndpoint();
-		PlayerEndpoint playerEndpoint = mockPlayerEndpoint();
-		PassageEndpoint passageEndpoint = mockPassageEndpoint();
-		FieldTypeEndpoint fieldTypeEndpoint = mockFieldTypeEndpoint();
-		UnitTypeEndpoint unitTypeEndpoint = mockUnitTypeEndpoint();
-		FactionEndpoint factionEndpoint = mockFactionEndpoint();
+
 		WorldGenerationUtils.init(createPrintableSymbols());
-		WorldGenerator generator = new WorldGenerator(x, landEndpoint, playerEndpoint, passageEndpoint, fieldTypeEndpoint, unitTypeEndpoint, factionEndpoint); //new Random(-2343597961835384248L));
+		WorldGenerator generator = newWorldGenerator(x); 
 		generator.generateLand();
 		/*	try {
 				Thread.sleep(4000);
@@ -88,16 +84,28 @@ public class WorldGenerationTest {
 
 	}
 	
+	private WorldGenerator newWorldGenerator() {
+		return newWorldGenerator(new Random().nextLong());
+	}
+
+	private WorldGenerator newWorldGenerator(long seed) {
+		return new WorldGenerator(seed, 
+				mockLandEndpoint(), mockPlayerEndpoint(), mockPassageEndpoint(), 
+				mockFieldTypeEndpoint(), mockUnitTypeEndpoint(), mockFactionEndpoint(), 
+				mockTownEndpoint(), mockHeroEndpoint());
+	}
+	
+	private WorldGenerator newWorldGenerator(int[][] mapSegment) {
+		return new WorldGenerator(mapSegment, 
+				mockLandEndpoint(), mockPlayerEndpoint(), mockPassageEndpoint(), 
+				mockFieldTypeEndpoint(), mockUnitTypeEndpoint(), mockFactionEndpoint(), 
+				mockTownEndpoint(), mockHeroEndpoint());
+	}
+	
 	//@org.junit.Test
 	public void testLandGenerationSingleNeighbour() throws WorldGenerationException{
 		long x = new Random().nextLong();//1234567890L;
-		LandEndpoint landEndpoint = mockLandEndpointSingleNeighbour();
-		PlayerEndpoint playerEndpoint = mockPlayerEndpoint();
-		PassageEndpoint passageEndpoint = mockPassageEndpoint();
-		FieldTypeEndpoint fieldTypeEndpoint = mockFieldTypeEndpoint();
-		UnitTypeEndpoint unitTypeEndpoint = mockUnitTypeEndpoint();
-		FactionEndpoint factionEndpoint = mockFactionEndpoint();
-		WorldGenerator generator = new WorldGenerator(x, landEndpoint, playerEndpoint, passageEndpoint, fieldTypeEndpoint, unitTypeEndpoint, factionEndpoint); //new Random(-2343597961835384248L));
+		WorldGenerator generator = newWorldGenerator(x); //new Random(-2343597961835384248L));
 		generator.generateLand();
 	}
 	
@@ -106,13 +114,7 @@ public class WorldGenerationTest {
 		long x = -5210437816999656336L; //new Random().nextLong();//1234567890L;
 		//dziala: 7143712281646963543
 		//path not found: -5210437816999656336
-		LandEndpoint landEndpoint = mockLandEndpointMultipleNeighbours();
-		PlayerEndpoint playerEndpoint = mockPlayerEndpoint();
-		PassageEndpoint passageEndpoint = mockPassageEndpoint();
-		FieldTypeEndpoint fieldTypeEndpoint = mockFieldTypeEndpoint();
-		UnitTypeEndpoint unitTypeEndpoint = mockUnitTypeEndpoint();
-		FactionEndpoint factionEndpoint = mockFactionEndpoint();
-		WorldGenerator generator = new WorldGenerator(x, landEndpoint, playerEndpoint, passageEndpoint, fieldTypeEndpoint, unitTypeEndpoint, factionEndpoint); //new Random(-2343597961835384248L));
+		WorldGenerator generator = newWorldGenerator(x); //new Random(-2343597961835384248L));
 		generator.generateLand();
 	}
 	
@@ -127,23 +129,17 @@ public class WorldGenerationTest {
 		FieldTypeEndpoint fieldTypeEndpoint = mockFieldTypeEndpoint();
 		UnitTypeEndpoint unitTypeEndpoint = mockUnitTypeEndpoint();
 		FactionEndpoint factionEndpoint = mockFactionEndpoint();
-		WorldGenerator generator = new WorldGenerator(x, landEndpoint, playerEndpoint, passageEndpoint, fieldTypeEndpoint, unitTypeEndpoint, factionEndpoint); //new Random(-2343597961835384248L));
+		TownEndpoint townEndpoint = mockTownEndpoint();
+		WorldGenerator generator = newWorldGenerator(x); //new Random(-2343597961835384248L));
 		generator.generateLand();
 	}
 	
 	//@org.junit.Test
 	public void testLandGenerationMultipleGenerationOrders() throws WorldGenerationException{
 		final int COUNT = 10;
-		
-		LandEndpoint landEndpoint = mockLandEndpointMultipleGenerationOrders();
-		PlayerEndpoint playerEndpoint = mockPlayerEndpoint();
-		PassageEndpoint passageEndpoint = mockPassageEndpoint();
-		FieldTypeEndpoint fieldTypeEndpoint = mockFieldTypeEndpoint();
-		UnitTypeEndpoint unitTypeEndpoint = mockUnitTypeEndpoint();
-		FactionEndpoint factionEndpoint = mockFactionEndpoint();
 		for(int i=0; i<COUNT; ++i){
 			long seed = new Random().nextLong();//1234567890L;
-			new WorldGenerator(seed, landEndpoint, playerEndpoint, passageEndpoint, fieldTypeEndpoint, unitTypeEndpoint, factionEndpoint).generateAndPersistLand();	
+			newWorldGenerator(seed).generateAndPersistLand();	
 		}
 	}
 
@@ -156,6 +152,7 @@ public class WorldGenerationTest {
 		FieldTypeEndpoint fieldTypeEndpoint = mockFieldTypeEndpoint();
 		UnitTypeEndpoint unitTypeEndpoint = mockUnitTypeEndpoint();
 		FactionEndpoint factionEndpoint = mockFactionEndpoint();
+		TownEndpoint townEndpoint = mockTownEndpoint();
 
 		for(int i=0; i<8; ++i){
 			for(int j=0; j<8; ++j){
@@ -166,7 +163,7 @@ public class WorldGenerationTest {
 		mapSegment[1][4] = 0;
 		mapSegment[0][4] = 0;
 		mapSegment[2][5] = 0;
-		WorldGenerator generator = new WorldGenerator(mapSegment, landEndpoint, playerEndpoint, passageEndpoint, fieldTypeEndpoint, unitTypeEndpoint, factionEndpoint); //new Random(-2343597961835384248L));
+		WorldGenerator generator = newWorldGenerator(mapSegment); //new Random(-2343597961835384248L));
 		generator.buildRoadRecursive(new GraphEdge(new Point(0, 2), new Point(7, 2)));
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 	}
@@ -206,7 +203,7 @@ public class WorldGenerationTest {
 	private static Land newLand(){
 		Land land = new Land();
 		land.setId(1L);
-		land.setTown(null);
+		land.setTownId(null);
 		land.setFields(new int[]{
 				0, 0, 2, 7, 2, 2, 2, 2, 0, 0, 
 				0, 9, 2, 6, 2, 2, 2, 2, 2, 0, 
@@ -215,7 +212,7 @@ public class WorldGenerationTest {
 				2, 2, 2, 0, 0, 0, 2, 2, 2, 0, 
 		});
 		land.setPassages(Arrays.asList(new Passage(8, 10, 69L, WorldGenerator.UP)));
-		land.setDungeons(Arrays.asList(new Dungeon(6, 11, 71L)));
+		land.setDungeons(Arrays.asList(new Dungeon(6, 11, 2L, 71L)));
 		land.setMinX(5);
 		land.setMaxX(14);
 		land.setMinY(10);
@@ -228,7 +225,7 @@ public class WorldGenerationTest {
 	private static Land newLand2(){
 		Land land = new Land();
 		land.setId(1L);
-		land.setTown(null);
+		land.setTownId(null);
 		land.setFields(new int[]{
 				0, 0, 2, 7, 2,
 				0, 9, 2, 6, 2, 
@@ -242,7 +239,7 @@ public class WorldGenerationTest {
 				2, 6, 2, 0, 0
 		});
 		land.setPassages(Arrays.asList(new Passage(3, 0, 69L, WorldGenerator.UP)));
-		land.setDungeons(Arrays.asList(new Dungeon(1, 1, 71L)));
+		land.setDungeons(Arrays.asList(new Dungeon(1, 1, 2L, 71L)));
 		land.setMinX(0);
 		land.setMaxX(4);
 		land.setMinY(0);
@@ -254,9 +251,8 @@ public class WorldGenerationTest {
 	
 	private static Player newPlayer(){
 		Player player = new Player();
-		Hero hero = new Hero();
-		hero.setCurrentLandId(1L);
-		player.setHero(hero);
+		Hero hero = new Hero(0, 0, 1L);
+		//player.setHeroId(hero.getId());
 		return player;
 	}
 	
@@ -390,17 +386,6 @@ public class WorldGenerationTest {
 		thenReturn(CollectionResponse.<UnitType> builder().setItems(unitTypes()).build());
 		return unitTypeEndpoint;
 	}
-	
-	private static List<UnitType> unitTypes() {
-		return Arrays.asList(
-				//				  name			cost	texture			faction	mindmg maxdmg	hp 		speed ranged missiles
-				new UnitType(1L, "Goblin", 		100, "goblin.png", 		newMonsterFaction().getId(), 	3, 	6, 		50, 	6, 	true, 	10), 
-				new UnitType(2L, "Orc", 		400, "orc.png", 		newMonsterFaction().getId(), 	10, 15, 	200, 	5, 	false, 	0), 
-				new UnitType(3L, "Troll", 		2000, "troll.png", 		newMonsterFaction().getId(), 	30, 100, 	1000, 	3, 	false, 	0), 
-				new UnitType(101L, "Swordsman", 	300, "swordsman.png", 	newHumanFaction().getId(), 	3, 	6, 	50, 	5, 	false, 	0), 
-				new UnitType(102L, "Archer", 		450, "archer.png", 		newHumanFaction().getId(), 	3, 	6, 	50, 	5, 	true, 	10), 
-				new UnitType(103L, "Knight", 		1500, "knight.png", 	newHumanFaction().getId(), 	3, 	6, 	50, 	7, 	false, 	0));
-	}
 
 	public static FactionEndpoint mockFactionEndpoint(){
 		FactionEndpoint factionEndpoint = Mockito.mock(FactionEndpoint.class);
@@ -411,6 +396,27 @@ public class WorldGenerationTest {
 		when(factionEndpoint.getFactionsForTowns(Mockito.anyString(), Mockito.any(Integer.class))).
 		thenReturn(CollectionResponse.<Faction> builder().setItems(Arrays.asList(newHumanFaction())).build());
 		return factionEndpoint;
+	}
+	
+	public static TownEndpoint mockTownEndpoint(){
+		TownEndpoint townEndpoint = Mockito.mock(TownEndpoint.class);
+		return townEndpoint;
+	}
+	
+	public static HeroEndpoint mockHeroEndpoint(){
+		HeroEndpoint heroEndpoint = Mockito.mock(HeroEndpoint.class);
+		return heroEndpoint;
+	}
+	
+	private static List<UnitType> unitTypes() {
+		return Arrays.asList(
+				//				  name			cost	texture			faction	mindmg maxdmg	hp 		speed ranged missiles
+				new UnitType(1L, "Goblin", 		100, "goblin.png", 		newMonsterFaction().getId(), 	3, 	6, 		50, 	6, 	true, 	10), 
+				new UnitType(2L, "Orc", 		400, "orc.png", 		newMonsterFaction().getId(), 	10, 15, 	200, 	5, 	false, 	0), 
+				new UnitType(3L, "Troll", 		2000, "troll.png", 		newMonsterFaction().getId(), 	30, 100, 	1000, 	3, 	false, 	0), 
+				new UnitType(101L, "Swordsman", 	300, "swordsman.png", 	newHumanFaction().getId(), 	3, 	6, 	50, 	5, 	false, 	0), 
+				new UnitType(102L, "Archer", 		450, "archer.png", 		newHumanFaction().getId(), 	3, 	6, 	50, 	5, 	true, 	10), 
+				new UnitType(103L, "Knight", 		1500, "knight.png", 	newHumanFaction().getId(), 	3, 	6, 	50, 	7, 	false, 	0));
 	}
 	
 	private Map<Integer, String> createPrintableSymbols() {

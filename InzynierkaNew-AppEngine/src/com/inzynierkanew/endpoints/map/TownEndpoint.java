@@ -158,13 +158,13 @@ public class TownEndpoint {
 	}
 
 	private boolean containsTown(Town town) {
-		if(town==null || town.getKey()==null){
+		if(town==null || town.getId()==null){
 			return false;
 		}
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			Town item = mgr.find(Town.class, town.getKey());
+			Town item = mgr.find(Town.class, town.getId());
 			if (item == null) {
 				contains = false;
 			}

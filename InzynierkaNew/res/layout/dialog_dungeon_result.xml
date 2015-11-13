@@ -1,0 +1,197 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".TownActivity" >
+
+    <TextView
+        android:id="@+id/dungeon_dialog_result_title"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="Battle result"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+   	<TextView
+        android:id="@+id/dungeon_dialog_result_playerLossesTitle"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dungeon_dialog_result_title"
+        android:text="Your losses: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:id="@+id/dungeon_dialog_result_playerLosses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dungeon_dialog_result_playerLossesTitle"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unit0"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unit1"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unit2"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unit3"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unit4"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dungeon_dialog_result_playerLossesCounts"
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:layout_below="@+id/dungeon_dialog_result_playerLosses"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unitCount0"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit1" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unitCount1"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit2" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unitCount2"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit3" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unitCount3"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit4" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit5" />
+    </LinearLayout>
+    
+       	<TextView
+        android:id="@+id/dungeon_dialog_result_enemyLossesTitle"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dungeon_dialog_result_playerLossesCounts"
+        android:text="Enemy losses: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+        <LinearLayout
+        android:id="@+id/dungeon_dialog_result_enemyLosses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dungeon_dialog_result_enemyLossesTitle"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unit0"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unit1"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unit2"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unit3"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unit4"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dungeon_dialog_result_enemyLossesCounts"
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:layout_below="@+id/dungeon_dialog_result_enemyLosses"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount0"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit1" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount1"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit2" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount2"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit3" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount3"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit4" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="unit5" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dungeon_dialog_result_quitButton"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dungeon_dialog_result_enemyLossesCounts"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scrollHorizontally="true"
+        android:text="Back to land" />
+
+</RelativeLayout>

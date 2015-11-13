@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/kOKc1ZhwWPkRj3UAZNVhq0k35ck\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/54dUHG3ZiY3cKclaegdy7gvU8bE\"",
  "discoveryVersion": "v1",
  "id": "heroendpoint:v1",
  "name": "heroendpoint",
@@ -14,9 +14,9 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://myapp.appspot.com/_ah/api/heroendpoint/v1/",
+ "baseUrl": "https://1059.appspot.com/_ah/api/heroendpoint/v1/",
  "basePath": "/_ah/api/heroendpoint/v1/",
- "rootUrl": "https://myapp.appspot.com/_ah/api/",
+ "rootUrl": "https://1059.appspot.com/_ah/api/",
  "servicePath": "heroendpoint/v1/",
  "batchPath": "batch",
  "parameters": {
@@ -104,8 +104,20 @@
      "type": "string",
      "format": "int64"
     },
-    "key": {
-     "$ref": "Key"
+    "experience": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
     },
     "level": {
      "type": "integer",
@@ -118,34 +130,6 @@
     "y": {
      "type": "integer",
      "format": "int32"
-    }
-   }
-  },
-  "Key": {
-   "id": "Key",
-   "type": "object",
-   "properties": {
-    "appId": {
-     "type": "string"
-    },
-    "complete": {
-     "type": "boolean"
-    },
-    "id": {
-     "type": "string",
-     "format": "int64"
-    },
-    "kind": {
-     "type": "string"
-    },
-    "name": {
-     "type": "string"
-    },
-    "namespace": {
-     "type": "string"
-    },
-    "parent": {
-     "$ref": "Key"
     }
    }
   }

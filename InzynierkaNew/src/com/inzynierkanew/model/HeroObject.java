@@ -1,15 +1,13 @@
 package com.inzynierkanew.model;
 
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
-import com.inzynierkanew.entities.players.playerendpoint.model.Hero;
+import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
 import com.inzynierkanew.game.GameView;
 import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.Point;

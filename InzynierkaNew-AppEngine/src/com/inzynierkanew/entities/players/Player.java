@@ -33,8 +33,10 @@ public class Player {
 
 	private int gold;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
-	private Hero hero;
+//	@OneToOne(cascade = CascadeType.PERSIST)
+//	private Hero hero;
+	
+	private Long heroId;
 
 	public Long getId() {
 		return id;
@@ -88,16 +90,24 @@ public class Player {
 		this.lastLogin = lastLogin;
 	}
 
-	public Hero getHero() {
-		return hero;
-	}
-
-	public void setHero(Hero hero) {
-		this.hero = hero;
-	}
-
+//	public Hero getHero() {
+//		return hero;
+//	}
+//
+//	public void setHero(Hero hero) {
+//		this.hero = hero;
+//	}
+	
 	public int getGold() {
 		return gold;
+	}
+
+	public Long getHeroId() {
+		return heroId;
+	}
+
+	public void setHeroId(Long heroId) {
+		this.heroId = heroId;
 	}
 
 	public void setGold(int gold) {

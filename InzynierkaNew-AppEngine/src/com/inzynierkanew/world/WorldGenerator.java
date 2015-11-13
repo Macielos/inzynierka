@@ -18,7 +18,9 @@ import com.inzynierkanew.dumps.WorldDump;
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.map.PassageEndpoint;
+import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.endpoints.players.FactionEndpoint;
+import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.map.Dungeon;
@@ -26,6 +28,7 @@ import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.entities.map.Passage;
 import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.entities.players.Faction;
+import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.init.ApplicationInitializer;
@@ -60,8 +63,6 @@ public class WorldGenerator {
 	private static final int ARMY_MIN_STRENGTH = 400;
 	private static final int ARMY_DIFF = 1200;
 
-	// FIELD TYPES - TEMP
-	// TODO load field types from datastore
 	public static final int EMPTY = 0;
 	public static final int EXISTING_LAND = -1;
 	public static final int EXISTING_LAND_PASSAGE = -2;
@@ -77,7 +78,7 @@ public class WorldGenerator {
 	public static final long MAP_SEGMENT_FACTOR = 1000000000000L;
 	
 	public static final int PLAYER_INITIAL_GOLD = 100000000;
-
+	
 	// LOG
 	private Log log = LogFactory.getLog(getClass());
 
@@ -88,6 +89,8 @@ public class WorldGenerator {
 	private final FieldTypeEndpoint fieldTypeEndpoint;
 	private final UnitTypeEndpoint unitTypeEndpoint;
 	private final FactionEndpoint factionEndpoint;
+	private final TownEndpoint townEndpoint;
+	private final HeroEndpoint heroEndpoint;
 
 	private int PASSABLE;
 	private int NON_PASSABLE;
@@ -122,7 +125,7 @@ public class WorldGenerator {
 	private List<Passage> passages = new ArrayList<>();
 	private Set<Point> passagePoints = new HashSet<>();
 
-	private Point town = null;
+	private Point townPoint = null;
 
 	private Set<GraphEdge> edges = new HashSet<>();
 	private Set<Point> crossroads = new HashSet<>();
@@ -152,11 +155,12 @@ public class WorldGenerator {
 
 	public WorldGenerator(long seed) {
 		this(seed, new LandEndpoint(), new PlayerEndpoint(), new PassageEndpoint(), new FieldTypeEndpoint(), new UnitTypeEndpoint(),
-				new FactionEndpoint());
+				new FactionEndpoint(), new TownEndpoint(), new HeroEndpoint());
 	}
 
 	public WorldGenerator(long seed, LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, PassageEndpoint passageEndpoint,
-			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint) {
+			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint, 
+			TownEndpoint townEndpoint, HeroEndpoint heroEndpoint) {
 		this.seed = seed;
 		this.random = new Random(seed);
 		this.landEndpoint = landEndpoint;
@@ -165,10 +169,13 @@ public class WorldGenerator {
 		this.fieldTypeEndpoint = fieldTypeEndpoint;
 		this.unitTypeEndpoint = unitTypeEndpoint;
 		this.factionEndpoint = factionEndpoint;
+		this.townEndpoint = townEndpoint;
+		this.heroEndpoint = heroEndpoint;
 	}
 
 	public WorldGenerator(int[][] mapSegment, LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, PassageEndpoint passageEndpoint,
-			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint) {
+			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint, 
+			TownEndpoint townEndpoint, HeroEndpoint heroEndpoint) {
 		this.seed = new Random().nextLong();
 		this.random = new Random(seed);
 		this.mapSegment = mapSegment;
@@ -178,6 +185,8 @@ public class WorldGenerator {
 		this.fieldTypeEndpoint = fieldTypeEndpoint;
 		this.unitTypeEndpoint = unitTypeEndpoint;
 		this.factionEndpoint = factionEndpoint;
+		this.townEndpoint = townEndpoint;
+		this.heroEndpoint = heroEndpoint;
 	}
 
 	public void generateAndPersistLand() {
@@ -271,7 +280,7 @@ public class WorldGenerator {
 
 	private void findBorderLand() throws WorldGenerationException {
 		// TODO tylko aktywni gracze posiadaj¹cy herosa z currentLandId
-		List<Player> players = (List<Player>) playerEndpoint.listPlayer(null, null).getItems();
+		List<Hero> heroes = (List<Hero>) heroEndpoint.listHero(null, null).getItems();
 		List<Land> landsWithFreePassage = (List<Land>) landEndpoint.findLandsWithFreePassages().getItems();
 		Statistics<Long> playerPresenceInLands = new Statistics<>(landsWithFreePassage.size());
 		Set<Long> landIds = new HashSet<>(landsWithFreePassage.size());
@@ -279,9 +288,9 @@ public class WorldGenerator {
 			landIds.add(land.getId());
 			playerPresenceInLands.add(land.getId(), 0);
 		}
-		for (Player player : players) {
-			if (player.getHero() != null && landIds.contains(player.getHero().getCurrentLandId())) {
-				playerPresenceInLands.increment(player.getHero().getCurrentLandId());
+		for (Hero hero: heroes) {
+			if (landIds.contains(hero.getCurrentLandId())) {
+				playerPresenceInLands.increment(hero.getCurrentLandId());
 			}
 		}
 		Long bestLandId = playerPresenceInLands.getMax();
@@ -1113,7 +1122,7 @@ public class WorldGenerator {
 				y = random.nextInt(height);
 				if (mapSegment[y][x] == NON_PASSABLE && !isBorder(x, y) && getNeighbourFieldOfTypeCrossingIncluded(x, y, PASSAGE) == null) {
 					mapSegment[y][x] = TOWN;
-					town = new Point(x, y);
+					townPoint = new Point(x, y);
 					break;
 				}
 			}
@@ -1153,8 +1162,8 @@ public class WorldGenerator {
 
 		// log.info(WorldGenerationUtils.mapToString(mapSegment));
 
-		if (town != null) {
-			crossroads.add(town);
+		if (townPoint != null) {
+			crossroads.add(townPoint);
 		}
 		crossroads.addAll(passagePoints);
 	}
@@ -1471,18 +1480,21 @@ public class WorldGenerator {
 		}
 		land.setFields(fields);
 		Long factionId = randomKey(townUnitTypesByFactions);
-		land.setTown(town == null ? null : new Town(town.x + mapSegmentMinX, town.y + mapSegmentMinY, TOWN, "Aringrad", factionId,
+		if(townPoint!=null){
+			Town town = (townPoint == null ? null : new Town(townPoint.x + mapSegmentMinX, townPoint.y + mapSegmentMinY, TOWN, "Aringrad", factionId,
 				createTownArmy(factionId)));
+			townEndpoint.insertTown(town);
+			land.setTownId(town.getId());
+		}
 		land.setPassages(passages);
 		List<Dungeon> dungeons = new ArrayList<>(this.dungeons.size());
 
 		for (Point point : this.dungeons) {
-			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON,
+			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, factionId, 
 					createDungeonArmy(randomKey(dungeonUnitTypesByFactions))));
 		}
 		land.setDungeons(dungeons);
 		land.setHasFreePassage(hasFreePassage(passages));
-		land.setHasTown(town != null);
 		land.setMapSegment(WorldGenerationUtils.calcMapSegment(land));
 		return land;
 	}

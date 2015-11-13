@@ -5,34 +5,57 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.google.appengine.api.datastore.Key;
-
 @Entity
 public class Hero {
 
 	/**
-	 * TODO:
-	 * player.hero -> nie referencja tylko id
-	 * szukaj hero, a nie player.getHero
-	 * rozkmiñ czemu po kliku pasek rekrut. jednostek siê nie zmienia
+	 * TODO: player.hero -> nie referencja tylko id szukaj hero, a nie
+	 * player.getHero rozkmiñ czemu po kliku pasek rekrut. jednostek siê nie
+	 * zmienia
 	 */
-	
+
+	// @Id
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
+	// private Key key;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
-	
+	private Long id;
+
 	private int x;
-	
+
 	private int y;
-	
+
 	private int level;
-	
+
+	private int experience;
+
 	private Long currentLandId;
-	
+
 	private int[] army;
 
-	public Key getKey() {
-		return key;
+	private int[] items;
+
+	// public Key getKey() {
+	// return key;
+	// }
+
+	public Hero(int x, int y, Long currentLandId){
+		this(x, y, currentLandId, null, null);
+	}
+	
+	public Hero(int x, int y, Long currentLandId, int[] army, int[] items) {
+		this.x = x;
+		this.y = y;
+		this.level = 1;
+		this.experience = 0;
+		this.currentLandId = currentLandId;
+		this.army = army;
+		this.items = items;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public int getX() {
@@ -59,6 +82,14 @@ public class Hero {
 		this.level = level;
 	}
 
+	public int getExperience() {
+		return experience;
+	}
+
+	public void setExperience(int experience) {
+		this.experience = experience;
+	}
+
 	public Long getCurrentLandId() {
 		return currentLandId;
 	}
@@ -74,5 +105,13 @@ public class Hero {
 	public void setArmy(int[] army) {
 		this.army = army;
 	}
-	
+
+	public int[] getItems() {
+		return items;
+	}
+
+	public void setItems(int[] items) {
+		this.items = items;
+	}
+
 }
