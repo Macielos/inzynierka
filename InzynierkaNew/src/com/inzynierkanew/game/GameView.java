@@ -255,17 +255,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		int maxLevel = Integer.parseInt(properties.get(Constants.MAX_HERO_LEVEL));
 		int baseXpPerLevel = Integer.parseInt(properties.get(Constants.BASE_XP_PER_LEVEL));
-		double nextLevelFactor = Double.parseDouble(properties.get(Constants.NEXT_LEVEL_FACTOR));
+		int nextLevelFactor = Integer.parseInt(properties.get(Constants.NEXT_LEVEL_FACTOR));
 		
 		xpsForNextLevel = new int[maxLevel];
 		xpsForNextLevel[0] = 0;
 
 		int xpForCurrentLevel = baseXpPerLevel;
-		double xpForCurrentLevelDouble = baseXpPerLevel;
 		for(int i=1; i<maxLevel; ++i){
-			xpsForNextLevel[i] = (int) xpForCurrentLevel;
-			xpForCurrentLevelDouble = xpForCurrentLevelDouble * (1 + nextLevelFactor);
-			xpForCurrentLevel = (int) Math.round(xpForCurrentLevelDouble);
+			xpsForNextLevel[i] = xpsForNextLevel[i-1] + xpForCurrentLevel;
+			xpForCurrentLevel += nextLevelFactor;
 		}
 	}
 
@@ -648,7 +646,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public Integer getHeroLevelForXp(int currentLevel, int xp){
 		for(int i=currentLevel-1; i<xpsForNextLevel.length; ++i){
 			if(xpsForNextLevel[i] > xp){
-				return i-1;
+				return i;
 			}
 		}
 		return xpsForNextLevel.length;

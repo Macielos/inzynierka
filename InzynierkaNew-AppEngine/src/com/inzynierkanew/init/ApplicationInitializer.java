@@ -40,7 +40,7 @@ public class ApplicationInitializer implements ServletContextListener {
 	private final Log log = LogFactory.getLog(getClass());
 
 	private boolean cleanDatastoreOnInit = false;
-	private boolean repopulatePropertiesOnInit = true;
+	private boolean repopulatePropertiesOnInit = false;
 	private boolean repopulateTypesOnInit = false;
 	private int landsGeneratedOnInit = 3;
 
@@ -49,7 +49,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
 	public static final int MAX_HERO_LEVEL = 100;
 	public static final int BASE_XP_PER_LEVEL = 1000;
-	public static final double NEXT_LEVEL_FACTOR = 1.2;
+	public static final int NEXT_LEVEL_FACTOR = 500;
 	
 	private final FactionEndpoint factionEndpoint = new FactionEndpoint();
 	private final FieldTypeEndpoint fieldTypeEndpoint = new FieldTypeEndpoint();

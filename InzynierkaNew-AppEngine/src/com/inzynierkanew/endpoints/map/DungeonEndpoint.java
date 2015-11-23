@@ -148,6 +148,9 @@ public class DungeonEndpoint {
 	}
 
 	private boolean containsDungeon(Dungeon dungeon) {
+		if(dungeon == null || dungeon.getId() == null){
+			return false;
+		}
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
