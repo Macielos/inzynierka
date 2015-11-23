@@ -6,6 +6,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import com.inzynierkanew.R;
+import com.inzynierkanew.activities.BaseActivity;
+import com.inzynierkanew.battle.BattleResolver;
+import com.inzynierkanew.battle.BattleResult;
+import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
+import com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon;
+import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
+import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
+import com.inzynierkanew.entities.map.townendpoint.model.Town;
+import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
+import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
+import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
+import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
+import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
+import com.inzynierkanew.entities.players.playerendpoint.model.Player;
+import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
+import com.inzynierkanew.town.Unit;
+import com.inzynierkanew.utils.CloudEndpointUtils;
+import com.inzynierkanew.utils.Constants;
+import com.inzynierkanew.utils.GameUtils;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -23,38 +44,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-import com.inzynierkanew.R;
-import com.inzynierkanew.activities.BaseActivity;
-import com.inzynierkanew.battle.BattleResolver;
-import com.inzynierkanew.battle.BattleResult;
-import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
-import com.inzynierkanew.entities.map.landendpoint.model.Dungeon;
-import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
-import com.inzynierkanew.entities.map.townendpoint.model.Town;
-import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
-import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
-import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
-import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
-import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
-import com.inzynierkanew.entities.players.playerendpoint.model.Player;
-import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
-import com.inzynierkanew.town.Unit;
-import com.inzynierkanew.utils.AndroidUtils;
-import com.inzynierkanew.utils.CloudEndpointUtils;
-import com.inzynierkanew.utils.Constants;
-import com.inzynierkanew.utils.GameUtils;
 
 public class GameActivity extends BaseActivity {
 
 	private static final String TAG = GameActivity.class.getSimpleName();
 
-	//TODO updatePlayer wstawia nowego hero (sic!)
-	
-	// private RelativeLayout viewWrapper;
 	private GameView gameView;
 
 	private Map<Integer, UnitType> unitTypes;
@@ -63,7 +61,7 @@ public class GameActivity extends BaseActivity {
 	private Player player;
 	private Hero hero;
 	private List<Unit> availableUnits;
-
+	
 	private boolean recruitmentTookPlace = false;
 
 	private final Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
@@ -71,6 +69,7 @@ public class GameActivity extends BaseActivity {
 	private final Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
 	private final Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
+	private final Dungeonendpoint dungeonEndpoint = CloudEndpointUtils.newDungeonEndpoint();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +91,7 @@ public class GameActivity extends BaseActivity {
 		TextView playerGold = (TextView) findViewById(R.id.main_goldCount);
 		playerGold.setText(""+player.getGold());
 		
-		TextView playerLevel = (TextView) findViewById(R.id.main_level);
-		playerGold.setText(""+hero.getLevel());
-		
-		TextView playerExperience = (TextView) findViewById(R.id.main_level);
-		playerExperience.setText(""+hero.getExperience());
-
+		displayHeroExperience();
 		displayPlayerArmyMain();
 		
 		gameView.setRenderMode(GameView.DIALOG_CHOSEN);
@@ -377,19 +371,27 @@ public class GameActivity extends BaseActivity {
 		});
 	}
 
+	private void displayPlayerArmyAftermath(List<Unit> losses, Dialog dialog){
+		displayArmy("dungeon_dialog_result_playerLosses_", losses, dialog);
+	}
+	
+	private void displayDungeonArmyAftermath(List<Unit> losses, Dialog dialog){
+		displayArmy("dungeon_dialog_result_enemyLosses_", losses, dialog);
+	}
+		
 	private void displayDungeonArmy(Dungeon dungeon, Dialog dialog){
-		displayArmy("dungeon_dialog_", dungeon.getArmy(), dialog);
+		displayArmy("dungeon_dialog_", GameUtils.armyToUnitList(dungeon.getArmy(), unitTypes), dialog);
 	}
 	
 	private void displayPlayerArmyMain() {
-		displayArmy("main_", hero.getArmy(), null);
+		displayArmy("main_", GameUtils.armyToUnitList(hero.getArmy(), unitTypes), null);
 	}
 	
 	private void displayPlayerArmyTown() {
-		displayArmy("", hero.getArmy(), null);
+		displayArmy("", GameUtils.armyToUnitList(hero.getArmy(), unitTypes), null);
 	}
 	
-	private void displayArmy(String fieldPrefix, List<Integer> army, Dialog dialog) {
+	private void displayArmy(String fieldPrefix, List<Unit> army, Dialog dialog) {
 		int armySize = army == null ? 0 : army.size();
 		try {
 			ImageView unitImage;
@@ -401,10 +403,10 @@ public class GameActivity extends BaseActivity {
 			for (int i = 0; i < Constants.PLAYER_ARMY_MAX_SIZE; ++i) {
 				unitImage = (ImageView) findByField(fieldPrefix+"unit" + i, dialog);
 				unitCount = (TextView) findByField(fieldPrefix+"unitCount" + i, dialog);
-				if (2 * i < armySize) {
+				if (i < armySize) {
 					unitImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
-							R.drawable.class.getField(unitTypes.get(army.get(2 * i)).getTexture()).getInt(null)));
-					unitCount.setText(""+army.get(2 * i + 1));
+							R.drawable.class.getField(""+army.get(i).getUnitType().getTexture()).getInt(null)));
+					unitCount.setText(""+army.get(i).getCount());
 				} else {
 					unitImage.setImageBitmap(null);
 					unitCount.setText("");
@@ -461,7 +463,27 @@ public class GameActivity extends BaseActivity {
 		availableUnits = GameUtils.armyToUnitList(townArmy, unitTypes);
 	}
 
-	public void showDungeonDialog(final Dungeon dungeon) {
+	public void showDungeonDialog(final Long dungeonId) {
+		Dungeon dungeonInit = null;
+		try {
+			dungeonInit = new AsyncTask<Void, Void, com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon>(){
+				protected com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon doInBackground(Void[] params) {
+					try {
+						return dungeonEndpoint.getDungeon(dungeonId).execute();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Log.e(TAG, "Failed to get dungeon in async task", e);
+						return null;
+					}
+				};
+			}.execute().get();
+		} catch (InterruptedException | ExecutionException e1) {
+			// TODO Auto-generated catch block
+			Log.e(TAG, "Failed to get dungeon", e1);
+		}
+		
+		final Dungeon dungeon = dungeonInit;
+		
 		final Dialog dialog = new Dialog(this);
 		dialog.setContentView(R.layout.dialog_dungeon);
 		
@@ -477,9 +499,11 @@ public class GameActivity extends BaseActivity {
 			public void onClick(View v) {
 				Log.i(TAG, "battle!");
 				BattleResult battleResult = new BattleResolver(hero.getArmy(), dungeon.getArmy(), gameView).runAutoResolve().getBattleResult();
-				hero.setArmy(battleResult.getHeroArmy());
-				hero.setExperience(hero.getExperience()+battleResult.getExperienceGained());
-				dungeon.setArmy(battleResult.getEnemyArmy());
+				hero.setArmy(GameUtils.unitListToArmy(battleResult.getHeroArmy()));
+				updateHeroExperience(battleResult.getExperienceGained());
+				displayPlayerArmyMain();
+				displayHeroExperience();
+				dungeon.setArmy(GameUtils.unitListToArmy(battleResult.getEnemyArmy()));
 				try {
 					new AsyncTask<Void, Void, Void>(){
 
@@ -497,11 +521,38 @@ public class GameActivity extends BaseActivity {
 				} catch (InterruptedException | ExecutionException e) {
 					Log.e(TAG, "failed to update hero in an async task", e);
 				}
+				try {
+					new AsyncTask<Void, Void, Void>(){
+
+						@Override
+						protected Void doInBackground(Void... arg0) {
+							try {
+								dungeonEndpoint.updateDungeon(dungeon).execute();
+							} catch (IOException e) {
+								Log.e(TAG, "failed to update dungeon", e);
+							}
+							return null;
+						}
+						
+					}.execute().get();
+				} catch (InterruptedException | ExecutionException e) {
+					Log.e(TAG, "failed to update dungeon in an async task", e);
+				}
 				dialog.setContentView(R.layout.dialog_dungeon_result);
 				
-				//TODO dungeonEndpoint.updateDungeon
-				//TODO load army
-				// nie konwertuj armii do jednostek, i tak bêdziesz musia³ przekonwertowaæ z powrotem!!!
+				displayPlayerArmyAftermath(battleResult.getPlayerLosses(), dialog);
+				displayDungeonArmyAftermath(battleResult.getEnemyLosses(), dialog);
+				
+				Button quitButton = (Button) dialog.findViewById(R.id.dungeon_dialog_result_quitButton);
+				quitButton.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						dialog.hide();
+						gameView.setRenderMode(GameView.DIALOG_CHOSEN);
+					}
+				});
+
 			}
 		});
 		
@@ -512,9 +563,31 @@ public class GameActivity extends BaseActivity {
 			public void onClick(View v) {
 				Log.i(TAG, "withdraw!");
 				dialog.hide();
+				gameView.setRenderMode(GameView.DIALOG_CHOSEN);
 			}
 		});
 		dialog.show();
+	}
+	
+	protected void updateHeroExperience(int experienceGained) {
+		hero.setExperience(hero.getExperience()+experienceGained);
+		hero.setLevel(gameView.getHeroLevelForXp(hero.getLevel(), hero.getExperience()));
+	}
+
+	private void displayHeroExperience() {
+
+		TextView playerLevel = (TextView) findViewById(R.id.main_level);
+		playerLevel.setText(""+hero.getLevel());
+		
+		int xpForThisLevel = gameView.getXpForNextLevel(hero.getLevel());
+		int xpForNextLevel = gameView.getXpForNextLevel(hero.getLevel()+1);
+		
+		TextView playerExperience = (TextView) findViewById(R.id.main_experienceText);
+		playerExperience.setText(""+hero.getExperience()+"/"+xpForNextLevel);
+		
+		ProgressBar playerExperienceBar = (ProgressBar) findViewById(R.id.main_experienceBar);
+		playerExperienceBar.setMax(xpForNextLevel - xpForThisLevel);
+		playerExperienceBar.setProgress(hero.getExperience() - xpForThisLevel);
 	}
 
 	// @Override

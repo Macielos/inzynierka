@@ -48,27 +48,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "unittypeendpoint.removeUnitType" : {
-      "path" : "unittype/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "unittypeendpoint.listUnitType" : {
       "path" : "unittype",
       "httpMethod" : "GET",
@@ -94,6 +73,22 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "unittypeendpoint.updateUnitType" : {
+      "path" : "unittype",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "unittypeendpoint.insertUnitType" : {
       "path" : "unittype",
       "httpMethod" : "POST",
@@ -110,20 +105,25 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "unittypeendpoint.updateUnitType" : {
-      "path" : "unittype",
-      "httpMethod" : "PUT",
+    "unittypeendpoint.removeUnitType" : {
+      "path" : "unittype/{id}",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     }
   },
@@ -192,11 +192,17 @@
           "$ref" : "UnitType"
         }
       },
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType" : {
-      },
       "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.listUnitType" : {
         "response" : {
           "$ref" : "CollectionResponse_UnitType"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType" : {
+        "request" : {
+          "$ref" : "UnitType"
+        },
+        "response" : {
+          "$ref" : "UnitType"
         }
       },
       "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType" : {
@@ -207,13 +213,7 @@
           "$ref" : "UnitType"
         }
       },
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType" : {
-        "request" : {
-          "$ref" : "UnitType"
-        },
-        "response" : {
-          "$ref" : "UnitType"
-        }
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType" : {
       }
     }
   }

@@ -15,6 +15,7 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
 import com.inzynierkanew.dumps.WorldDump;
+import com.inzynierkanew.endpoints.map.DungeonEndpoint;
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.map.PassageEndpoint;
@@ -67,7 +68,6 @@ public class WorldGenerator {
 	public static final int EXISTING_LAND = -1;
 	public static final int EXISTING_LAND_PASSAGE = -2;
 	public static final int CROSSROAD = -3;
-
 	public static final int OVERLAPPING = -4;
 
 	public static final int UP = 1;
@@ -84,6 +84,7 @@ public class WorldGenerator {
 
 	// ENDPOINTS
 	private final LandEndpoint landEndpoint;
+	private final DungeonEndpoint dungeonEndpoint;
 	private final PlayerEndpoint playerEndpoint;
 	private final PassageEndpoint passageEndpoint;
 	private final FieldTypeEndpoint fieldTypeEndpoint;
@@ -154,45 +155,61 @@ public class WorldGenerator {
 	}
 
 	public WorldGenerator(long seed) {
-		this(seed, new LandEndpoint(), new PlayerEndpoint(), new PassageEndpoint(), new FieldTypeEndpoint(), new UnitTypeEndpoint(),
-				new FactionEndpoint(), new TownEndpoint(), new HeroEndpoint());
+		this(
+				seed, 
+				new LandEndpoint(), new DungeonEndpoint(), 
+				new PassageEndpoint(), new TownEndpoint(), 
+				new PlayerEndpoint(), new HeroEndpoint(), 
+				new FieldTypeEndpoint(), new UnitTypeEndpoint(), 
+				new FactionEndpoint()); 
 	}
 
-	public WorldGenerator(long seed, LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, PassageEndpoint passageEndpoint,
-			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint, 
-			TownEndpoint townEndpoint, HeroEndpoint heroEndpoint) {
+	public WorldGenerator(long seed, 
+			LandEndpoint landEndpoint, DungeonEndpoint dungeonEndpoint, 
+			PassageEndpoint passageEndpoint, TownEndpoint townEndpoint, 
+			PlayerEndpoint playerEndpoint, HeroEndpoint heroEndpoint, 
+			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint 
+			) {
 		this.seed = seed;
 		this.random = new Random(seed);
 		this.landEndpoint = landEndpoint;
-		this.playerEndpoint = playerEndpoint;
+		this.dungeonEndpoint = dungeonEndpoint;
 		this.passageEndpoint = passageEndpoint;
+		this.townEndpoint = townEndpoint;
+		this.playerEndpoint = playerEndpoint;
+		this.heroEndpoint = heroEndpoint;
 		this.fieldTypeEndpoint = fieldTypeEndpoint;
 		this.unitTypeEndpoint = unitTypeEndpoint;
 		this.factionEndpoint = factionEndpoint;
-		this.townEndpoint = townEndpoint;
-		this.heroEndpoint = heroEndpoint;
+
+
 	}
 
-	public WorldGenerator(int[][] mapSegment, LandEndpoint landEndpoint, PlayerEndpoint playerEndpoint, PassageEndpoint passageEndpoint,
-			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, FactionEndpoint factionEndpoint, 
-			TownEndpoint townEndpoint, HeroEndpoint heroEndpoint) {
+	public WorldGenerator(int[][] mapSegment, 
+			LandEndpoint landEndpoint, DungeonEndpoint dungeonEndpoint, 
+			PassageEndpoint passageEndpoint, TownEndpoint townEndpoint, 
+			PlayerEndpoint playerEndpoint, HeroEndpoint heroEndpoint, 
+			FieldTypeEndpoint fieldTypeEndpoint, UnitTypeEndpoint unitTypeEndpoint, 
+			FactionEndpoint factionEndpoint) {
 		this.seed = new Random().nextLong();
 		this.random = new Random(seed);
 		this.mapSegment = mapSegment;
 		this.landEndpoint = landEndpoint;
-		this.playerEndpoint = playerEndpoint;
+		this.dungeonEndpoint = dungeonEndpoint;
 		this.passageEndpoint = passageEndpoint;
+		this.townEndpoint = townEndpoint;
+		this.playerEndpoint = playerEndpoint;
+		this.heroEndpoint = heroEndpoint;
 		this.fieldTypeEndpoint = fieldTypeEndpoint;
 		this.unitTypeEndpoint = unitTypeEndpoint;
 		this.factionEndpoint = factionEndpoint;
-		this.townEndpoint = townEndpoint;
-		this.heroEndpoint = heroEndpoint;
 	}
 
 	public void generateAndPersistLand() {
 		try {
 			Land land = generateLand();
-			landEndpoint.insertLand(land);
+			land = landEndpoint.insertLand(land);
+			prepareAndPersistDungeons(land);
 			for (Passage passage : neighbourPassagesToUpdate) {
 				passage.setNextLandId(land.getId());
 				passageEndpoint.updatePassage(passage);
@@ -1487,18 +1504,23 @@ public class WorldGenerator {
 			land.setTownId(town.getId());
 		}
 		land.setPassages(passages);
-		List<Dungeon> dungeons = new ArrayList<>(this.dungeons.size());
-
-		for (Point point : this.dungeons) {
-			dungeons.add(new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, factionId, 
-					createDungeonArmy(randomKey(dungeonUnitTypesByFactions))));
-		}
-		land.setDungeons(dungeons);
 		land.setHasFreePassage(hasFreePassage(passages));
 		land.setMapSegment(WorldGenerationUtils.calcMapSegment(land));
 		return land;
 	}
 
+	private void prepareAndPersistDungeons(Land land){
+		Dungeon dungeon;
+		List<Dungeon> dungeons = new ArrayList<>(this.dungeons.size());
+		Long factionId = randomKey(dungeonUnitTypesByFactions);
+		for (Point point : this.dungeons) {
+			dungeon = new Dungeon(point.x + mapSegmentMinX, point.y + mapSegmentMinY, DUNGEON, land.getId(), factionId, 
+					createDungeonArmy(factionId));
+			dungeonEndpoint.insertDungeon(dungeon);
+			dungeons.add(dungeon);
+		}
+	}
+	
 	private int[] createTownArmy(Long factionId) {
 		return createArmy(townUnitTypesByFactions, factionId);
 	}

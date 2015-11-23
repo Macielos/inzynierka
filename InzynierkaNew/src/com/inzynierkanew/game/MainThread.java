@@ -48,6 +48,7 @@ public class MainThread extends Thread {
 
 	@Override
 	public void run() {
+		Log.i(TAG+"x", "RUUUUUUN!!!");
 		Canvas canvas;
 		Log.d(TAG, "Starting game loop");
 

@@ -14,6 +14,9 @@ public abstract class GameUtils {
 	}
 	
 	public static List<Unit> armyToUnitList(List<Integer> army, Map<Integer, UnitType> unitTypes) {
+		if(army == null){
+			return new ArrayList<>(0);
+		}
 		List<Unit> availableUnits = new ArrayList<>(army.size() / 2);
 		for (int i = 0; i < army.size(); i += 2) {
 			availableUnits.add(new Unit(unitTypes.get(army.get(i)), army.get(i + 1)));

@@ -7,25 +7,15 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.os.AsyncTask;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.WindowManager;
-
 import com.google.api.client.json.GenericJson;
 import com.inzynierkanew.R;
+import com.inzynierkanew.entities.general.propertyendpoint.Propertyendpoint;
+import com.inzynierkanew.entities.general.propertyendpoint.model.Property;
+import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
-import com.inzynierkanew.entities.map.landendpoint.model.Dungeon;
+import com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
@@ -40,8 +30,8 @@ import com.inzynierkanew.entities.players.unittypeendpoint.Unittypeendpoint;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
 import com.inzynierkanew.model.DrawableFieldType;
-import com.inzynierkanew.model.HeroObject;
-import com.inzynierkanew.model.LandMap;
+import com.inzynierkanew.model.HeroModel;
+import com.inzynierkanew.model.LandModel;
 import com.inzynierkanew.utils.AndroidUtils;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.Constants;
@@ -49,6 +39,18 @@ import com.inzynierkanew.utils.IOnChoice;
 import com.inzynierkanew.utils.IOnConfirm;
 import com.inzynierkanew.utils.Point;
 import com.inzynierkanew.utils.TimeUtils;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.os.AsyncTask;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.WindowManager;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -62,14 +64,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private MainThread thread;
 
-	private MessageEndpoint messageEndpoint = CloudEndpointUtils.newMessageEndpoint();
-	private Playerendpoint playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
-	private Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
-	private Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
-	private Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
-	private Unittypeendpoint unitTypeEndpoint = CloudEndpointUtils.newUnitTypeEndpoint();
-	private Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
-	private Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
+	private final MessageEndpoint messageEndpoint = CloudEndpointUtils.newMessageEndpoint();
+	private final Playerendpoint playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
+	private final Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
+	private final Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
+	private final Dungeonendpoint dungeonEndpoint = CloudEndpointUtils.newDungeonEndpoint();
+	private final Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
+	private final Unittypeendpoint unitTypeEndpoint = CloudEndpointUtils.newUnitTypeEndpoint();
+	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
+	private final Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
+	private final Propertyendpoint propertyEndpoint = CloudEndpointUtils.newPropertyEndpoint();
 
 	private AtomicInteger renderMode = new AtomicInteger(DIALOG_CHOSEN);
 
@@ -85,10 +89,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private Land land;
 	private Town town;
 	private Hero hero;
+	private List<Dungeon> dungeons;
+	private Map<String, String> properties;
+	
+	private HeroModel heroObject;
+	private LandModel landMap;
 
-	private HeroObject heroObject;
-	private LandMap landMap;
-
+	private int[] xpsForNextLevel;
+	
 	private String sessionId;
 
 	private boolean scrolling = false;
@@ -110,7 +118,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		this.sessionId = sessionId;
 		Log.i(TAG, "sessionId: " + sessionId);
 		getHolder().addCallback(this);
-		thread = new MainThread(getHolder(), this);
 		setFocusable(true);
 		
 		downloadInitialData();
@@ -128,12 +135,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			downloadPlayer();
 			downloadHero();
 			downloadTypes();
+			downloadProperties();
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to download game status from server", e);
 		}
 	}
 
-	// TODO fieldTypes->texture, a nie toLowerCase()
+	// TODO sesje
 	private void downloadPlayer() throws NumberFormatException, InterruptedException, ExecutionException {
 		player = new AsyncTask<Long, Void, Player>() {
 			protected Player doInBackground(Long[] params) {
@@ -169,7 +177,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		if (hero.getCurrentLandId() == null) {
 			throw new RuntimeException("Hero is not in any land on server");
 		}
-		heroObject = new HeroObject(this, getPlayerBitmap(), hero);
+		heroObject = new HeroModel(this, getPlayerBitmap(), hero);
 	}
 
 	private void downloadTypes() throws InterruptedException, ExecutionException, IllegalAccessException, IllegalArgumentException,
@@ -203,7 +211,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 		}.execute(null, null).get();
 		if (unitTypeList == null) {
-			throw new RuntimeException("Failed to download field types");
+			throw new RuntimeException("Failed to download unit types");
 		}
 		List<Faction> factionList = new AsyncTask<Void, Void, List<Faction>>() {
 			@Override
@@ -211,7 +219,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				try {
 					return factionEndpoint.listFaction().execute().getItems();
 				} catch (IOException e) {
-					Log.e(TAG, "Failed to download unit types", e);
+					Log.e(TAG, "Failed to download factions", e);
 					return null;
 				}
 			}
@@ -223,6 +231,42 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		fieldTypes = createFieldtypes(fieldTypeList);
 		unitTypes = createUnitTypes(unitTypeList);
 		factions = createFactions(factionList);
+	}
+	
+	private void downloadProperties() throws InterruptedException, ExecutionException {
+		List<Property> propertyList = new AsyncTask<Void, Void, List<Property>>() {
+			@Override
+			protected List<Property> doInBackground(Void... params) {
+				try {
+					return propertyEndpoint.listProperty().execute().getItems();
+				} catch (IOException e) {
+					Log.e(TAG, "Failed to download properties", e);
+					return null;
+				}
+			}
+
+		}.execute(null, null).get();
+		if (propertyList == null) {
+			throw new RuntimeException("Failed to download properties");
+		}
+		properties = new HashMap<>(propertyList.size());
+		for(Property property: propertyList){
+			properties.put(property.getKey(), property.getValue());
+		}
+		int maxLevel = Integer.parseInt(properties.get(Constants.MAX_HERO_LEVEL));
+		int baseXpPerLevel = Integer.parseInt(properties.get(Constants.BASE_XP_PER_LEVEL));
+		double nextLevelFactor = Double.parseDouble(properties.get(Constants.NEXT_LEVEL_FACTOR));
+		
+		xpsForNextLevel = new int[maxLevel];
+		xpsForNextLevel[0] = 0;
+
+		int xpForCurrentLevel = baseXpPerLevel;
+		double xpForCurrentLevelDouble = baseXpPerLevel;
+		for(int i=1; i<maxLevel; ++i){
+			xpsForNextLevel[i] = (int) xpForCurrentLevel;
+			xpForCurrentLevelDouble = xpForCurrentLevelDouble * (1 + nextLevelFactor);
+			xpForCurrentLevel = (int) Math.round(xpForCurrentLevelDouble);
+		}
 	}
 
 	private void downloadNextLand(Long id) {
@@ -253,7 +297,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			if(town==null){
 				throw new RuntimeException("Town is null");
 			}
-			landMap = new LandMap(this, land, town, fieldTypes, townIndex, passageIndex, dungeonIndex);
+			dungeons = new AsyncTask<Void, Void, List<Dungeon>>() {
+				protected List<Dungeon> doInBackground(Void[] params) {
+					try {
+						return dungeonEndpoint.listDungeon(land.getId()).execute().getItems();
+					} catch (IOException e) {
+						Log.e(TAG, "Failed to download town", e);
+						return null;
+					}
+				};
+			}.execute().get();
+
+			if(dungeons==null){
+				throw new RuntimeException("Dungeon list is null");
+			}
+			landMap = new LandModel(this, land, town, dungeons, fieldTypes, townIndex, passageIndex, dungeonIndex);
 			centerCameraOnHero();
 		} catch (InterruptedException | ExecutionException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
 			Log.e(TAG, "Failed to download land in an async task", e);
@@ -355,7 +413,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				
 				@Override
 				public void run() {
-					activity.showDungeonDialog((Dungeon) object);
+					activity.showDungeonDialog(((Dungeon) object).getId());
 				}
 			});
 		} else if (object instanceof Passage) {
@@ -418,6 +476,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
+		Log.i("RUN", "RUUUUUUUUUUUUUUUUUUUUUUUUUN!!!");
 		thread = new MainThread(getHolder(), this);
 		thread.setRunning(true);
 		thread.start();
@@ -573,6 +632,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public Map<Integer, Faction> getFactions() {
 		return factions;
+	}
+	
+	public String getProperty(String key){
+		return properties.get(key);
+	}
+	
+	public Integer getXpForNextLevel(int level){
+		if(level <= 0 && level > xpsForNextLevel.length){
+			return null;
+		}
+		return xpsForNextLevel[level - 1];
+	}
+	
+	public Integer getHeroLevelForXp(int currentLevel, int xp){
+		for(int i=currentLevel-1; i<xpsForNextLevel.length; ++i){
+			if(xpsForNextLevel[i] > xp){
+				return i-1;
+			}
+		}
+		return xpsForNextLevel.length;
 	}
 
 	public void setRenderMode(int renderMode){

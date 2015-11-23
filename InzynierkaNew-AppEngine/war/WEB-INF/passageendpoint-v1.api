@@ -27,22 +27,17 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "passageendpoint.getPassage" : {
-      "path" : "passage/{id}",
-      "httpMethod" : "GET",
+    "passageendpoint.insertPassage" : {
+      "path" : "passage",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -69,6 +64,27 @@
         "body" : "empty"
       }
     },
+    "passageendpoint.getPassage" : {
+      "path" : "passage/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "passageendpoint.listPassage" : {
       "path" : "passage",
       "httpMethod" : "GET",
@@ -89,22 +105,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "passageendpoint.insertPassage" : {
-      "path" : "passage",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -206,24 +206,24 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage" : {
-        "response" : {
-          "$ref" : "Passage"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
-      },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.listPassage" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Passage"
-        }
-      },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage" : {
         "request" : {
           "$ref" : "Passage"
         },
         "response" : {
           "$ref" : "Passage"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
+      },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage" : {
+        "response" : {
+          "$ref" : "Passage"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.listPassage" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Passage"
         }
       },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage" : {

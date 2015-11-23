@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Land {
@@ -23,12 +22,14 @@ public class Land {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Passage> passages = new ArrayList<>();
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Dungeon> dungeons = new ArrayList<>();
+	//@OneToMany(cascade = CascadeType.ALL)
+	//private List<Dungeon> dungeons = new ArrayList<>();
+	
+	//@OneToMany(cascade = CascadeType.ALL)
+	private List<Long> dungeonIds = new ArrayList<>();
 	
 	private boolean hasFreePassage;
-//	private boolean hasTown;
-	
+
 	private long mapSegment;
 	
 	private int minX;
@@ -61,12 +62,20 @@ public class Land {
 		this.passages = passages;
 	}
 
-	public List<Dungeon> getDungeons() {
-		return dungeons;
+//	public List<Dungeon> getDungeons() {
+//		return dungeons;
+//	}
+//
+//	public void setDungeons(List<Dungeon> dungeons) {
+//		this.dungeons = dungeons;
+//	}
+	
+	public List<Long> getDungeonIds() {
+		return dungeonIds;
 	}
 
-	public void setDungeons(List<Dungeon> dungeons) {
-		this.dungeons = dungeons;
+	public void setDungeonIds(List<Long> dungeonIds) {
+		this.dungeonIds = dungeonIds;
 	}
 
 	public int[] getFields() {

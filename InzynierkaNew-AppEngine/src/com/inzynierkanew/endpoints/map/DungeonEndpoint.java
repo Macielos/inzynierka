@@ -2,6 +2,7 @@ package com.inzynierkanew.endpoints.map;
 
 import com.inzynierkanew.entities.map.Dungeon;
 import com.inzynierkanew.utils.EMF;
+
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -18,7 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-@Api(name = "dungeonendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map"))
+@Api(name = "dungeonendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map") )
 public class DungeonEndpoint {
 
 	/**
@@ -29,8 +30,9 @@ public class DungeonEndpoint {
 	 * persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listDungeon")
-	public CollectionResponse<Dungeon> listDungeon(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit) {
+	@ApiMethod(name = "listDungeon", path = "listDungeon/{landId}")
+	public CollectionResponse<Dungeon> listDungeon(@Nullable @Named("cursor") String cursorString,
+			@Nullable @Named("limit") Integer limit, @Named("landId") Long landId) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
@@ -38,7 +40,8 @@ public class DungeonEndpoint {
 
 		try {
 			mgr = getEntityManager();
-			Query query = mgr.createQuery("select from Dungeon as Dungeon");
+			String queryString = "select from Dungeon as Dungeon" + (landId == null ? "" : " where Dungeon.landId = "+landId);
+			Query query = mgr.createQuery(queryString);
 			if (cursorString != null && cursorString != "") {
 				cursor = Cursor.fromWebSafeString(cursorString);
 				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
@@ -71,7 +74,7 @@ public class DungeonEndpoint {
 	 * @param id the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getDungeon")
+	@ApiMethod(name = "getDungeon", path = "getDungeon/{id}")
 	public Dungeon getDungeon(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		Dungeon dungeon = null;
@@ -120,7 +123,7 @@ public class DungeonEndpoint {
 			if (!containsDungeon(dungeon)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.merge(dungeon);
+			mgr.persist(dungeon);
 		} finally {
 			mgr.close();
 		}
@@ -148,7 +151,7 @@ public class DungeonEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			Dungeon item = mgr.find(Dungeon.class, dungeon.getKey());
+			Dungeon item = mgr.find(Dungeon.class, dungeon.getId());
 			if (item == null) {
 				contains = false;
 			}

@@ -16,6 +16,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.inzynierkanew.entities.general.propertyendpoint.Propertyendpoint;
+import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
@@ -175,6 +176,15 @@ public class CloudEndpointUtils {
 	
 	public static Landendpoint newLandEndpoint(){
 		Landendpoint.Builder endpointBuilder = new Landendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return updateBuilder(endpointBuilder).build();
+	}
+	
+	public static Dungeonendpoint newDungeonEndpoint(){
+		Dungeonendpoint.Builder endpointBuilder = new Dungeonendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {
 					public void initialize(HttpRequest httpRequest) {
 					}

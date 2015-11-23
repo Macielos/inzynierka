@@ -22,10 +22,8 @@ import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.general.Property;
-import com.inzynierkanew.entities.map.Dungeon;
 import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.entities.players.Faction;
-import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.utils.WorldGenerationUtils;
@@ -42,16 +40,17 @@ public class ApplicationInitializer implements ServletContextListener {
 	private final Log log = LogFactory.getLog(getClass());
 
 	private boolean cleanDatastoreOnInit = false;
-	private boolean repopulatePropertiesOnInit = false;
-	private boolean repopulateTypesOnInit = true;
+	private boolean repopulatePropertiesOnInit = true;
+	private boolean repopulateTypesOnInit = false;
 	private int landsGeneratedOnInit = 3;
 
 	public static final long HUMANS_ID = 1L;
 	public static final long MONSTERS_ID = 2L;
 
+	public static final int MAX_HERO_LEVEL = 100;
 	public static final int BASE_XP_PER_LEVEL = 1000;
 	public static final double NEXT_LEVEL_FACTOR = 1.2;
-
+	
 	private final FactionEndpoint factionEndpoint = new FactionEndpoint();
 	private final FieldTypeEndpoint fieldTypeEndpoint = new FieldTypeEndpoint();
 	private final UnitTypeEndpoint unitTypeEndpoint = new UnitTypeEndpoint();
@@ -65,7 +64,12 @@ public class ApplicationInitializer implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		log.info("Application is starting...");
-
+				
+		//Dungeon newDungeon = dungeonEndpoint.insertDungeon(new Dungeon(-2, -3, 0, 1L, null));
+		//Dungeon checkDungeon = dungeonEndpoint.getDungeon(newDungeon.getKey().getId());
+		//log.info("new: "+newDungeon);
+		//log.info("check: "+checkDungeon);
+		
 		if (cleanDatastoreOnInit) {
 			clearDatastore();
 		}
@@ -89,10 +93,10 @@ public class ApplicationInitializer implements ServletContextListener {
 		// heroEndpoint.updateHero(hero);
 		// }
 
-		for (Dungeon dungeon : dungeonEndpoint.listDungeon(null, null).getItems()) {
-			dungeon.setFactionId(MONSTERS_ID);
-			dungeonEndpoint.updateDungeon(dungeon);
-		}
+//		for (Dungeon dungeon : dungeonEndpoint.listDungeon(null, null).getItems()) {
+//			dungeon.setFactionId(MONSTERS_ID);
+//			dungeonEndpoint.updateDungeon(dungeon);
+//		}
 
 		// for(Town town: townEndpoint.listTown(null, null).getItems()){
 		// log.info(town);
@@ -100,16 +104,15 @@ public class ApplicationInitializer implements ServletContextListener {
 		// }
 
 		WorldGenerationUtils.init(createPrintableSymbols());
-		try {
-			Thread.sleep(5000L);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		log.info("Firing world generation...");
+//		try {
+//			Thread.sleep(5000L);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		if (landEndpoint.listLand(null, 1).getItems().isEmpty()) {
+			log.info("Firing world generation...");
 			for (int i = 0; i < landsGeneratedOnInit; ++i) {
 				WorldGeneratorFactory.fireWorldGeneration();
 			}
@@ -137,6 +140,7 @@ public class ApplicationInitializer implements ServletContextListener {
 	}
 
 	private void insertProperties() {
+		propertyEndpoint.insertProperty(new Property("MaxHeroLevel", "" + MAX_HERO_LEVEL));
 		propertyEndpoint.insertProperty(new Property("BaseXpPerLevel", "" + BASE_XP_PER_LEVEL));
 		propertyEndpoint.insertProperty(new Property("NextLevelFactor", "" + NEXT_LEVEL_FACTOR));
 	}

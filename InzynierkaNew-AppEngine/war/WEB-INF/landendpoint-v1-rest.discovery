@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/I1p0WGCwrbjqW1eayrFKoRVnJ1k\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/wOeI0JBlPa_fCVDRhuewf_JULfI\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -89,45 +89,6 @@
     }
    }
   },
-  "Dungeon": {
-   "id": "Dungeon",
-   "type": "object",
-   "properties": {
-    "army": {
-     "type": "array",
-     "items": {
-      "type": "integer",
-      "format": "int32"
-     }
-    },
-    "factionId": {
-     "type": "string",
-     "format": "int64"
-    },
-    "key": {
-     "$ref": "Key"
-    },
-    "maxArmy": {
-     "type": "array",
-     "items": {
-      "type": "integer",
-      "format": "int32"
-     }
-    },
-    "type": {
-     "type": "string",
-     "format": "int64"
-    },
-    "x": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "y": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
   "Key": {
    "id": "Key",
    "type": "object",
@@ -160,10 +121,11 @@
    "id": "Land",
    "type": "object",
    "properties": {
-    "dungeons": {
+    "dungeonIds": {
      "type": "array",
      "items": {
-      "$ref": "Dungeon"
+      "type": "string",
+      "format": "int64"
      }
     },
     "fields": {

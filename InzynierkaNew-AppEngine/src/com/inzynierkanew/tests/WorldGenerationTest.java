@@ -17,6 +17,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.google.api.server.spi.response.CollectionResponse;
+import com.inzynierkanew.endpoints.map.DungeonEndpoint;
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.map.PassageEndpoint;
@@ -90,16 +91,20 @@ public class WorldGenerationTest {
 
 	private WorldGenerator newWorldGenerator(long seed) {
 		return new WorldGenerator(seed, 
-				mockLandEndpoint(), mockPlayerEndpoint(), mockPassageEndpoint(), 
-				mockFieldTypeEndpoint(), mockUnitTypeEndpoint(), mockFactionEndpoint(), 
-				mockTownEndpoint(), mockHeroEndpoint());
+				mockLandEndpoint(), mockDungeonEndpoint(), 
+				mockPassageEndpoint(), mockTownEndpoint(), 
+				mockPlayerEndpoint(), mockHeroEndpoint(), 
+				mockFieldTypeEndpoint(), mockUnitTypeEndpoint(), 
+				mockFactionEndpoint());
 	}
 	
 	private WorldGenerator newWorldGenerator(int[][] mapSegment) {
 		return new WorldGenerator(mapSegment, 
-				mockLandEndpoint(), mockPlayerEndpoint(), mockPassageEndpoint(), 
-				mockFieldTypeEndpoint(), mockUnitTypeEndpoint(), mockFactionEndpoint(), 
-				mockTownEndpoint(), mockHeroEndpoint());
+				mockLandEndpoint(), mockDungeonEndpoint(), 
+				mockPassageEndpoint(), mockTownEndpoint(), 
+				mockPlayerEndpoint(), mockHeroEndpoint(), 
+				mockFieldTypeEndpoint(), mockUnitTypeEndpoint(), 
+				mockFactionEndpoint());
 	}
 	
 	//@org.junit.Test
@@ -212,7 +217,7 @@ public class WorldGenerationTest {
 				2, 2, 2, 0, 0, 0, 2, 2, 2, 0, 
 		});
 		land.setPassages(Arrays.asList(new Passage(8, 10, 69L, WorldGenerator.UP)));
-		land.setDungeons(Arrays.asList(new Dungeon(6, 11, 2L, 71L)));
+		land.setDungeonIds(Arrays.asList(2L));
 		land.setMinX(5);
 		land.setMaxX(14);
 		land.setMinY(10);
@@ -239,7 +244,7 @@ public class WorldGenerationTest {
 				2, 6, 2, 0, 0
 		});
 		land.setPassages(Arrays.asList(new Passage(3, 0, 69L, WorldGenerator.UP)));
-		land.setDungeons(Arrays.asList(new Dungeon(1, 1, 2L, 71L)));
+		land.setDungeonIds(Arrays.asList(2L));
 		land.setMinX(0);
 		land.setMaxX(4);
 		land.setMinY(0);
@@ -349,6 +354,11 @@ public class WorldGenerationTest {
 	public static PassageEndpoint mockPassageEndpoint(){
 		PassageEndpoint passageEndpoint = Mockito.mock(PassageEndpoint.class);
 		return passageEndpoint;
+	}
+	
+	public static DungeonEndpoint mockDungeonEndpoint(){
+		DungeonEndpoint dungeonEndpoint = Mockito.mock(DungeonEndpoint.class);
+		return dungeonEndpoint;
 	}
 	
 	public static FieldTypeEndpoint mockFieldTypeEndpoint(){

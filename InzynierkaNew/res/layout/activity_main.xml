@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/main_statusBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="50dp" >
 
         <ImageView
             android:id="@+id/main_goldIcon"
@@ -18,15 +18,15 @@
 
         <TextView
             android:id="@+id/main_goldCount"
-            android:layout_width="30dp"
+            android:layout_width="76dp"
             android:layout_height="wrap_content"
-            android:textSize="32sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/main_level"
-            android:layout_width="30dp"
+            android:layout_width="44dp"
             android:layout_height="wrap_content"
-            android:textSize="32sp" />
+            android:textSize="20sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
