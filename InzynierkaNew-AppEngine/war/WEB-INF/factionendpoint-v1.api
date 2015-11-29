@@ -27,31 +27,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "factionendpoint.getFactionsForTowns" : {
-      "path" : "collectionresponse_faction_towns",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.getFactionsForTowns",
-      "request" : {
-        "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "factionendpoint.getFactionsForDungeons" : {
       "path" : "collectionresponse_faction_dungeons",
       "httpMethod" : "GET",
@@ -77,35 +52,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "factionendpoint.getFaction" : {
-      "path" : "faction/{id}",
+    "factionendpoint.getFactionsForTowns" : {
+      "path" : "collectionresponse_faction_towns",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "factionendpoint.listFaction" : {
-      "path" : "faction",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.listFaction",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.getFactionsForTowns",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -139,6 +93,43 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "factionendpoint.insertFaction" : {
+      "path" : "faction",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.insertFaction",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "factionendpoint.getFaction" : {
+      "path" : "faction/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "factionendpoint.removeFaction" : {
       "path" : "faction/{id}",
       "httpMethod" : "DELETE",
@@ -160,17 +151,26 @@
         "body" : "empty"
       }
     },
-    "factionendpoint.insertFaction" : {
+    "factionendpoint.listFaction" : {
       "path" : "faction",
-      "httpMethod" : "POST",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.insertFaction",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.listFaction",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -215,22 +215,12 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.FactionEndpoint.getFactionsForTowns" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Faction"
-        }
-      },
       "com.inzynierkanew.endpoints.players.FactionEndpoint.getFactionsForDungeons" : {
         "response" : {
           "$ref" : "CollectionResponse_Faction"
         }
       },
-      "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction" : {
-        "response" : {
-          "$ref" : "Faction"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.FactionEndpoint.listFaction" : {
+      "com.inzynierkanew.endpoints.players.FactionEndpoint.getFactionsForTowns" : {
         "response" : {
           "$ref" : "CollectionResponse_Faction"
         }
@@ -243,14 +233,24 @@
           "$ref" : "Faction"
         }
       },
-      "com.inzynierkanew.endpoints.players.FactionEndpoint.removeFaction" : {
-      },
       "com.inzynierkanew.endpoints.players.FactionEndpoint.insertFaction" : {
         "request" : {
           "$ref" : "Faction"
         },
         "response" : {
           "$ref" : "Faction"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction" : {
+        "response" : {
+          "$ref" : "Faction"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.FactionEndpoint.removeFaction" : {
+      },
+      "com.inzynierkanew.endpoints.players.FactionEndpoint.listFaction" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Faction"
         }
       }
     }

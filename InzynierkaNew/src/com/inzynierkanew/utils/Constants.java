@@ -14,8 +14,4 @@ public abstract class Constants {
 	
 	public static final int PLAYER_ARMY_MAX_SIZE = 5;
 	
-	public static final String BASE_XP_PER_LEVEL = "BaseXpPerLevel";
-	public static final String NEXT_LEVEL_FACTOR = "NextLevelFactor";
-	public static final String MAX_HERO_LEVEL = "MaxHeroLevel";
-	
 }

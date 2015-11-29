@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/mt9BMRlvgj-jzxYbp-rwUqo4H4o\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/G-p79KZyenXJJWTZ9xZ9oslzDz4\"",
  "discoveryVersion": "v1",
  "id": "dungeonendpoint:v1",
  "name": "dungeonendpoint",
@@ -111,13 +111,6 @@
     "landId": {
      "type": "string",
      "format": "int64"
-    },
-    "maxArmy": {
-     "type": "array",
-     "items": {
-      "type": "integer",
-      "format": "int32"
-     }
     },
     "type": {
      "type": "string",

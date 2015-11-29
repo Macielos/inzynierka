@@ -52,22 +52,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "passageendpoint.updatePassage" : {
-      "path" : "passage",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "passageendpoint.removePassage" : {
       "path" : "passage/{id}",
       "httpMethod" : "DELETE",
@@ -87,6 +71,22 @@
       },
       "response" : {
         "body" : "empty"
+      }
+    },
+    "passageendpoint.insertPassage" : {
+      "path" : "passage",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "passageendpoint.getPassage" : {
@@ -110,14 +110,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "passageendpoint.insertPassage" : {
+    "passageendpoint.updatePassage" : {
       "path" : "passage",
-      "httpMethod" : "POST",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -196,11 +196,11 @@
           "parent" : {
             "$ref" : "Key"
           },
-          "namespace" : {
-            "type" : "string"
-          },
           "complete" : {
             "type" : "boolean"
+          },
+          "namespace" : {
+            "type" : "string"
           }
         }
       }
@@ -211,7 +211,9 @@
           "$ref" : "CollectionResponse_Passage"
         }
       },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage" : {
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
+      },
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage" : {
         "request" : {
           "$ref" : "Passage"
         },
@@ -219,14 +221,12 @@
           "$ref" : "Passage"
         }
       },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.removePassage" : {
-      },
       "com.inzynierkanew.endpoints.map.PassageEndpoint.getPassage" : {
         "response" : {
           "$ref" : "Passage"
         }
       },
-      "com.inzynierkanew.endpoints.map.PassageEndpoint.insertPassage" : {
+      "com.inzynierkanew.endpoints.map.PassageEndpoint.updatePassage" : {
         "request" : {
           "$ref" : "Passage"
         },

@@ -1,0 +1,246 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://1059.appspot.com/_ah/api",
+  "name" : "itemendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://1059.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "inzynierkanew.com",
+  "ownerName" : "inzynierkanew.com",
+  "packagePath" : "entities.players",
+  "methods" : {
+    "itemendpoint.getItem" : {
+      "path" : "item/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.getItem",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemendpoint.removeItem" : {
+      "path" : "item/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.removeItem",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "itemendpoint.updateItem" : {
+      "path" : "item",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.updateItem",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemendpoint.insertItem" : {
+      "path" : "item",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.insertItem",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemendpoint.getItemsByType" : {
+      "path" : "collectionresponse_item/{itemLevel}/{itemClass}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.getItemsByType",
+      "request" : {
+        "parameters" : {
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          },
+          "itemLevel" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "itemClass" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemendpoint.listItem" : {
+      "path" : "item",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.listItem",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Item" : {
+        "id" : "Item",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "itemClass" : {
+            "$ref" : "ItemClass"
+          },
+          "itemLevel" : {
+            "type" : "integer"
+          },
+          "strengthBonus" : {
+            "type" : "integer"
+          },
+          "agilityBonus" : {
+            "type" : "integer"
+          },
+          "intelligenceBonus" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "ItemClass" : {
+        "id" : "ItemClass",
+        "type" : "string",
+        "enum" : [ "STANDARD", "MAGICAL", "LEGENDARY" ]
+      },
+      "CollectionResponse_Item" : {
+        "id" : "CollectionResponse_Item",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Item"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.getItem" : {
+        "response" : {
+          "$ref" : "Item"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.removeItem" : {
+      },
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.updateItem" : {
+        "request" : {
+          "$ref" : "Item"
+        },
+        "response" : {
+          "$ref" : "Item"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.insertItem" : {
+        "request" : {
+          "$ref" : "Item"
+        },
+        "response" : {
+          "$ref" : "Item"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.getItemsByType" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Item"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.listItem" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Item"
+        }
+      }
+    }
+  }
+}

@@ -31,8 +31,6 @@ public class Player {
 
 	private Date lastLogin;
 
-	private int gold;
-
 //	@OneToOne(cascade = CascadeType.PERSIST)
 //	private Hero hero;
 	
@@ -98,20 +96,12 @@ public class Player {
 //		this.hero = hero;
 //	}
 	
-	public int getGold() {
-		return gold;
-	}
-
 	public Long getHeroId() {
 		return heroId;
 	}
 
 	public void setHeroId(Long heroId) {
 		this.heroId = heroId;
-	}
-
-	public void setGold(int gold) {
-		this.gold = gold;
 	}
 
 }

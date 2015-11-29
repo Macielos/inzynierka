@@ -21,35 +21,28 @@ import com.inzynierkanew.endpoints.players.FactionEndpoint;
 import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
-import com.inzynierkanew.entities.general.Property;
 import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.entities.players.Faction;
+import com.inzynierkanew.entities.players.Item;
+import com.inzynierkanew.entities.players.Item.ItemClass;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.utils.EMF;
+import com.inzynierkanew.utils.SharedConstants;
 import com.inzynierkanew.utils.WorldGenerationUtils;
 import com.inzynierkanew.world.WorldGenerator;
 import com.inzynierkanew.world.WorldGeneratorFactory;
 
 public class ApplicationInitializer implements ServletContextListener {
 
-	// TODO
-	/*
-	 * - player.hero -> player->heroId - hero.key -> hero.id - land.town.key ->
-	 * land.town.id - land.town -> land.townId ???
-	 */
 	private final Log log = LogFactory.getLog(getClass());
 
-	private boolean cleanDatastoreOnInit = false;
+	private boolean cleanDatastoreOnInit = true;
 	private boolean repopulatePropertiesOnInit = false;
 	private boolean repopulateTypesOnInit = false;
 	private int landsGeneratedOnInit = 3;
 
 	public static final long HUMANS_ID = 1L;
 	public static final long MONSTERS_ID = 2L;
-
-	public static final int MAX_HERO_LEVEL = 100;
-	public static final int BASE_XP_PER_LEVEL = 1000;
-	public static final int NEXT_LEVEL_FACTOR = 500;
 	
 	private final FactionEndpoint factionEndpoint = new FactionEndpoint();
 	private final FieldTypeEndpoint fieldTypeEndpoint = new FieldTypeEndpoint();
@@ -82,6 +75,7 @@ public class ApplicationInitializer implements ServletContextListener {
 			insertTypes();
 		}
 
+		// HERO.setGold
 		// log.info("Giving gold to players...");
 		// for(Player player: playerEndpoint.listPlayer(null, null).getItems()){
 		// player.setGold(player.getGold()+50000000);
@@ -140,9 +134,12 @@ public class ApplicationInitializer implements ServletContextListener {
 	}
 
 	private void insertProperties() {
-		propertyEndpoint.insertProperty(new Property("MaxHeroLevel", "" + MAX_HERO_LEVEL));
-		propertyEndpoint.insertProperty(new Property("BaseXpPerLevel", "" + BASE_XP_PER_LEVEL));
-		propertyEndpoint.insertProperty(new Property("NextLevelFactor", "" + NEXT_LEVEL_FACTOR));
+//		propertyEndpoint.insertProperty(new Property("MaxHeroLevel", "" + MAX_HERO_LEVEL));
+//		propertyEndpoint.insertProperty(new Property("BaseXpPerLevel", "" + BASE_XP_PER_LEVEL));
+//		propertyEndpoint.insertProperty(new Property("NextLevelFactor", "" + NEXT_LEVEL_FACTOR));
+//		propertyEndpoint.insertProperty(new Property("BaseGoldPerVictory", "" + BASE_GOLD_PER_VICTORY));
+//		propertyEndpoint.insertProperty(new Property("GoldXpModifier", "" + GOLD_XP_MODIFIER));
+//		propertyEndpoint.insertProperty(new Property("GoldRandomFactor", "" + GOLD_RANDOM_FACTOR));
 	}
 
 	private void clearProperties() {
@@ -150,11 +147,11 @@ public class ApplicationInitializer implements ServletContextListener {
 	}
 
 	private void clearDatastore() {
-		clearEntities("Player", "PlayerSession", "Hero", "Land", "Passage", "Dungeon", "Town");
+		clearEntities("Player", "PlayerSession", "Hero", "Land", "Passage", "Dungeon", "Town", "DungeonVisit");
 	}
 
 	private void clearTypes() {
-		clearEntities("Faction", "UnitType", "FieldType");
+		clearEntities("Faction", "UnitType", "FieldType", "Item");
 	}
 
 	private void clearEntities(String... entityNames) {
@@ -190,17 +187,35 @@ public class ApplicationInitializer implements ServletContextListener {
 		List<FieldType> fieldTypes = Arrays.asList(new FieldType(1L, "Road", true, "road"), new FieldType(2L, "Passage", true, "passage"),
 				new FieldType(3L, "Town", true, "town"), new FieldType(4L, "Dungeon", true, "dungeon"), new FieldType(100L, "Grass", true,
 						"grass"), new FieldType(110L, "Mountains", false, "mountains"));
+		
+		List<Item> items = Arrays.asList(
+				new Item(1L, "Sword of Might +5", ItemClass.STANDARD, 1, 5, 0, 0), 
+				new Item(2L, "Sword of Might +10", ItemClass.STANDARD, 6, 10, 0, 0),
+				new Item(3L, "Sword of Might +20", ItemClass.STANDARD, 11, 20, 0, 0), 
+				new Item(11L, "Dagger of Swiftness +5", ItemClass.STANDARD, 1, 0, 5, 0), 
+				new Item(12L, "Dagger of Swiftness +10", ItemClass.STANDARD, 6, 0, 10, 0), 
+				new Item(13L, "Dagger of Swiftness +20", ItemClass.STANDARD, 11, 0, 20, 0), 
+				new Item(21L, "Staff of Enlightment +5", ItemClass.STANDARD, 1, 0, 0, 5), 
+				new Item(22L, "Staff of Enlightment +10", ItemClass.STANDARD, 6, 0, 0, 10), 
+				new Item(23L, "Staff of Enlightment +20", ItemClass.STANDARD, 11, 0, 0, 20),
+				new Item(101L, "Divine Shield", ItemClass.MAGICAL, 11, 40, 20, 0),
+				new Item(102L, "Cloak of Darkness", ItemClass.MAGICAL, 11, 10, 10, 50),
+				new Item(103L, "Ring of Fortitude", ItemClass.MAGICAL, 11, 10, 25, 25)
+				);
 
-		for (Faction faction : factions) {
+		for (Faction faction: factions) {
 			factionEndpoint.insertFaction(faction);
 		}
 
-		for (UnitType unitType : unitTypes) {
+		for (UnitType unitType: unitTypes) {
 			unitTypeEndpoint.insertUnitType(unitType);
 		}
 
-		for (FieldType fieldType : fieldTypes) {
+		for (FieldType fieldType: fieldTypes) {
 			fieldTypeEndpoint.insertFieldType(fieldType);
+		}
+		for(Item item: items){
+			
 		}
 	}
 

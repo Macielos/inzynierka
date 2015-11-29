@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/wUD1oflFk6IMI1uXy4BsYSaRTgc\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/4H938h2-BOnteTLfmOPZvX8KbYU\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -104,10 +104,6 @@
    "properties": {
     "deviceRegistrationID": {
      "type": "string"
-    },
-    "gold": {
-     "type": "integer",
-     "format": "int32"
     },
     "heroId": {
      "type": "string",
@@ -272,8 +268,33 @@
   },
   "registerPlayer": {
    "id": "playerendpoint.registerPlayer",
-   "path": "registerPlayer",
+   "path": "registerPlayer/{strength}/{agility}/{intelligence}",
    "httpMethod": "POST",
+   "parameters": {
+    "agility": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "intelligence": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "strength": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "strength",
+    "agility",
+    "intelligence"
+   ],
    "request": {
     "$ref": "Player",
     "parameterName": "resource"

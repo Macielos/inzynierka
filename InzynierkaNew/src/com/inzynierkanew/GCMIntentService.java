@@ -13,6 +13,7 @@ import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.init.RegisterActivity;
 import com.inzynierkanew.utils.CloudEndpointUtils;
+import com.inzynierkanew.utils.SharedConstants;
 
 /**
  * This class is started up as a service of the Android application. It listens
@@ -153,7 +154,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 				playerForRegistration
 					.setDeviceRegistrationID(registrationId)
 					.setRegistrationTime(new DateTime(System.currentTimeMillis()));
-				playerEndpoint.registerPlayer(playerForRegistration).execute();
+				playerEndpoint.registerPlayer(SharedConstants.INITIAL_STRENGTH, 
+						SharedConstants.INITIAL_AGILITY, SharedConstants.INITIAL_INTELLIGENCE, 
+						playerForRegistration).execute();
 			//}
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),

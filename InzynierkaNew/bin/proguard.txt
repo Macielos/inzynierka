@@ -1,18 +1,18 @@
-# view AndroidManifest.xml #generated:22
+# view AndroidManifest.xml #generated:23
 -keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
 
-# view AndroidManifest.xml #generated:21
+# view AndroidManifest.xml #generated:22
 -keep class com.inzynierkanew.GCMIntentService { <init>(...); }
 
-# view AndroidManifest.xml #generated:35
+# view AndroidManifest.xml #generated:36
 -keep class com.inzynierkanew.game.GameActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:34
+# view AndroidManifest.xml #generated:35
 -keep class com.inzynierkanew.init.LoginActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:14
+# view AndroidManifest.xml #generated:15
 -keep class com.inzynierkanew.init.MainActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:33
+# view AndroidManifest.xml #generated:34
 -keep class com.inzynierkanew.init.RegisterActivity { <init>(...); }
 

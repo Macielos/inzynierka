@@ -9,6 +9,7 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 public abstract class AndroidUtils {
 
@@ -26,7 +27,6 @@ public abstract class AndroidUtils {
 		return null;
 	}
 	
-
 	public static void showChoiceDialog(final Activity activity, final String message, final IOnChoice onChoice) throws InterruptedException, ExecutionException {
 		new AsyncTask<Void, Void, AlertDialog>() {
 			AlertDialog.Builder alertDialog;
@@ -88,5 +88,9 @@ public abstract class AndroidUtils {
 				}).create().show();
 			}
 		}.execute().get();
+	}
+	
+	public static void setVisible(View v, boolean visible){
+		v.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
 	}
 }

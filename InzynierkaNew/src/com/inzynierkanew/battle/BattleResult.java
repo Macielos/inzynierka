@@ -2,7 +2,7 @@ package com.inzynierkanew.battle;
 
 import java.util.List;
 
-import com.inzynierkanew.town.Unit;
+import com.inzynierkanew.model.Unit;
 import com.inzynierkanew.utils.GameUtils;
 
 public class BattleResult {

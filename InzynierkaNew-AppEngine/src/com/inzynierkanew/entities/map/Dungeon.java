@@ -22,7 +22,6 @@ public class Dungeon {
 	private Long factionId;
 	
 	private int[] army;
-	private int[] maxArmy;
 	
 	public Dungeon(int x, int y, long type, Long landId, Long factionId, int... army) {
 		this.x = x;
@@ -31,7 +30,6 @@ public class Dungeon {
 		this.landId = landId;
 		this.factionId = factionId;
 		this.army = army;
-		this.maxArmy = army;
 	}
 	
 	public Long getId() {
@@ -86,13 +84,4 @@ public class Dungeon {
 		this.army = army;
 	}
 
-	public int[] getMaxArmy() {
-		return maxArmy;
-	}
-
-	public void setMaxArmy(int[] maxArmy) {
-		this.maxArmy = maxArmy;
-	}
-
-	
 }

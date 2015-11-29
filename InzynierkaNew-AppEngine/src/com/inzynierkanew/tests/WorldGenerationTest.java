@@ -26,12 +26,10 @@ import com.inzynierkanew.endpoints.players.FactionEndpoint;
 import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
-import com.inzynierkanew.entities.map.Dungeon;
 import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.entities.map.Passage;
 import com.inzynierkanew.entities.players.Faction;
-import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.utils.Point;
@@ -256,7 +254,7 @@ public class WorldGenerationTest {
 	
 	private static Player newPlayer(){
 		Player player = new Player();
-		Hero hero = new Hero(0, 0, 1L);
+		//Hero hero = new Hero(0, 0, 1L, 100L, 10, 10, 10);
 		//player.setHeroId(hero.getId());
 		return player;
 	}

@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/54dUHG3ZiY3cKclaegdy7gvU8bE\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/6sqAQAJlXScZ_DcEtpfj-vtCKbE\"",
  "discoveryVersion": "v1",
  "id": "heroendpoint:v1",
  "name": "heroendpoint",
@@ -93,6 +93,10 @@
    "id": "Hero",
    "type": "object",
    "properties": {
+    "agility": {
+     "type": "integer",
+     "format": "int32"
+    },
     "army": {
      "type": "array",
      "items": {
@@ -104,13 +108,28 @@
      "type": "string",
      "format": "int64"
     },
+    "equippedItems": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
     "experience": {
      "type": "integer",
      "format": "int32"
     },
+    "gold": {
+     "type": "string",
+     "format": "int64"
+    },
     "id": {
      "type": "string",
      "format": "int64"
+    },
+    "intelligence": {
+     "type": "integer",
+     "format": "int32"
     },
     "items": {
      "type": "array",
@@ -120,6 +139,10 @@
      }
     },
     "level": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "strength": {
      "type": "integer",
      "format": "int32"
     },

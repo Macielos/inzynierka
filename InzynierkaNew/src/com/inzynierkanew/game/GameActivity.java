@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import com.inzynierkanew.R;
@@ -12,6 +13,8 @@ import com.inzynierkanew.battle.BattleResolver;
 import com.inzynierkanew.battle.BattleResult;
 import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
 import com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon;
+import com.inzynierkanew.entities.map.dungeonvisitendpoint.Dungeonvisitendpoint;
+import com.inzynierkanew.entities.map.dungeonvisitendpoint.model.DungeonVisit;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
 import com.inzynierkanew.entities.map.townendpoint.model.Town;
@@ -19,13 +22,17 @@ import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
+import com.inzynierkanew.entities.players.itemendpoint.model.Item;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
-import com.inzynierkanew.town.Unit;
+import com.inzynierkanew.model.Loot;
+import com.inzynierkanew.model.Unit;
+import com.inzynierkanew.utils.AndroidUtils;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.GameUtils;
+import com.inzynierkanew.utils.SharedConstants;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -70,6 +77,7 @@ public class GameActivity extends BaseActivity {
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
 	private final Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
 	private final Dungeonendpoint dungeonEndpoint = CloudEndpointUtils.newDungeonEndpoint();
+	private final Dungeonvisitendpoint dungeonVisitEndpoint = CloudEndpointUtils.newDungeonVisitEndpoint();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,14 +96,18 @@ public class GameActivity extends BaseActivity {
 		LinearLayout surface = (LinearLayout) findViewById(R.id.main_gameSurface);
 		surface.addView(gameView);
 		
-		TextView playerGold = (TextView) findViewById(R.id.main_goldCount);
-		playerGold.setText(""+player.getGold());
+		displayPlayerGold();
 		
 		displayHeroExperience();
 		displayPlayerArmyMain();
 		
 		gameView.setRenderMode(GameView.DIALOG_CHOSEN);
 		gameView.setLastDialogOnHeroLocation();
+	}
+
+	private void displayPlayerGold() {
+		TextView playerGold = (TextView) findViewById(R.id.main_goldCount);
+		playerGold.setText(""+hero.getGold());
 	}
 	
 	public void initTownView(){
@@ -292,9 +304,9 @@ public class GameActivity extends BaseActivity {
 					public void onClick(View v) {
 						int recruitedUnits = unitsToRecruitSeekBar.getProgress();
 						int recruitmentCost = recruitedUnits * availableUnit.getUnitType().getCost();
-						if (player.getGold() >= recruitmentCost) {
+						if (hero.getGold() >= recruitmentCost) {
 							Log.i(TAG, "recruiting " + recruitedUnits + "x " + availableUnit.getUnitType().getName());
-							player.setGold(player.getGold() - recruitmentCost);
+							hero.setGold(hero.getGold() - recruitmentCost);
 							boolean recruitAll = unitsToRecruitSeekBar.getMax()==recruitedUnits;
 							recruit(availableUnit.getUnitType().getId().intValue(), recruitedUnits);
 							unitsToRecruitSeekBar.setProgress(0);
@@ -379,8 +391,8 @@ public class GameActivity extends BaseActivity {
 		displayArmy("dungeon_dialog_result_enemyLosses_", losses, dialog);
 	}
 		
-	private void displayDungeonArmy(Dungeon dungeon, Dialog dialog){
-		displayArmy("dungeon_dialog_", GameUtils.armyToUnitList(dungeon.getArmy(), unitTypes), dialog);
+	private void displayDungeonArmy(List<Integer> dungeonArmy, Dialog dialog){
+		displayArmy("dungeon_dialog_", GameUtils.armyToUnitList(dungeonArmy, unitTypes), dialog);
 	}
 	
 	private void displayPlayerArmyMain() {
@@ -487,20 +499,34 @@ public class GameActivity extends BaseActivity {
 		final Dialog dialog = new Dialog(this);
 		dialog.setContentView(R.layout.dialog_dungeon);
 		
+		DungeonVisit dungeonVisit = gameView.getDungeonVisit(dungeon.getId());
+		List<Integer> army = dungeonVisit == null ? dungeon.getArmy() : dungeonVisit.getArmy();
+		
+		displayDungeonArmy(army, dialog);
+		
+		boolean guardiansPresent = !GameUtils.isArmyEmpty(army);
+		
 		TextView factionTextView = (TextView) dialog.findViewById(R.id.dungeon_dialog_faction);
-		factionTextView.setText("Guarded by "+gameView.getFactions().get(dungeon.getFactionId()));
-		
-		displayDungeonArmy(dungeon, dialog);
-		
+		factionTextView.setText(guardiansPresent 
+					? "Guarded by "+gameView.getFactions().get(dungeon.getFactionId().intValue()).getName()
+					: "Deserted");
+				
 		Button combatButton = (Button) dialog.findViewById(R.id.dungeon_dialog_combatButton);
+		AndroidUtils.setVisible(combatButton, guardiansPresent);
 		combatButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Log.i(TAG, "battle!");
-				BattleResult battleResult = new BattleResolver(hero.getArmy(), dungeon.getArmy(), gameView).runAutoResolve().getBattleResult();
+				final BattleResult battleResult = new BattleResolver(hero.getArmy(), dungeon.getArmy(), gameView).runAutoResolve().getBattleResult();
+				Loot loot = getLoot(battleResult);
 				hero.setArmy(GameUtils.unitListToArmy(battleResult.getHeroArmy()));
 				updateHeroExperience(battleResult.getExperienceGained());
+				hero.setGold(hero.getGold()+loot.getGold());
+				displayPlayerGold();
+				for(Item item: loot.getItems()){
+					hero.getItems().add(item.getId().intValue());
+				}
 				displayPlayerArmyMain();
 				displayHeroExperience();
 				dungeon.setArmy(GameUtils.unitListToArmy(battleResult.getEnemyArmy()));
@@ -527,9 +553,15 @@ public class GameActivity extends BaseActivity {
 						@Override
 						protected Void doInBackground(Void... arg0) {
 							try {
-								dungeonEndpoint.updateDungeon(dungeon).execute();
+								DungeonVisit dungeonVisit = new DungeonVisit()
+										.setHeroId(hero.getId())
+										.setDungeonId(dungeon.getId())
+										.setLandId(gameView.getLandId())
+										.setArmy(GameUtils.unitListToArmy(battleResult.getEnemyArmy()));
+								gameView.addDungeonVisit(dungeonVisit);
+								dungeonVisitEndpoint.insertDungeonVisit(dungeonVisit).execute();
 							} catch (IOException e) {
-								Log.e(TAG, "failed to update dungeon", e);
+								Log.e(TAG, "failed to insert dungeon visit", e);
 							}
 							return null;
 						}
@@ -550,6 +582,7 @@ public class GameActivity extends BaseActivity {
 					public void onClick(View v) {
 						dialog.hide();
 						gameView.setRenderMode(GameView.DIALOG_CHOSEN);
+						gameView.setLastDialogOnHeroLocation();                                                     
 					}
 				});
 
@@ -564,6 +597,7 @@ public class GameActivity extends BaseActivity {
 				Log.i(TAG, "withdraw!");
 				dialog.hide();
 				gameView.setRenderMode(GameView.DIALOG_CHOSEN);
+				gameView.setLastDialogOnHeroLocation();    
 			}
 		});
 		dialog.show();
@@ -588,6 +622,17 @@ public class GameActivity extends BaseActivity {
 		ProgressBar playerExperienceBar = (ProgressBar) findViewById(R.id.main_experienceBar);
 		playerExperienceBar.setMax(xpForNextLevel - xpForThisLevel);
 		playerExperienceBar.setProgress(hero.getExperience() - xpForThisLevel);
+	}
+	
+	private Loot getLoot(BattleResult battleResult){
+		double xpd = (double) battleResult.getExperienceGained();
+		int goldGained = (int)(((double)SharedConstants.BASE_GOLD_PER_VICTORY+xpd*SharedConstants.GOLD_XP_MODIFIER)*SharedConstants.GOLD_RANDOM_FACTOR);
+		Random random = new Random();
+		double itemDropped = random.nextDouble();
+		if(itemDropped < SharedConstants.CHANCE_FOR_ITEM){
+			//TODO
+		}
+		return new Loot(goldGained, new ArrayList<Item>(0));
 	}
 
 	// @Override

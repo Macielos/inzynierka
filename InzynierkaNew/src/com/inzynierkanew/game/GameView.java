@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.api.client.json.GenericJson;
 import com.inzynierkanew.R;
+import com.inzynierkanew.battle.BattleResult;
 import com.inzynierkanew.entities.general.propertyendpoint.Propertyendpoint;
 import com.inzynierkanew.entities.general.propertyendpoint.model.Property;
 import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
@@ -16,6 +18,8 @@ import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon;
+import com.inzynierkanew.entities.map.dungeonvisitendpoint.Dungeonvisitendpoint;
+import com.inzynierkanew.entities.map.dungeonvisitendpoint.model.DungeonVisit;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
@@ -38,6 +42,7 @@ import com.inzynierkanew.utils.Constants;
 import com.inzynierkanew.utils.IOnChoice;
 import com.inzynierkanew.utils.IOnConfirm;
 import com.inzynierkanew.utils.Point;
+import com.inzynierkanew.utils.SharedConstants;
 import com.inzynierkanew.utils.TimeUtils;
 
 import android.content.Context;
@@ -50,9 +55,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements SurfaceHolder.Callback, View.OnLongClickListener {
 
 	private static final String TAG = GameView.class.getSimpleName();
 
@@ -69,13 +75,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private final Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
 	private final Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
 	private final Dungeonendpoint dungeonEndpoint = CloudEndpointUtils.newDungeonEndpoint();
+	private final Dungeonvisitendpoint dungeonVisitEndpoint = CloudEndpointUtils.newDungeonVisitEndpoint();
 	private final Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
 	private final Unittypeendpoint unitTypeEndpoint = CloudEndpointUtils.newUnitTypeEndpoint();
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
 	private final Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
-	private final Propertyendpoint propertyEndpoint = CloudEndpointUtils.newPropertyEndpoint();
 
 	private AtomicInteger renderMode = new AtomicInteger(DIALOG_CHOSEN);
+	private Random random = new Random();
 
 	private Map<Integer, DrawableFieldType> fieldTypes;
 	private Map<Integer, UnitType> unitTypes;
@@ -91,12 +98,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private Hero hero;
 	private List<Dungeon> dungeons;
 	private Map<String, String> properties;
-	
+	private Map<Long, DungeonVisit> dungeonVisitHistory;
+
 	private HeroModel heroObject;
 	private LandModel landMap;
 
 	private int[] xpsForNextLevel;
-	
+
 	private String sessionId;
 
 	private boolean scrolling = false;
@@ -118,24 +126,34 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		this.sessionId = sessionId;
 		Log.i(TAG, "sessionId: " + sessionId);
 		getHolder().addCallback(this);
+		setOnLongClickListener(this);
+		
 		setFocusable(true);
+
+		xpsForNextLevel = new int[SharedConstants.MAX_HERO_LEVEL];
+		xpsForNextLevel[0] = 0;
+
+		int xpForCurrentLevel = SharedConstants.BASE_XP_PER_LEVEL;
+		for (int i = 1; i < SharedConstants.MAX_HERO_LEVEL; ++i) {
+			xpsForNextLevel[i] = xpsForNextLevel[i - 1] + xpForCurrentLevel;
+			xpForCurrentLevel += SharedConstants.NEXT_LEVEL_FACTOR;
+		}
 		
 		downloadInitialData();
 		downloadNextLand(heroObject.getHero().getCurrentLandId());
 		try {
-			Log.i(TAG, land==null ? "land is null" : land.toPrettyString());
+			Log.i(TAG, land == null ? "land is null" : land.toPrettyString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void downloadInitialData() {
 		try {
 			downloadPlayer();
 			downloadHero();
 			downloadTypes();
-			downloadProperties();
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to download game status from server", e);
 		}
@@ -158,8 +176,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			throw new RuntimeException("Player assigned to this session id not found on server");
 		}
 	}
-	
-	private void downloadHero() throws NumberFormatException, InterruptedException, ExecutionException{
+
+	private void downloadHero() throws NumberFormatException, InterruptedException, ExecutionException {
 		hero = new AsyncTask<Long, Void, Hero>() {
 			protected Hero doInBackground(Long[] params) {
 				try {
@@ -180,8 +198,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		heroObject = new HeroModel(this, getPlayerBitmap(), hero);
 	}
 
-	private void downloadTypes() throws InterruptedException, ExecutionException, IllegalAccessException, IllegalArgumentException,
-			NoSuchFieldException {
+	private void downloadTypes() throws InterruptedException, ExecutionException, IllegalAccessException,
+			IllegalArgumentException, NoSuchFieldException {
 		List<FieldType> fieldTypeList = new AsyncTask<Void, Void, List<FieldType>>() {
 
 			@Override
@@ -231,40 +249,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		fieldTypes = createFieldtypes(fieldTypeList);
 		unitTypes = createUnitTypes(unitTypeList);
 		factions = createFactions(factionList);
-	}
-	
-	private void downloadProperties() throws InterruptedException, ExecutionException {
-		List<Property> propertyList = new AsyncTask<Void, Void, List<Property>>() {
-			@Override
-			protected List<Property> doInBackground(Void... params) {
-				try {
-					return propertyEndpoint.listProperty().execute().getItems();
-				} catch (IOException e) {
-					Log.e(TAG, "Failed to download properties", e);
-					return null;
-				}
-			}
-
-		}.execute(null, null).get();
-		if (propertyList == null) {
-			throw new RuntimeException("Failed to download properties");
-		}
-		properties = new HashMap<>(propertyList.size());
-		for(Property property: propertyList){
-			properties.put(property.getKey(), property.getValue());
-		}
-		int maxLevel = Integer.parseInt(properties.get(Constants.MAX_HERO_LEVEL));
-		int baseXpPerLevel = Integer.parseInt(properties.get(Constants.BASE_XP_PER_LEVEL));
-		int nextLevelFactor = Integer.parseInt(properties.get(Constants.NEXT_LEVEL_FACTOR));
-		
-		xpsForNextLevel = new int[maxLevel];
-		xpsForNextLevel[0] = 0;
-
-		int xpForCurrentLevel = baseXpPerLevel;
-		for(int i=1; i<maxLevel; ++i){
-			xpsForNextLevel[i] = xpsForNextLevel[i-1] + xpForCurrentLevel;
-			xpForCurrentLevel += nextLevelFactor;
-		}
+		Log.i("FACTIONS", factions.toString());
 	}
 
 	private void downloadNextLand(Long id) {
@@ -279,6 +264,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 					}
 				};
 			}.execute(id).get();
+			if (land == null) {
+				throw new RuntimeException("Land is null");
+			}
 			town = new AsyncTask<Long, Void, Town>() {
 				protected Town doInBackground(Long[] params) {
 					try {
@@ -289,10 +277,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 					}
 				};
 			}.execute(land.getTownId()).get();
-			if(land==null){
-				throw new RuntimeException("Land is null");
-			}
-			if(town==null){
+			if (town == null) {
 				throw new RuntimeException("Town is null");
 			}
 			dungeons = new AsyncTask<Void, Void, List<Dungeon>>() {
@@ -305,31 +290,46 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 					}
 				};
 			}.execute().get();
-
-			if(dungeons==null){
+			if (dungeons == null) {
 				throw new RuntimeException("Dungeon list is null");
 			}
+			List<DungeonVisit> dungeonVisits = new AsyncTask<Void, Void, List<DungeonVisit>>() {
+				protected List<DungeonVisit> doInBackground(Void[] params) {
+					try {
+						return dungeonVisitEndpoint.listDungeonVisitsByIds(hero.getId(), land.getId(), true).execute().getItems();
+					} catch (IOException e) {
+						Log.e(TAG, "Failed to download dungeon visit history", e);
+						return null;
+					}
+				};
+			}.execute().get();
+			//if (dungeonVisits == null) {
+			//	throw new RuntimeException("Dungeon visits list is null");
+			//}
+			dungeonVisitHistory = createDungeonVisitHistory(dungeonVisits);
 			landMap = new LandModel(this, land, town, dungeons, fieldTypes, townIndex, passageIndex, dungeonIndex);
 			centerCameraOnHero();
-		} catch (InterruptedException | ExecutionException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
+		} catch (InterruptedException | ExecutionException | IllegalAccessException | IllegalArgumentException
+				| NoSuchFieldException e) {
 			Log.e(TAG, "Failed to download land in an async task", e);
 		}
 
-//		com.inzynierkanew.entities.map.townendpoint.model.Town town = null;
-//		try {
-//			town = townEndpoint.getTown(land.getTown().getKey().getId()).execute();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				Log.i(TAG, town.toPrettyString());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		
+		// com.inzynierkanew.entities.map.townendpoint.model.Town town = null;
+		// try {
+		// town =
+		// townEndpoint.getTown(land.getTown().getKey().getId()).execute();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } finally {
+		// try {
+		// Log.i(TAG, town.toPrettyString());
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+
 	}
 
 	private void centerCameraOnHero() {
@@ -373,7 +373,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			return;
 		}
 
-		if (renderMode.get() == DIALOG_CHOSEN && (heroObject.getLocalX() != lastDialogX || heroObject.getLocalY() != lastDialogY)) {
+		if (renderMode.get() == DIALOG_CHOSEN
+				&& (heroObject.getLocalX() != lastDialogX || heroObject.getLocalY() != lastDialogY)) {
 			renderMode.set(LOOP);
 		}
 
@@ -393,22 +394,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			thread.setRunning(false);
 			final GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
 			activity.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					activity.initTownView();
 				}
 			});
-			//thread.interrupt();
+			// thread.interrupt();
 			// getHolder().removeCallback(this);
-			//GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
-			//activity.enterTown();
+			// GameActivity activity = (GameActivity)
+			// AndroidUtils.getActivity(getContext());
+			// activity.enterTown();
 		} else if (object instanceof Dungeon) {
 			Log.i(TAG, "Entering dungeon");
 			renderMode.set(SHOW_DIALOG);
 			final GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
 			activity.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					activity.showDungeonDialog(((Dungeon) object).getId());
@@ -432,28 +434,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 								}
 							});
 				} else {
-					AndroidUtils.showChoiceDialog(AndroidUtils.getActivity(getContext()), "Do you want to move to the next land?",
-							new IOnChoice() {
+					AndroidUtils.showChoiceDialog(AndroidUtils.getActivity(getContext()),
+							"Do you want to move to the next land?", new IOnChoice() {
 
 								@Override
 								public void onConfirm() {
-									//try {
-										thread.setPaused(true);
-										downloadNextLand(passage.getNextLandId());
-										heroObject.moveToNextLand(passage, land);
-										try {
-											playerEndpoint.moveHeroToDifferentLand(heroObject.getHero().getId(),
-													passage.getNextLandId(), passage.getNextX(), passage.getNextY());
-										} catch (IOException e) {
-											Log.e(TAG, "Failed to move Hero to land " + passage.getNextLandId(), e);
-										}
-										renderMode.set(DIALOG_CHOSEN);
-										lastDialogX = heroObject.getLocalX();
-										lastDialogY = heroObject.getLocalY();
-										thread.setPaused(false);
-//									} catch (IllegalArgumentException e) {
-//										Log.e(TAG, "Error while downloading next land", e);
-//									}
+									// try {
+									thread.setPaused(true);
+									downloadNextLand(passage.getNextLandId());
+									heroObject.moveToNextLand(passage, land);
+									try {
+										playerEndpoint.moveHeroToDifferentLand(heroObject.getHero().getId(),
+												passage.getNextLandId(), passage.getNextX(), passage.getNextY());
+									} catch (IOException e) {
+										Log.e(TAG, "Failed to move Hero to land " + passage.getNextLandId(), e);
+									}
+									renderMode.set(DIALOG_CHOSEN);
+									lastDialogX = heroObject.getLocalX();
+									lastDialogY = heroObject.getLocalY();
+									thread.setPaused(false);
+									// } catch (IllegalArgumentException e) {
+									// Log.e(TAG, "Error while downloading next
+									// land", e);
+									// }
 								}
 
 								@Override
@@ -489,17 +492,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		thread.setRunning(false);
-		// boolean retry = true;
-		// while (retry) {
-		// try {
-		// thread.join();
-		// retry = false;
-		// } catch (InterruptedException e) {
-		// // try again shutting down the thread
-		// }
-		// }
+		boolean retry = true;
+		while (retry) {
+			try {
+				thread.join();
+				retry = false;
+			} catch (InterruptedException e) {
+				// try again shutting down the thread
+			}
+		}
 	}
-
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
@@ -514,13 +517,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 						(int) ((event.getY() - offsetY) / Constants.TILE_SIZE));
 				Point localStartPoint = new Point(heroObject.getLocalX(), heroObject.getLocalY());
 
-//				if (localDestinationPoint.equals(localStartPoint)
-//						&& landMap.getObject(heroObject.getLocalX(), heroObject.getLocalY()) instanceof Town) {
-//					Log.i(TAG, "Enter town onClick");
-//					GameActivity activity = (GameActivity) AndroidUtils.getActivity(getContext());
-//					activity.enterTown();
-//					return true;
-//				}
+				// if (localDestinationPoint.equals(localStartPoint)
+				// && landMap.getObject(heroObject.getLocalX(),
+				// heroObject.getLocalY()) instanceof Town) {
+				// Log.i(TAG, "Enter town onClick");
+				// GameActivity activity = (GameActivity)
+				// AndroidUtils.getActivity(getContext());
+				// activity.enterTown();
+				// return true;
+				// }
 				if (landMap.isFieldPassable(localDestinationPoint.x, localDestinationPoint.y)) {
 					if (heroObject.onTheMove()) {
 						heroObject.haltMovement();
@@ -529,7 +534,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 					heroObject.setPath(landMap.findPath(localStartPoint, localDestinationPoint));
 					try {
 						playerEndpoint.updateHeroPosition(heroObject.getHero().getId(),
-								localDestinationPoint.x - landMap.getCornerX(), localDestinationPoint.y - landMap.getCornerY());
+								localDestinationPoint.x - landMap.getCornerX(),
+								localDestinationPoint.y - landMap.getCornerY());
 					} catch (IOException e) {
 						Log.e(TAG, "Failed to move Hero to position " + localDestinationPoint, e);
 					}
@@ -560,6 +566,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				+ (int) ((event.getY() - offsetY) / Constants.TILE_SIZE));
 		return true;
 	}
+	
+	@Override
+	public boolean onLongClick(View v) {
+		Log.i("LONGCLICK", "long click");
+		return false;
+	}
 
 	private Map<Integer, UnitType> createUnitTypes(List<UnitType> unitTypes) {
 		Map<Integer, UnitType> map = new HashMap<>(unitTypes.size());
@@ -568,21 +580,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		return map;
 	}
-	
+
 	private Map<Integer, Faction> createFactions(List<Faction> factions) {
 		Map<Integer, Faction> map = new HashMap<>(factions.size());
-		for(Faction faction: factions){
+		for (Faction faction : factions) {
 			map.put(faction.getId().intValue(), faction);
 		}
 		return map;
 	}
 
-	private Map<Integer, DrawableFieldType> createFieldtypes(List<FieldType> fieldTypes) throws IllegalAccessException,
-			IllegalArgumentException, NoSuchFieldException {
+	private Map<Integer, DrawableFieldType> createFieldtypes(List<FieldType> fieldTypes)
+			throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
 		Map<Integer, DrawableFieldType> fieldTypeMap = new HashMap<>(fieldTypes.size());
 		for (FieldType fieldType : fieldTypes) {
-			fieldTypeMap.put(fieldType.getId().intValue(),
-					new DrawableFieldType(fieldType, createBitmap(R.drawable.class.getField(fieldType.getTexture()).getInt(null))));
+			fieldTypeMap.put(fieldType.getId().intValue(), new DrawableFieldType(fieldType,
+					createBitmap(R.drawable.class.getField(fieldType.getTexture()).getInt(null))));
 			if (fieldType.getName().equals("Town")) {
 				townIndex = fieldType.getId().intValue();
 			}
@@ -594,6 +606,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		return fieldTypeMap;
+	}
+	
+	private Map<Long, DungeonVisit> createDungeonVisitHistory(List<DungeonVisit> dungeonVisits){
+		if(dungeonVisits==null){
+			return new HashMap<>();
+		}
+		Map<Long, DungeonVisit> dungeonVisitHistory = new HashMap<>(dungeonVisits.size());
+		for(DungeonVisit dungeonVisit: dungeonVisits){
+			dungeonVisitHistory.put(dungeonVisit.getDungeonId(), dungeonVisit);
+		}
+		return dungeonVisitHistory;
 	}
 
 	public float getOffsetX() {
@@ -607,16 +630,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	public Hero getHero() {
 		return hero;
 	}
-	
-	public Long getLandId(){
+
+	public Long getLandId() {
 		return land == null ? null : land.getId();
 	}
-	
-	public Long getTownId(){
+
+	public Long getTownId() {
 		return land.getTownId();
 	}
 
@@ -627,37 +650,46 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public Map<Integer, UnitType> getUnitTypes() {
 		return unitTypes;
 	}
-	
+
 	public Map<Integer, Faction> getFactions() {
 		return factions;
 	}
-	
-	public String getProperty(String key){
+
+	public String getProperty(String key) {
 		return properties.get(key);
 	}
-	
-	public Integer getXpForNextLevel(int level){
-		if(level <= 0 && level > xpsForNextLevel.length){
+
+	public Integer getXpForNextLevel(int level) {
+		if (level <= 0 && level > xpsForNextLevel.length) {
 			return null;
 		}
 		return xpsForNextLevel[level - 1];
 	}
-	
-	public Integer getHeroLevelForXp(int currentLevel, int xp){
-		for(int i=currentLevel-1; i<xpsForNextLevel.length; ++i){
-			if(xpsForNextLevel[i] > xp){
+
+	public Integer getHeroLevelForXp(int currentLevel, int xp) {
+		for (int i = currentLevel - 1; i < xpsForNextLevel.length; ++i) {
+			if (xpsForNextLevel[i] > xp) {
 				return i;
 			}
 		}
 		return xpsForNextLevel.length;
 	}
+	
+	public DungeonVisit getDungeonVisit(Long dungeonId) {
+		return dungeonVisitHistory.get(dungeonId);
+	}
 
-	public void setRenderMode(int renderMode){
+	public void addDungeonVisit(DungeonVisit dungeonVisit) {
+		dungeonVisitHistory.put(dungeonVisit.getDungeonId(), dungeonVisit);
+	}
+
+	public void setRenderMode(int renderMode) {
 		this.renderMode.set(renderMode);
 	}
-	
-	public void setLastDialogOnHeroLocation(){
+
+	public void setLastDialogOnHeroLocation() {
 		lastDialogX = heroObject.getLocalX();
 		lastDialogY = heroObject.getLocalY();
 	}
+
 }

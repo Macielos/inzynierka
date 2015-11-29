@@ -109,17 +109,19 @@ public class PlayerEndpoint {
 	 * @return The inserted entity.
 	 */
 	@ApiMethod(name = "registerPlayer")
-	public Player registerPlayer(Player player) {
+	public Player registerPlayer(Player player, 
+			@Named("strength") Integer strength, 
+			@Named("agility") Integer agility, 
+			@Named("intelligence") Integer intelligence) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (containsPlayer(player)) {
 				throw new EntityExistsException("Object already exists");
 			}
 			WorldGeneratorFactory.fireWorldGeneration();
-			player.setGold(WorldGenerator.PLAYER_INITIAL_GOLD);
 			Land startingLand = landEndpoint.findLandForNewPlayer();
 			Town startingTown = townEndpoint.getTown(startingLand.getTownId());
-			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId());
+			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId(), WorldGenerator.HERO_INITIAL_GOLD, strength, agility, intelligence);
 			hero = heroEndpoint.insertHero(hero);
 			player.setHeroId(hero.getId());
 			mgr.persist(player);

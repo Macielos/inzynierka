@@ -3,9 +3,12 @@ package com.inzynierkanew.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import com.inzynierkanew.battle.BattleResult;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
-import com.inzynierkanew.town.Unit;
+import com.inzynierkanew.model.Loot;
+import com.inzynierkanew.model.Unit;
 
 public abstract class GameUtils {
 	
@@ -33,4 +36,20 @@ public abstract class GameUtils {
 		return army;
 	
 	}
+	
+	public static boolean isArmyEmpty(List<Integer> army){
+		if(army==null){
+			return true;
+		}
+		if(army.isEmpty()){
+			return true;
+		}
+		for(int i=1; i<army.size(); i+=2){
+			if(army.get(i)>0){
+				return false;
+			}
+		}
+		return true;
+	}
+		
 }

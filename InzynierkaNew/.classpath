@@ -121,10 +121,21 @@
 			<attribute name="javadoc_location" value="file:/C:/Users/Arjan/.p2/pool/plugins/com.google.appengine.eclipse.sdkbundle_1.9.25/appengine-java-sdk-1.9.25/docs/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Arjan/android-sdks/platforms/android-23/android.jar" sourcepath="C:/Users/Arjan/android-sdks/sources/android-23">
+		<attributes>
+			<attribute name="javadoc_location" value="http://developer.android.com/reference/"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/InzynierkaNew-Utils"/>
 	<classpathentry kind="src" path="endpoint-libs/libdungeonendpoint-v1/dungeonendpoint/dungeonendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libdungeonvisitendpoint-v1/dungeonvisitendpoint/dungeonvisitendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libfactionendpoint-v1/factionendpoint/factionendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libfieldtypeendpoint-v1/fieldtypeendpoint/fieldtypeendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libheroendpoint-v1/heroendpoint/heroendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libitemendpoint-v1/itemendpoint/itemendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/liblandendpoint-v1/landendpoint/landendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libmessageEndpoint-v1/messageEndpoint/messageendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libpassageendpoint-v1/passageendpoint/passageendpoint-v1-generated-source"/>

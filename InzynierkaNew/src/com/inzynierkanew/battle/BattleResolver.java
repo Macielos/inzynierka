@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.inzynierkanew.game.GameView;
-import com.inzynierkanew.town.Unit;
+import com.inzynierkanew.model.Unit;
 import com.inzynierkanew.utils.GameUtils;
 
 public class BattleResolver {
@@ -49,7 +49,7 @@ public class BattleResolver {
 		playerLosses = new ArrayList<>(playerArmy.size());
 		int loss, lossCount;
 		for(Unit unit: playerArmy){
-			loss = random.nextInt(20);
+			loss = random.nextInt(40);
 			lossCount = unit.getCount() * loss / 100;
 			if(lossCount > 0){
 				playerLosses.add(new Unit(unit.getUnitType(), lossCount));
@@ -60,9 +60,6 @@ public class BattleResolver {
 			experienceGained += enemyUnit.getCount()*enemyUnit.getUnitType().getHitpoints()/10;
 		}
 		enemyArmy.clear();
-		for(Unit enemyUnit: enemyArmy){
-			experienceGained += enemyUnit.getCount()*enemyUnit.getUnitType().getHitpoints()/10;
-		}
 	}
 
 	public BattleResult getBattleResult(){

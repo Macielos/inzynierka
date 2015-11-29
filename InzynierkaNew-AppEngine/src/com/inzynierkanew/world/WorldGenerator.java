@@ -77,7 +77,9 @@ public class WorldGenerator {
 
 	public static final long MAP_SEGMENT_FACTOR = 1000000000000L;
 	
-	public static final int PLAYER_INITIAL_GOLD = 100000000;
+	public static final long HERO_INITIAL_GOLD = 100000000L;
+	public static final long HERO_INITIAL_WOOD = 0L;
+	public static final long HERO_INITIAL_IRON = 0L;
 	
 	// LOG
 	private Log log = LogFactory.getLog(getClass());
