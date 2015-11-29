@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical|center_horizontal|center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/dispose_skill_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dispose skill points"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/register_hero_points_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(0 left)"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/register_hero_strength"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_weight="0.87"
+            android:text="Strength"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <NumberPicker
+            android:id="@+id/register_hero_strength_numberpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/register_hero_agility"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_weight="0.87"
+            android:text="Agility"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <NumberPicker
+            android:id="@+id/register_hero_agility_numberpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/register_hero_intelligence"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_weight="0.87"
+            android:text="Intelligence"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <NumberPicker
+            android:id="@+id/register_hero_intelligence_numberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+  <Button
+      android:id="@+id/register_hero_registerButton"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="Register" />
+
+  <Button
+      android:id="@+id/register_hero_backButton"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="Back" />
+
+</LinearLayout>

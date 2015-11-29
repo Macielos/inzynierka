@@ -19,6 +19,7 @@ import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.endpoints.players.FactionEndpoint;
 import com.inzynierkanew.endpoints.players.HeroEndpoint;
+import com.inzynierkanew.endpoints.players.ItemEndpoint;
 import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.map.FieldType;
@@ -53,6 +54,7 @@ public class ApplicationInitializer implements ServletContextListener {
 	private final PlayerEndpoint playerEndpoint = new PlayerEndpoint();
 	private final HeroEndpoint heroEndpoint = new HeroEndpoint();
 	private final PropertyEndpoint propertyEndpoint = new PropertyEndpoint();
+	private final ItemEndpoint itemEndpoint = new ItemEndpoint();
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
@@ -215,7 +217,7 @@ public class ApplicationInitializer implements ServletContextListener {
 			fieldTypeEndpoint.insertFieldType(fieldType);
 		}
 		for(Item item: items){
-			
+			itemEndpoint.insertItem(item);
 		}
 	}
 

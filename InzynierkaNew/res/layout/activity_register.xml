@@ -7,26 +7,26 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/enterName"
+        android:id="@+id/register_enterName"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:text="Your name" />
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/register_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10" />
 
     <TextView
-        android:id="@+id/enterPassword"
+        android:id="@+id/register_enterPassword"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:text="Password" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -34,14 +34,14 @@
         android:inputType="textPassword" />
     	
   <Button
-      android:id="@+id/registerButton"
+      android:id="@+id/register_nextButton"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_weight="0"
-      android:text="Register" />
+      android:text="Next" />
 
   <Button
-      android:id="@+id/cancelButton"
+      android:id="@+id/register_cancelButton"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_weight="0"

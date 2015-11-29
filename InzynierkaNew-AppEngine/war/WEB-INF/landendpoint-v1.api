@@ -94,6 +94,47 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "landendpoint.updateLand" : {
+      "path" : "land",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.listLand" : {
+      "path" : "land",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.listLand",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "landendpoint.removeLand" : {
       "path" : "land/{id}",
       "httpMethod" : "DELETE",
@@ -131,47 +172,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "landendpoint.listLand" : {
-      "path" : "land",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.listLand",
-      "request" : {
-        "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "landendpoint.updateLand" : {
-      "path" : "land",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -245,10 +245,10 @@
               "type" : "integer"
             }
           },
-          "width" : {
+          "height" : {
             "type" : "integer"
           },
-          "height" : {
+          "width" : {
             "type" : "integer"
           }
         }
@@ -305,11 +305,11 @@
           "parent" : {
             "$ref" : "Key"
           },
-          "complete" : {
-            "type" : "boolean"
-          },
           "namespace" : {
             "type" : "string"
+          },
+          "complete" : {
+            "type" : "boolean"
           }
         }
       }
@@ -338,9 +338,10 @@
           "$ref" : "Land"
         }
       },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand" : {
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.getLand" : {
+      "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand" : {
+        "request" : {
+          "$ref" : "Land"
+        },
         "response" : {
           "$ref" : "Land"
         }
@@ -350,10 +351,9 @@
           "$ref" : "CollectionResponse_Land"
         }
       },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand" : {
-        "request" : {
-          "$ref" : "Land"
-        },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand" : {
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.getLand" : {
         "response" : {
           "$ref" : "Land"
         }

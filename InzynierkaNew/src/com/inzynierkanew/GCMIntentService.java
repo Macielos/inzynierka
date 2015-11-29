@@ -2,10 +2,6 @@ package com.inzynierkanew;
 
 import java.io.IOException;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.util.DateTime;
@@ -13,7 +9,12 @@ import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.init.RegisterActivity;
 import com.inzynierkanew.utils.CloudEndpointUtils;
-import com.inzynierkanew.utils.SharedConstants;
+import com.inzynierkanew.utils.RegistrationContainer;
+import com.inzynierkanew.utils.TimeUtils;
+
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 /**
  * This class is started up as a service of the Android application. It listens
@@ -45,7 +46,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	public static final String PROJECT_NUMBER = "891637358470";
 	
 	// TODO wymyslic lepsze rozwiazanie jak przazywac playera miedzy register a onRegistered, bo to jest thread-unsafe. Jakaœ kolejka?
-	private static Player playerForRegistration;
+	private static RegistrationContainer registree;
 
 	/**
 	 * Register the device for GCM.
@@ -53,8 +54,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * @param mContext
 	 *            the activity's context.
 	 */
-	public static void register(Context mContext, Player player) {
-		playerForRegistration = player;
+	public static void register(Context mContext, RegistrationContainer container) {
+		registree = container;
 		GCMRegistrar.checkDevice(mContext);
 		GCMRegistrar.checkManifest(mContext);
 		GCMRegistrar.register(mContext, PROJECT_NUMBER);
@@ -151,13 +152,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 										URLEncoder.encode(android.os.Build.MANUFACTURER + " " + android.os.Build.PRODUCT, "UTF-8")))
 						.execute();
 				*/
-				playerForRegistration
+			Player player = registree.getPlayer()
 					.setDeviceRegistrationID(registrationId)
-					.setRegistrationTime(new DateTime(System.currentTimeMillis()));
-				playerEndpoint.registerPlayer(SharedConstants.INITIAL_STRENGTH, 
-						SharedConstants.INITIAL_AGILITY, SharedConstants.INITIAL_INTELLIGENCE, 
-						playerForRegistration).execute();
-			//}
+					.setRegistrationTime(new DateTime(TimeUtils.now()));
+				playerEndpoint.registerPlayer(registree.getStrength(), registree.getAgility(), 
+						registree.getIntelligence(), player).execute();
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),
 					"Exception received when attempting to register with server at " + playerEndpoint.getRootUrl(), e);

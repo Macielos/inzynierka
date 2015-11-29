@@ -90,22 +90,6 @@
         "body" : "empty"
       }
     },
-    "fieldtypeendpoint.updateFieldType" : {
-      "path" : "fieldtype",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "fieldtypeendpoint.insertFieldType" : {
       "path" : "fieldtype",
       "httpMethod" : "POST",
@@ -114,6 +98,22 @@
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
       "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "fieldtypeendpoint.updateFieldType" : {
+      "path" : "fieldtype",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -198,7 +198,7 @@
       },
       "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.removeFieldType" : {
       },
-      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType" : {
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType" : {
         "request" : {
           "$ref" : "FieldType"
         },
@@ -206,7 +206,7 @@
           "$ref" : "FieldType"
         }
       },
-      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType" : {
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType" : {
         "request" : {
           "$ref" : "FieldType"
         },

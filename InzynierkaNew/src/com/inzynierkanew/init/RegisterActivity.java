@@ -7,7 +7,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
@@ -20,7 +26,9 @@ import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
 import com.inzynierkanew.utils.CloudEndpointUtils;
+import com.inzynierkanew.utils.RegistrationContainer;
 import com.inzynierkanew.utils.RequestValidator;
+import com.inzynierkanew.utils.SharedConstants;
 import com.inzynierkanew.utils.ValidationResult;
 
 /**
@@ -57,54 +65,90 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private State curState = State.UNREGISTERED;
-	
+
 	private MessageEndpoint messageEndpoint = null;
 
-	private OnTouchListener registerListener = null;
-	private OnTouchListener unregisterListener = null;
-	
-	private Button registerButton;
-	private Button cancelButton;
-	private TextView nameView;
-	private TextView passwordView;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 
-		registerButton = (Button) findViewById(R.id.registerButton);
-		cancelButton = (Button) findViewById(R.id.cancelButton);
-		nameView = (TextView) findViewById(R.id.name);
-		passwordView = (TextView) findViewById(R.id.password);
+		final TextView nameView = (TextView) findViewById(R.id.register_name);
+		final TextView passwordView = (TextView) findViewById(R.id.register_password);
 
-		registerListener = new OnTouchListener() {
+		Button nextButton = (Button) findViewById(R.id.register_nextButton);
+		nextButton.setOnClickListener(new View.OnClickListener() {
+
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction() & MotionEvent.ACTION_MASK) {
-				case MotionEvent.ACTION_DOWN:
-					if (GCMIntentService.PROJECT_NUMBER == null || GCMIntentService.PROJECT_NUMBER.length() == 0) {
-						showDialog("Unable to register for Google Cloud Messaging. "
-								+ "Your application's PROJECT_NUMBER field is unset! You can change " + "it in GCMIntentService.java");
-					} else {
-						String name = nameView.getText().toString();
-						String password = passwordView.getText().toString();
-						byte[] passwordBytes = password.getBytes();
-						
-						ValidationResult result = RequestValidator.validateRegisterRequest(name, passwordBytes);
-						if(!result.valid){
-							showDialog(result.error);
+			public void onClick(View v) {
+				final String name = nameView.getText().toString();
+				final byte[] password = passwordView.getText().toString().getBytes();
+				Log.i("X", name);
+				Log.i("X", password.toString());
+				ValidationResult result = RequestValidator.validateRegisterRequest(name, password);
+				if (!result.valid) {
+					showDialog(result.error);
+					return;
+				}
+				final String passwordHash = RequestValidator.hashPassword(password);
+
+				setContentView(R.layout.activity_register_hero);
+
+				final AtomicInteger pointsLeft = new AtomicInteger(SharedConstants.INITAL_SKILL_POINTS);
+				final TextView pointsLeftView = (TextView) findViewById(R.id.register_hero_points_left);
+				pointsLeftView.setText("(" + pointsLeft + " left)");
+
+				final NumberPicker strengthNumberPicker = (NumberPicker) findViewById(
+						R.id.register_hero_strength_numberpicker);
+				final NumberPicker agilityNumberPicker = (NumberPicker) findViewById(
+						R.id.register_hero_agility_numberpicker);
+				final NumberPicker intelligenceNumberPicker = (NumberPicker) findViewById(
+						R.id.register_hero_intelligence_numberPicker);
+
+				final List<NumberPicker> numberPickers = Arrays.asList(strengthNumberPicker, agilityNumberPicker,
+						intelligenceNumberPicker);
+
+				for (NumberPicker numberPicker : numberPickers) {
+					numberPicker.setMinValue(SharedConstants.INITIAL_SKILL_VALUE);
+					numberPicker.setValue(SharedConstants.INITIAL_SKILL_VALUE);
+					numberPicker.setMaxValue(pointsLeft.get());
+					numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+						@Override
+						public void onValueChange(NumberPicker changedPicker, int oldVal, int newVal) {
+							pointsLeft.addAndGet(oldVal - newVal);
+							pointsLeftView.setText("(" + pointsLeft + " left)");
+							for (NumberPicker numberPicker : numberPickers) {
+								numberPicker.setMaxValue(numberPicker.getValue() + pointsLeft.get());
+							}
+						}
+					});
+				}
+
+				Button registerButton = (Button) findViewById(R.id.register_hero_registerButton);
+				registerButton.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if (GCMIntentService.PROJECT_NUMBER == null || GCMIntentService.PROJECT_NUMBER.length() == 0) {
+							showDialog("Unable to register for Google Cloud Messaging. "
+									+ "Your application's PROJECT_NUMBER field is unset! You can change "
+									+ "it in GCMIntentService.java");
 						} else {
 							updateState(State.REGISTERING);
 							try {
-								Player player = new Player();
-								player.setName(name);
-								player.setPassword(RequestValidator.hashPassword(passwordBytes));
-								GCMIntentService.register(getApplicationContext(), player);
+								Player player = new Player().setName(name)
+										.setPassword(passwordHash);
+								GCMIntentService.register(getApplicationContext(),
+										new RegistrationContainer(player, strengthNumberPicker.getValue(),
+												agilityNumberPicker.getValue(), intelligenceNumberPicker.getValue()));
 							} catch (Exception e) {
-								Log.e(RegisterActivity.class.getName(), "Exception received when attempting to register for Google Cloud "
-										+ "Messaging. Perhaps you need to set your virtual device's " + " target to Google APIs? "
-										+ "See https://developers.google.com/eclipse/docs/cloud_endpoints_android" + " for more information.",
+								Log.e(RegisterActivity.class.getName(),
+										"Exception received when attempting to register for Google Cloud "
+												+ "Messaging. Perhaps you need to set your virtual device's "
+												+ " target to Google APIs? "
+												+ "See https://developers.google.com/eclipse/docs/cloud_endpoints_android"
+												+ " for more information.",
 										e);
 								showDialog("There was a problem when attempting to register for "
 										+ "Google Cloud Messaging. If you're running in the emulator, "
@@ -114,59 +158,29 @@ public class RegisterActivity extends BaseActivity {
 							}
 						}
 					}
-					return true;
-				case MotionEvent.ACTION_UP:
-					return true;
-				default:
-					return false;
-				}
-			}
-		};
+				});
 
-		unregisterListener = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction() & MotionEvent.ACTION_MASK) {
-				case MotionEvent.ACTION_DOWN:
-					updateState(State.UNREGISTERING);
-					GCMIntentService.unregister(getApplicationContext());
-					return true;
-				case MotionEvent.ACTION_UP:
-					return true;
-				default:
-					return false;
-				}
-			}
-		};
+				Button backButton = (Button) findViewById(R.id.register_hero_backButton);
+				backButton.setOnClickListener(new View.OnClickListener() {
 
-		registerButton.setOnTouchListener(registerListener);
-		
-		cancelButton.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction() & MotionEvent.ACTION_MASK) {
-				case MotionEvent.ACTION_DOWN:
-					newActivity(LoginActivity.class);
-					return true;
-				case MotionEvent.ACTION_UP:
-					return true;
-				default:
-					return false;
-				}	
+					@Override
+					public void onClick(View v) {
+						setContentView(R.layout.activity_register);
+					}
+				});
 			}
 		});
 
-		/*
-		 * build the messaging endpoint so we can access old messages via an
-		 * endpoint call
-		 */
-		MessageEndpoint.Builder endpointBuilder = new MessageEndpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) {
-					}
-				});		
-		messageEndpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+		Button cancelButton = (Button) findViewById(R.id.register_cancelButton);
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+
+	@Override
+	public void onClick(View v) {
+		newActivity(LoginActivity.class);
+	}
+
+	});
+
 	}
 
 	@Override
@@ -211,35 +225,22 @@ public class RegisterActivity extends BaseActivity {
 						updateState(State.UNREGISTERED);
 					}
 				}
-			} 
+			}
 		}
 	}
 
 	private void updateState(State newState) {
-		Button registerButton = (Button) findViewById(R.id.registerButton);
+		Button registerButton = (Button) findViewById(R.id.register_hero_registerButton);
 		switch (newState) {
 		case REGISTERED:
-			registerButton.setText("Unregister");
-			registerButton.setOnTouchListener(unregisterListener);
-			registerButton.setEnabled(true);
+			registerButton.setText("Registered");
 			break;
-
 		case REGISTERING:
 			registerButton.setText("Registering...");
 			registerButton.setEnabled(false);
 			break;
-
-		case UNREGISTERED:
-			registerButton.setText("Register");
-			registerButton.setOnTouchListener(registerListener);
-			registerButton.setEnabled(true);
-			break;
-
-		case UNREGISTERING:
-			registerButton.setText("Unregistering...");
-			registerButton.setEnabled(false);
-			break;
 		}
 		curState = newState;
+
 	}
 }

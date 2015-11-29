@@ -3,11 +3,8 @@ package com.inzynierkanew.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import com.inzynierkanew.battle.BattleResult;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
-import com.inzynierkanew.model.Loot;
 import com.inzynierkanew.model.Unit;
 
 public abstract class GameUtils {

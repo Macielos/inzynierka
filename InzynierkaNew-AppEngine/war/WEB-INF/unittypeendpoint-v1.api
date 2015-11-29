@@ -27,22 +27,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "unittypeendpoint.insertUnitType" : {
-      "path" : "unittype",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "unittypeendpoint.updateUnitType" : {
       "path" : "unittype",
       "httpMethod" : "PUT",
@@ -80,22 +64,17 @@
         "body" : "empty"
       }
     },
-    "unittypeendpoint.getUnitType" : {
-      "path" : "unittype/{id}",
-      "httpMethod" : "GET",
+    "unittypeendpoint.insertUnitType" : {
+      "path" : "unittype",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.getUnitType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -118,6 +97,27 @@
           "limit" : {
             "type" : "int32",
             "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "unittypeendpoint.getUnitType" : {
+      "path" : "unittype/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.getUnitType",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
           }
         },
         "body" : "empty"
@@ -187,14 +187,6 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType" : {
-        "request" : {
-          "$ref" : "UnitType"
-        },
-        "response" : {
-          "$ref" : "UnitType"
-        }
-      },
       "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.updateUnitType" : {
         "request" : {
           "$ref" : "UnitType"
@@ -205,7 +197,10 @@
       },
       "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.removeUnitType" : {
       },
-      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.getUnitType" : {
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.insertUnitType" : {
+        "request" : {
+          "$ref" : "UnitType"
+        },
         "response" : {
           "$ref" : "UnitType"
         }
@@ -213,6 +208,11 @@
       "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.listUnitType" : {
         "response" : {
           "$ref" : "CollectionResponse_UnitType"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.UnitTypeEndpoint.getUnitType" : {
+        "response" : {
+          "$ref" : "UnitType"
         }
       }
     }

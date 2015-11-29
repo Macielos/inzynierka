@@ -18,6 +18,7 @@
         <class>com.inzynierkanew.entities.map.Land</class>
         <!-- class>com.inzynierkanew.entities.map.BaseField</class-->
         <class>com.inzynierkanew.entities.map.Town</class>
+        <class>com.inzynierkanew.entities.map.TownVisit</class>
         <class>com.inzynierkanew.entities.map.Dungeon</class>
         <class>com.inzynierkanew.entities.map.DungeonVisit</class>
         <class>com.inzynierkanew.entities.map.Passage</class>

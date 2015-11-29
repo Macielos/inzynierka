@@ -317,7 +317,6 @@ public class GameActivity extends BaseActivity {
 								recruitBtn.setEnabled(false);
 							} else {
 								unitsToRecruitSeekBar.setMax(unitsToRecruitSeekBar.getMax() - recruitedUnits);
-								//unitsToRecruitSeekBar.forceLayout();
 								unitCountText.setText(unitsToRecruitSeekBar.getProgress() + " / " + unitsToRecruitSeekBar.getMax());
 							}
 							displayPlayerArmyTown();
