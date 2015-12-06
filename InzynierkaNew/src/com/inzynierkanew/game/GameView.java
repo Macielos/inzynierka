@@ -24,6 +24,8 @@ import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
 import com.inzynierkanew.entities.map.townendpoint.model.Town;
+import com.inzynierkanew.entities.map.townvisitendpoint.Townvisitendpoint;
+import com.inzynierkanew.entities.map.townvisitendpoint.model.TownVisit;
 import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
@@ -79,6 +81,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private final Fieldtypeendpoint fieldTypeEndpoint = CloudEndpointUtils.newFieldTypeEndpoint();
 	private final Unittypeendpoint unitTypeEndpoint = CloudEndpointUtils.newUnitTypeEndpoint();
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
+	private final Townvisitendpoint townVisitEndpoint = CloudEndpointUtils.newTownVisitEndpoint();
 	private final Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
 
 	private AtomicInteger renderMode = new AtomicInteger(DIALOG_CHOSEN);
@@ -98,6 +101,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private Hero hero;
 	private List<Dungeon> dungeons;
 	private Map<String, String> properties;
+	private TownVisit townVisit;
 	private Map<Long, DungeonVisit> dungeonVisitHistory;
 
 	private HeroModel heroObject;
@@ -303,10 +307,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 					}
 				};
 			}.execute().get();
-			//if (dungeonVisits == null) {
-			//	throw new RuntimeException("Dungeon visits list is null");
-			//}
 			dungeonVisitHistory = createDungeonVisitHistory(dungeonVisits);
+			townVisit = new AsyncTask<Void, Void, TownVisit>() {
+				protected TownVisit doInBackground(Void[] params) {
+					try {
+						return townVisitEndpoint.getTownVisit(town.getId(), hero.getId()).execute();
+					} catch (IOException e) {
+						Log.e(TAG, "Failed to download town visit history", e);
+						return null;
+					}
+				};
+			}.execute().get();
 			landMap = new LandModel(this, land, town, dungeons, fieldTypes, townIndex, passageIndex, dungeonIndex);
 			centerCameraOnHero();
 		} catch (InterruptedException | ExecutionException | IllegalAccessException | IllegalArgumentException
@@ -655,8 +666,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		return factions;
 	}
 
-	public String getProperty(String key) {
-		return properties.get(key);
+	public TownVisit getTownVisit() {
+		return townVisit;
+	}
+	
+	public void setTownVisit(TownVisit townVisit) {
+		this.townVisit = townVisit;
 	}
 
 	public Integer getXpForNextLevel(int level) {

@@ -142,6 +142,7 @@
 	<classpathentry kind="src" path="endpoint-libs/libplayerendpoint-v1/playerendpoint/playerendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libpropertyendpoint-v1/propertyendpoint/propertyendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libtownendpoint-v1/townendpoint/townendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libtownvisitendpoint-v1/townvisitendpoint/townvisitendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libunittypeendpoint-v1/unittypeendpoint/unittypeendpoint-v1-generated-source"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

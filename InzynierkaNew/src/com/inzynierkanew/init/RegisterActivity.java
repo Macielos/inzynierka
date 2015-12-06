@@ -1,35 +1,26 @@
 package com.inzynierkanew.init;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.Button;
-import android.widget.NumberPicker;
-import android.widget.TextView;
-
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.inzynierkanew.GCMIntentService;
 import com.inzynierkanew.R;
 import com.inzynierkanew.activities.BaseActivity;
-import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
-import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.RegistrationContainer;
 import com.inzynierkanew.utils.RequestValidator;
 import com.inzynierkanew.utils.SharedConstants;
 import com.inzynierkanew.utils.ValidationResult;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 
 /**
  * An activity that communicates with your App Engine backend via Cloud
@@ -111,7 +102,7 @@ public class RegisterActivity extends BaseActivity {
 				for (NumberPicker numberPicker : numberPickers) {
 					numberPicker.setMinValue(SharedConstants.INITIAL_SKILL_VALUE);
 					numberPicker.setValue(SharedConstants.INITIAL_SKILL_VALUE);
-					numberPicker.setMaxValue(pointsLeft.get());
+					numberPicker.setMaxValue(SharedConstants.INITIAL_SKILL_VALUE+pointsLeft.get());
 					numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
 						@Override

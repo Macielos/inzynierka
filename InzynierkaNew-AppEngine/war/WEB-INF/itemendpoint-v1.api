@@ -27,27 +27,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "itemendpoint.removeItem" : {
-      "path" : "item/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.removeItem",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "itemendpoint.getItem" : {
       "path" : "item/{id}",
       "httpMethod" : "GET",
@@ -94,20 +73,25 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "itemendpoint.updateItem" : {
-      "path" : "item",
-      "httpMethod" : "PUT",
+    "itemendpoint.removeItem" : {
+      "path" : "item/{id}",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.updateItem",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.removeItem",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     },
     "itemendpoint.insertItem" : {
@@ -126,19 +110,35 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "itemendpoint.getItemsByType" : {
-      "path" : "collectionresponse_item/{itemLevel}/{itemClass}",
+    "itemendpoint.updateItem" : {
+      "path" : "item",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.updateItem",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemendpoint.getRandomItemsByType" : {
+      "path" : "collectionresponse_item/{limit}/{itemLevel}/{itemClass}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.getItemsByType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.ItemEndpoint.getRandomItemsByType",
       "request" : {
         "parameters" : {
           "limit" : {
             "type" : "int32",
-            "required" : false
+            "required" : true
           },
           "itemLevel" : {
             "type" : "int32",
@@ -208,8 +208,6 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.ItemEndpoint.removeItem" : {
-      },
       "com.inzynierkanew.endpoints.players.ItemEndpoint.getItem" : {
         "response" : {
           "$ref" : "Item"
@@ -220,13 +218,7 @@
           "$ref" : "CollectionResponse_Item"
         }
       },
-      "com.inzynierkanew.endpoints.players.ItemEndpoint.updateItem" : {
-        "request" : {
-          "$ref" : "Item"
-        },
-        "response" : {
-          "$ref" : "Item"
-        }
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.removeItem" : {
       },
       "com.inzynierkanew.endpoints.players.ItemEndpoint.insertItem" : {
         "request" : {
@@ -236,7 +228,15 @@
           "$ref" : "Item"
         }
       },
-      "com.inzynierkanew.endpoints.players.ItemEndpoint.getItemsByType" : {
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.updateItem" : {
+        "request" : {
+          "$ref" : "Item"
+        },
+        "response" : {
+          "$ref" : "Item"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.ItemEndpoint.getRandomItemsByType" : {
         "response" : {
           "$ref" : "CollectionResponse_Item"
         }

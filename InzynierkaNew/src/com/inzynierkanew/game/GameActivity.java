@@ -15,16 +15,13 @@ import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
 import com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon;
 import com.inzynierkanew.entities.map.dungeonvisitendpoint.Dungeonvisitendpoint;
 import com.inzynierkanew.entities.map.dungeonvisitendpoint.model.DungeonVisit;
-import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
 import com.inzynierkanew.entities.map.townendpoint.model.Town;
-import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
-import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
+import com.inzynierkanew.entities.map.townvisitendpoint.Townvisitendpoint;
+import com.inzynierkanew.entities.map.townvisitendpoint.model.TownVisit;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
 import com.inzynierkanew.entities.players.itemendpoint.model.Item;
-import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
-import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.model.Loot;
 import com.inzynierkanew.model.Unit;
@@ -64,18 +61,16 @@ public class GameActivity extends BaseActivity {
 
 	private Map<Integer, UnitType> unitTypes;
 	private Town town;
-	private Faction faction;
-	private Player player;
+	private TownVisit townVisit;
+	private List<Integer> townArmy;
 	private Hero hero;
 	private List<Unit> availableUnits;
 	
 	private boolean recruitmentTookPlace = false;
 
-	private final Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
-	private final Playerendpoint playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
 	private final Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
-	private final Landendpoint landEndpoint = CloudEndpointUtils.newLandEndpoint();
+	private final Townvisitendpoint townVisitEndpoint = CloudEndpointUtils.newTownVisitEndpoint();
 	private final Dungeonendpoint dungeonEndpoint = CloudEndpointUtils.newDungeonEndpoint();
 	private final Dungeonvisitendpoint dungeonVisitEndpoint = CloudEndpointUtils.newDungeonVisitEndpoint();
 
@@ -90,7 +85,6 @@ public class GameActivity extends BaseActivity {
 		setContentView(R.layout.activity_main);
 		
 		unitTypes = gameView.getUnitTypes();
-		player = gameView.getPlayer();
 		hero = gameView.getHero();
 		
 		LinearLayout surface = (LinearLayout) findViewById(R.id.main_gameSurface);
@@ -118,9 +112,6 @@ public class GameActivity extends BaseActivity {
 	}
 			
 	private void loadTownData() {
-		unitTypes = gameView.getUnitTypes();
-		player = gameView.getPlayer();
-		hero = gameView.getHero();
 		try {
 			town = new AsyncTask<Void, Void, Town>() {
 
@@ -128,7 +119,6 @@ public class GameActivity extends BaseActivity {
 				protected Town doInBackground(Void... params) {
 					try {
 						return townEndpoint.getTown(gameView.getTownId()).execute();
-						//return townEndpoint.getTown(gameView.getTownKey().getId()).execute();
 					} catch (IOException e) {
 						Log.e(TAG, "failed to download town data", e);
 						return null;
@@ -138,6 +128,8 @@ public class GameActivity extends BaseActivity {
 		} catch (InterruptedException | ExecutionException e) {
 			Log.e(TAG, "failed to download town data in an async task", e);
 		}
+		townVisit = gameView.getTownVisit();
+		townArmy = townVisit==null ? town.getArmy() : townVisit.getArmy();
 
 //		try {
 //			hero = new AsyncTask<Long, Void, Hero>() {
@@ -156,25 +148,8 @@ public class GameActivity extends BaseActivity {
 //		} catch (InterruptedException | ExecutionException e) {
 //			Log.e(TAG, "failed to download hero data in an async task", e);
 //		}
-
-		try {
-			faction = new AsyncTask<Long, Void, Faction>() {
-
-				@Override
-				protected Faction doInBackground(Long... params) {
-					try {
-						return factionEndpoint.getFaction(params[0]).execute();
-					} catch (IOException e) {
-						Log.e(TAG, "failed to download faction data", e);
-						return null;
-					}
-				}
-
-			}.execute(town.getFactionId()).get();
-		} catch (InterruptedException | ExecutionException e) {
-			Log.e(TAG, "failed to download faction data in an async task", e);
-		}
-		availableUnits = GameUtils.armyToUnitList(town.getArmy(), unitTypes);
+		
+		availableUnits = GameUtils.armyToUnitList(townArmy, unitTypes);
 	}
 
 	private void showTownMain() {
@@ -184,7 +159,7 @@ public class GameActivity extends BaseActivity {
 		townNameTextView.setText(town.getName());
 
 		TextView factionTextView = (TextView) findViewById(R.id.townFaction);
-		factionTextView.setText("Town owned by " + faction.getName());
+		factionTextView.setText("Town owned by " + gameView.getFactions().get(town.getFactionId().intValue()).getName());
 
 		Button barracksButton = (Button) findViewById(R.id.townBarracksButton);
 		barracksButton.setOnClickListener(new OnClickListener() {
@@ -311,6 +286,7 @@ public class GameActivity extends BaseActivity {
 							recruit(availableUnit.getUnitType().getId().intValue(), recruitedUnits);
 							unitsToRecruitSeekBar.setProgress(0);
 							if(recruitAll){
+								//TODO pasek sie nie odswieza choc przycisk jest disabled jak powinien
 								unitsToRecruitSeekBar.setMax(1);
 								unitsToRecruitSeekBar.setEnabled(false);
 								unitCountText.setText("0 / 0");
@@ -337,10 +313,10 @@ public class GameActivity extends BaseActivity {
 		displayPlayerArmyTown();
 
 		Button backButton = (Button) findViewById(R.id.barracksBackButton);
-		backButton.setOnTouchListener(new OnTouchListener() {
+		backButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
+			public void onClick(View v) {
 				Log.i(TAG, "return to land");
 				if (recruitmentTookPlace) {
 					try {
@@ -349,8 +325,9 @@ public class GameActivity extends BaseActivity {
 							@Override
 							protected Void doInBackground(Void... params) {
 								try {
-									playerEndpoint.updatePlayer(player).execute();
-									townEndpoint.updateTown(town).execute();
+									//playerEndpoint.updatePlayer(player).execute();
+									gameView.setTownVisit(townVisit);
+									townVisitEndpoint.updateTownVisit(townVisit).execute();
 									heroEndpoint.updateHero(hero).execute();
 								} catch (IOException e) {
 									Log.e(TAG, "failed to update entities after recruitment", e);
@@ -359,25 +336,11 @@ public class GameActivity extends BaseActivity {
 							}
 
 						}.execute().get();
-//						new AsyncTask<Void, Void, Void>() {
-//
-//							@Override
-//							protected Void doInBackground(Void... params) {
-//								try {
-//									townEndpoint.updateTown(town).execute();
-//								} catch (IOException e) {
-//									Log.e(TAG, "failed to update town after recruitment", e);
-//								}
-//								return null;
-//							}
-//
-//						}.execute().get();
 					} catch (InterruptedException | ExecutionException e) {
 						Log.e(TAG, "failed to update entities after recruitment in an async task", e);
 					}
 				}
 				showTownMain();
-				return true;
 			}
 		});
 	}
@@ -447,7 +410,6 @@ public class GameActivity extends BaseActivity {
 
 	private void recruit(int unitType, int recruitedCount) {
 		recruitmentTookPlace = true;
-		List<Integer> townArmy = (List<Integer>) (town.getArmy() == null ? new ArrayList<>() : town.getArmy());
 		List<Integer> heroArmy = (List<Integer>) (hero.getArmy() == null ? new ArrayList<>() : hero.getArmy());
 		for (int i = 0; i < townArmy.size(); i += 2) {
 			if (townArmy.get(i).equals(unitType) && townArmy.get(i + 1) >= recruitedCount) {
@@ -469,7 +431,12 @@ public class GameActivity extends BaseActivity {
 			heroArmy.add(unitType);
 			heroArmy.add(recruitedCount);
 		}
-		town.setArmy(townArmy);
+		if(townVisit == null){
+			townVisit = new TownVisit().setHeroId(hero.getId()).setTownId(town.getId()).setArmy(townArmy);
+		} else {
+			townVisit.setArmy(townArmy);
+		}
+
 		hero.setArmy(heroArmy);
 		availableUnits = GameUtils.armyToUnitList(townArmy, unitTypes);
 	}
@@ -477,8 +444,8 @@ public class GameActivity extends BaseActivity {
 	public void showDungeonDialog(final Long dungeonId) {
 		Dungeon dungeonInit = null;
 		try {
-			dungeonInit = new AsyncTask<Void, Void, com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon>(){
-				protected com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon doInBackground(Void[] params) {
+			dungeonInit = new AsyncTask<Void, Void, Dungeon>(){
+				protected Dungeon doInBackground(Void[] params) {
 					try {
 						return dungeonEndpoint.getDungeon(dungeonId).execute();
 					} catch (IOException e) {

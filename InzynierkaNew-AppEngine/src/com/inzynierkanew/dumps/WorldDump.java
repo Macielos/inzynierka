@@ -1,6 +1,8 @@
 package com.inzynierkanew.dumps;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -14,19 +16,35 @@ public class WorldDump {
 	
 	private final LandEndpoint landEndpoint;
 	
+	private Map<Integer, String> emptySymbols;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	public WorldDump(LandEndpoint landEndpoint){
 		this.landEndpoint = landEndpoint;
+		emptySymbols = new HashMap<>();
+		emptySymbols.put(0, " ");
 	}
 		
-	public void dump(){
+	public void dumpTerrain(){
+		dump(false);
+	}
+	
+	public void dumpLands(){
+		dump(true);
+	}
+	
+	public void dump(boolean byLands){		
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;
 		int maxY = Integer.MIN_VALUE;
-		
+
 		List<Land> lands = (List<Land>) landEndpoint.listLand(null, null).getItems();
+		if(lands.isEmpty()){
+			log.info("No lands");
+			return;
+		}
 		for(Land land: lands){
 			if(land.getMinX()<minX){
 				minX = land.getMinX();
@@ -56,6 +74,7 @@ public class WorldDump {
 		
 		int i, x, y;
 		int landWidth;
+		int n = 0;
 		for(Land land: lands){
 			landWidth = land.getWidth();
 			i = 0;
@@ -64,17 +83,20 @@ public class WorldDump {
 				y = i / landWidth;
 				if(f!=WorldGenerator.EMPTY){
 					if(map[land.getMinY()-minY+y][land.getMinX()-minX+x]==WorldGenerator.EMPTY){
-						map[land.getMinY()-minY+y][land.getMinX()-minX+x] = f;
+						map[land.getMinY()-minY+y][land.getMinX()-minX+x] = byLands ? (n % 10) : f;
 					} else {
 						map[land.getMinY()-minY+y][land.getMinX()-minX+x] = WorldGenerator.OVERLAPPING;
 					}
 				}
 				++i;
 			}
+			++n;
 		}
 
 		log.info("WORLD DUMP: "+minX+"-"+maxX+", "+minY+"-"+maxY);
-		log.info(WorldGenerationUtils.mapToString(map));
+		log.info(byLands 
+				? WorldGenerationUtils.mapToString(map, emptySymbols)
+				: WorldGenerationUtils.mapToString(map));
 	}
 	
 }

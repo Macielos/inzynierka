@@ -68,9 +68,9 @@ public class LoginActivity extends BaseActivity {
 	private Button registerButton;
 	private TextView nameView;
 	private TextView passwordView;
-	
+
 	private Playerendpoint playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,69 +81,55 @@ public class LoginActivity extends BaseActivity {
 		nameView = (TextView) findViewById(R.id.name);
 		passwordView = (TextView) findViewById(R.id.password);
 
-		loginButton.setOnTouchListener(new OnTouchListener() {
-			
+		loginButton.setOnClickListener(new View.OnClickListener() {
+
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction() & MotionEvent.ACTION_MASK) {
-				case MotionEvent.ACTION_DOWN:
-					String name = nameView.getText().toString();
-					String password = passwordView.getText().toString();
-					ValidationResult result = RequestValidator.validateRegisterRequest(name, password.getBytes());
-					if(!result.valid){
-						showDialog(result.error);
-						return true;
-					}
-					LoginResponse response = null;
-					try {
-						response = new AsyncTask<String, Void, LoginResponse>(){
-							
-							@Override
-							protected LoginResponse doInBackground(String... params) {
-								try {
-									return playerEndpoint.authenticatePlayer(params[0], params[1]).execute();
-								} catch (IOException e) {
-									Log.e(getClass().getName(), "AsyncTask: Failed to authenticate player, exception is "+e.getClass().getName()+", "+e.getMessage(), e);
-									Log.e(getClass().getName(), "Stack trace elements: "+e.getStackTrace().length);
-									for(StackTraceElement el: e.getStackTrace()){
-										Log.e(getClass().getName(), el.toString());
-									}
-									return null;
+			public void onClick(View v) {
+				String name = nameView.getText().toString();
+				String password = passwordView.getText().toString();
+				ValidationResult result = RequestValidator.validateRegisterRequest(name, password.getBytes());
+				if (!result.valid) {
+					showDialog(result.error);
+					return;
+				}
+				LoginResponse response = null;
+				try {
+					response = new AsyncTask<String, Void, LoginResponse>() {
+
+						@Override
+						protected LoginResponse doInBackground(String... params) {
+							try {
+								return playerEndpoint.authenticatePlayer(params[0], params[1]).execute();
+							} catch (IOException e) {
+								Log.e(getClass().getName(), "AsyncTask: Failed to authenticate player, exception is "
+										+ e.getClass().getName() + ", " + e.getMessage(), e);
+								Log.e(getClass().getName(), "Stack trace elements: " + e.getStackTrace().length);
+								for (StackTraceElement el : e.getStackTrace()) {
+									Log.e(getClass().getName(), el.toString());
 								}
+								return null;
 							}
-						}.execute(name, password).get();
-					} catch (Exception e) {
-						Log.e(getClass().getName(), "Failed to authenticate player, exception is "+e.getClass().getName()+", "+e, e);
-					}
-					if(response == null || response.getSessionId()==null){							
-						showDialog("Incorrect username or password");
-					} else {
-						newActivity(GameActivity.class, "sessionId", response.getSessionId());
-					}
-					return true;
-				case MotionEvent.ACTION_UP:
-					return true;
-				default:
-					return false;
+						}
+					}.execute(name, password).get();
+				} catch (Exception e) {
+					Log.e(getClass().getName(),
+							"Failed to authenticate player, exception is " + e.getClass().getName() + ", " + e, e);
+				}
+				if (response == null || response.getSessionId() == null) {
+					showDialog("Incorrect username or password");
+				} else {
+					newActivity(GameActivity.class, "sessionId", response.getSessionId());
 				}
 			}
 		});
-		
-		registerButton.setOnTouchListener(new OnTouchListener() {
-			
+
+		registerButton.setOnClickListener(new View.OnClickListener() {
+
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction() & MotionEvent.ACTION_MASK) {
-				case MotionEvent.ACTION_DOWN:
-					newActivity(RegisterActivity.class);
-					return true;
-				case MotionEvent.ACTION_UP:
-					return true;
-				default:
-					return false;
-				}
+			public void onClick(View v) {
+				newActivity(RegisterActivity.class);
 			}
 		});
 	}
-	
+
 }

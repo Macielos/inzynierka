@@ -102,43 +102,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "factionendpoint.updateFaction" : {
-      "path" : "faction",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.updateFaction",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "factionendpoint.getFaction" : {
-      "path" : "faction/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "factionendpoint.insertFaction" : {
       "path" : "faction",
       "httpMethod" : "POST",
@@ -174,6 +137,43 @@
       },
       "response" : {
         "body" : "empty"
+      }
+    },
+    "factionendpoint.getFaction" : {
+      "path" : "faction/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "factionendpoint.updateFaction" : {
+      "path" : "faction",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.FactionEndpoint.updateFaction",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     }
   },
@@ -230,19 +230,6 @@
           "$ref" : "CollectionResponse_Faction"
         }
       },
-      "com.inzynierkanew.endpoints.players.FactionEndpoint.updateFaction" : {
-        "request" : {
-          "$ref" : "Faction"
-        },
-        "response" : {
-          "$ref" : "Faction"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction" : {
-        "response" : {
-          "$ref" : "Faction"
-        }
-      },
       "com.inzynierkanew.endpoints.players.FactionEndpoint.insertFaction" : {
         "request" : {
           "$ref" : "Faction"
@@ -252,6 +239,19 @@
         }
       },
       "com.inzynierkanew.endpoints.players.FactionEndpoint.removeFaction" : {
+      },
+      "com.inzynierkanew.endpoints.players.FactionEndpoint.getFaction" : {
+        "response" : {
+          "$ref" : "Faction"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.FactionEndpoint.updateFaction" : {
+        "request" : {
+          "$ref" : "Faction"
+        },
+        "response" : {
+          "$ref" : "Faction"
+        }
       }
     }
   }

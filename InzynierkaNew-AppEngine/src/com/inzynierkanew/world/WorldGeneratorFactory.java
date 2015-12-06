@@ -15,9 +15,11 @@ public class WorldGeneratorFactory {
 
 	private static final Log log = LogFactory.getLog(WorldGeneratorFactory.class);
 	
-	public static synchronized void fireWorldGeneration(){
+	public static synchronized void fireWorldGeneration() throws WorldGenerationException{
 		LandEndpoint landEndpoint = new LandEndpoint();
-		new WorldDump(landEndpoint).dump();
-		new WorldGenerator().generateAndPersistLand();	
+		new WorldGenerator().generateAndPersistLand();
+		WorldDump dump = new WorldDump(landEndpoint);
+		dump.dumpLands();
+		dump.dumpTerrain();
 	}
 }

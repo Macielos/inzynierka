@@ -5,20 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.google.appengine.api.datastore.Key;
-
 @Entity
 public class Town {
-
-	private static final long serialVersionUID = -4364131150495077922L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
-	// private Key key;
 
 	private int x;
 	private int y;
@@ -27,7 +19,6 @@ public class Town {
 	private String name;
 	private Long factionId;
 	private int[] army;
-	private int[] maxArmy;
 
 	public Town(int x, int y, long type, String name, Long factionId, int... army) {
 		this.x = x;
@@ -36,16 +27,11 @@ public class Town {
 		this.name = name;
 		this.factionId = factionId;
 		this.army = army;
-		this.maxArmy = army;
 	}
 
 	public Long getId() {
 		return id;
 	}
-
-	// public Key getKey() {
-	// return key;
-	// }
 
 	public int getX() {
 		return x;
@@ -93,14 +79,6 @@ public class Town {
 
 	public void setArmy(int[] army) {
 		this.army = army;
-	}
-
-	public int[] getMaxArmy() {
-		return maxArmy;
-	}
-
-	public void setMaxArmy(int[] maxArmy) {
-		this.maxArmy = maxArmy;
 	}
 
 }

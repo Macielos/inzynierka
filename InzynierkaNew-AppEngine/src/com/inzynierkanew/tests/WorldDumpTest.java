@@ -8,7 +8,7 @@ public class WorldDumpTest {
 	
 	@Test
 	public void testDump(){
-		new WorldDump(WorldGenerationTest.mockLandEndpointLandsForDump()).dump();
+		new WorldDump(WorldGenerationTest.mockLandEndpointLandsForDump()).dumpTerrain();
 	}
 	
 }

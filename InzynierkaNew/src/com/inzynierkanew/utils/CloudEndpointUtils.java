@@ -21,6 +21,7 @@ import com.inzynierkanew.entities.map.dungeonvisitendpoint.Dungeonvisitendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
 import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
+import com.inzynierkanew.entities.map.townvisitendpoint.Townvisitendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
@@ -222,6 +223,15 @@ public class CloudEndpointUtils {
 	
 	public static Townendpoint newTownEndpoint(){
 		Townendpoint.Builder endpointBuilder = new Townendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		return updateBuilder(endpointBuilder).build();
+	}
+	
+	public static Townvisitendpoint newTownVisitEndpoint(){
+		Townvisitendpoint.Builder endpointBuilder = new Townvisitendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {
 					public void initialize(HttpRequest httpRequest) {
 					}

@@ -118,7 +118,7 @@ public class PlayerEndpoint {
 			if (containsPlayer(player)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			WorldGeneratorFactory.fireWorldGeneration();
+			//WorldGeneratorFactory.fireWorldGeneration();
 			Land startingLand = landEndpoint.findLandForNewPlayer();
 			Town startingTown = townEndpoint.getTown(startingLand.getTownId());
 			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId(), WorldGenerator.HERO_INITIAL_GOLD, strength, agility, intelligence);
@@ -128,7 +128,7 @@ public class PlayerEndpoint {
 		} finally {
 			mgr.close();
 		}
-		new WorldDump(new LandEndpoint()).dump();
+		new WorldDump(new LandEndpoint()).dumpTerrain();
 		return player;
 	}
 

@@ -3,27 +3,53 @@ package com.inzynierkanew.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.entities.map.Land;
 import com.inzynierkanew.world.WorldGenerator;
 
 public abstract class WorldGenerationUtils {
 
-	private static Map<Integer, String> printableSymbols;
-
-	public static void init(Map<Integer, String> newPrintableSymbols) {
-		printableSymbols = newPrintableSymbols;
-	}
+	private static Map<Integer, String> printableSymbols = createPrintableSymbols();
 
 	private WorldGenerationUtils() {
 
 	}
+	
+	public static void init(Map<Integer, String> newPrintableSymbols) {
+		printableSymbols = newPrintableSymbols;
+	}
 
+	public static Map<Integer, String> createPrintableSymbols() {
+		Map<Integer, String> printableSymbols = new HashMap<>();
+
+		printableSymbols.put(WorldGenerator.EMPTY, " ");
+		printableSymbols.put(WorldGenerator.EXISTING_LAND, "E");
+		printableSymbols.put(WorldGenerator.EXISTING_LAND_PASSAGE, "I");
+		printableSymbols.put(WorldGenerator.CROSSROAD, "X");
+		printableSymbols.put(WorldGenerator.OVERLAPPING, "V");
+
+		printableSymbols.put(1, "+");
+		printableSymbols.put(2, "I");
+		printableSymbols.put(3, "T");
+		printableSymbols.put(4, "D");
+		printableSymbols.put(100, ".");
+		printableSymbols.put(110, "^");
+
+		return printableSymbols;
+	}
+	
 	public static String mapToString(int[][] map) {
 		return mapToString(map, true);
 	}
 
 	public static String mapToString(int[][] map, boolean axis) {
+		return mapToString(map, axis, printableSymbols);
+	}
+	
+	public static String mapToString(int[][] map, Map<Integer, String> printableSymbols) {
+		return mapToString(map, true, printableSymbols);
+	}
+	
+	public static String mapToString(int[][] map, boolean axis, Map<Integer, String> printableSymbols) {
 		StringBuilder sb = new StringBuilder("\n");
 		if (axis) {
 			sb.append("   ");

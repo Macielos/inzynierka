@@ -23,7 +23,7 @@ public class Item {
 	
 	public Item(Long id, String name, ItemClass itemClass, int itemLevel,
 			int strengthBonus, int agilityBonus, int intelligenceBonus) {
-		super();
+		this.id = id;
 		this.name = name;
 		this.itemClass = itemClass;
 		this.itemLevel = itemLevel;

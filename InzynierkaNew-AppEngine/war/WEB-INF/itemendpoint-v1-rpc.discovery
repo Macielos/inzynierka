@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/eix1W-PT43Tff9joizeDcbbM6EE\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/kqt5zjFOx_U0lR6Rt1kBFG275Og\"",
  "discoveryVersion": "v1",
  "id": "itemendpoint:v1",
  "name": "itemendpoint",
@@ -103,11 +103,10 @@
      "type": "integer",
      "format": "int32"
     },
-    "maxHeroLevel": {
-     "type": "integer",
-     "format": "int32"
+    "itemClass": {
+     "$ref": "ItemClass"
     },
-    "minHeroLevel": {
+    "itemLevel": {
      "type": "integer",
      "format": "int32"
     },
@@ -119,6 +118,20 @@
      "format": "int32"
     }
    }
+  },
+  "ItemClass": {
+   "id": "ItemClass",
+   "type": "string",
+   "enum": [
+    "LEGENDARY",
+    "MAGICAL",
+    "STANDARD"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    ""
+   ]
   }
  },
  "methods": {
@@ -137,6 +150,35 @@
    ],
    "returns": {
     "$ref": "Item"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "itemendpoint.getItemsByType": {
+   "id": "itemendpoint.getItemsByType",
+   "allowGet": true,
+   "parameters": {
+    "itemClass": {
+     "type": "string",
+     "required": true
+    },
+    "itemLevel": {
+     "type": "integer",
+     "required": true,
+     "format": "int32"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32"
+    }
+   },
+   "parameterOrder": [
+    "itemLevel",
+    "itemClass"
+   ],
+   "returns": {
+    "$ref": "CollectionResponse_Item"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

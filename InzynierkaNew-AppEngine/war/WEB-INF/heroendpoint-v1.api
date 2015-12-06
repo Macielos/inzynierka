@@ -27,6 +27,38 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
+    "heroendpoint.insertHero" : {
+      "path" : "hero",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.updateHero" : {
+      "path" : "hero",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "heroendpoint.listHero" : {
       "path" : "hero",
       "httpMethod" : "GET",
@@ -47,22 +79,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "heroendpoint.updateHero" : {
-      "path" : "hero",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -109,41 +125,10 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
-    },
-    "heroendpoint.insertHero" : {
-      "path" : "hero",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_Hero" : {
-        "id" : "CollectionResponse_Hero",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Hero"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "Hero" : {
         "id" : "Hero",
         "type" : "object",
@@ -200,12 +185,30 @@
             }
           }
         }
+      },
+      "CollectionResponse_Hero" : {
+        "id" : "CollectionResponse_Hero",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Hero"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.listHero" : {
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero" : {
+        "request" : {
+          "$ref" : "Hero"
+        },
         "response" : {
-          "$ref" : "CollectionResponse_Hero"
+          "$ref" : "Hero"
         }
       },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero" : {
@@ -216,17 +219,14 @@
           "$ref" : "Hero"
         }
       },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.listHero" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Hero"
+        }
+      },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
       },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero" : {
-        "response" : {
-          "$ref" : "Hero"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.insertHero" : {
-        "request" : {
-          "$ref" : "Hero"
-        },
         "response" : {
           "$ref" : "Hero"
         }

@@ -1,9 +1,6 @@
 package com.inzynierkanew.entities.map;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
 public class Passage extends BaseField {
@@ -21,10 +18,13 @@ public class Passage extends BaseField {
 	private int nextX;
 	
 	private int nextY;
+		
+	private boolean portal;
 	
 	public Passage(int x, int y, long type, int direction) {
 		super(x, y, type);
 		this.direction = direction;
+		this.portal = false;
 	}
 	
 	public Passage(int x, int y, long type, int direction, Long nextLandId, int nextX, int nextY) {
@@ -33,6 +33,7 @@ public class Passage extends BaseField {
 		this.nextLandId = nextLandId;
 		this.nextX = nextX;
 		this.nextY = nextY;
+		this.portal = false;
 	}
 	
 //	public Long getId() {
@@ -70,5 +71,12 @@ public class Passage extends BaseField {
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
+	
+	public boolean isPortal() {
+		return portal;
+	}
 
+	public void setPortal(boolean portal) {
+		this.portal = portal;
+	}
 }

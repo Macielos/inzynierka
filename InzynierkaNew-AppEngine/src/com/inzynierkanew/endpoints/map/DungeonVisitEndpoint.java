@@ -68,10 +68,7 @@ public class DungeonVisitEndpoint {
 	public DungeonVisit insertDungeonVisit(DungeonVisit dungeonvisit) {
 		EntityManager mgr = getEntityManager();
 		try {
-			if (containsDungeonVisit(dungeonvisit)) {
-				throw new EntityExistsException("Object already exists");
-			}
-			mgr.persist(dungeonvisit);
+			mgr.merge(dungeonvisit);
 		} finally {
 			mgr.close();
 		}
