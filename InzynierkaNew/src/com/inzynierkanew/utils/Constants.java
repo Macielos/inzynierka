@@ -13,5 +13,7 @@ public abstract class Constants {
 	public static final int TOWN_VIEW = 1;
 	
 	public static final int PLAYER_ARMY_MAX_SIZE = 5;
+	//TODO zrobic cos a la lista ale pozioma
+	public static final int LOOT_MAX_SIZE = 3;
 	
 }

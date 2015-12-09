@@ -37,7 +37,7 @@ import com.inzynierkanew.utils.WorldGenerationUtils;
 public class WorldGenerator {
 
 	// CONSTANTS
-	private static final double INITIAL_CONTINUE_RATE = 1.8; //3.0;
+	private static final double INITIAL_CONTINUE_RATE = 3.0;
 	private static final double CONTINUE_RATE_DROP = 0.1;
 
 	public static final int LAND_MAX_HEIGHT = (int) (2 * INITIAL_CONTINUE_RATE / CONTINUE_RATE_DROP);

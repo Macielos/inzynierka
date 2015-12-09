@@ -2,6 +2,7 @@ package com.inzynierkanew.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -38,10 +39,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -110,7 +109,7 @@ public class GameActivity extends BaseActivity {
 		loadTownData();
 		showTownMain();
 	}
-			
+
 	private void loadTownData() {
 		try {
 			town = new AsyncTask<Void, Void, Town>() {
@@ -334,7 +333,6 @@ public class GameActivity extends BaseActivity {
 								}
 								return null;
 							}
-
 						}.execute().get();
 					} catch (InterruptedException | ExecutionException e) {
 						Log.e(TAG, "failed to update entities after recruitment in an async task", e);
@@ -384,6 +382,27 @@ public class GameActivity extends BaseActivity {
 				} else {
 					unitImage.setImageBitmap(null);
 					unitCount.setText("");
+				}
+			}
+		} catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+			Log.e(TAG, "Error while displaying player army", e);
+		}
+	}
+	
+	private void displayItemsAftermath(final Dialog dialog, Loot loot) {
+		displayItems("dungeon_dialog_result_", loot.getItems(), dialog);
+	}
+	
+	private void displayItems(String fieldPrefix, List<Item> items, Dialog dialog) {
+		try {
+			ImageView itemImage;
+			for (int i = 0; i < Constants.LOOT_MAX_SIZE; ++i) {
+				itemImage = (ImageView) findByField(fieldPrefix+"item" + i, dialog);
+				if (i < items.size()) {
+					itemImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+							R.drawable.class.getField(""+items.get(i).getIcon()).getInt(null)));
+				} else {
+					itemImage.setImageBitmap(null);
 				}
 			}
 		} catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
@@ -490,9 +509,16 @@ public class GameActivity extends BaseActivity {
 				updateHeroExperience(battleResult.getExperienceGained());
 				hero.setGold(hero.getGold()+loot.getGold());
 				displayPlayerGold();
-				for(Item item: loot.getItems()){
-					hero.getItems().add(item.getId().intValue());
+				List<Integer> heroItems = hero.getItems();
+				if(heroItems == null){
+					heroItems = new ArrayList<>();
 				}
+				for(Item item: loot.getItems()){
+					gameView.getHeroInventory().put(item.getId().intValue(), item);
+					heroItems.add(item.getId().intValue());
+				}
+				hero.setItems(heroItems);
+				
 				displayPlayerArmyMain();
 				displayHeroExperience();
 				dungeon.setArmy(GameUtils.unitListToArmy(battleResult.getEnemyArmy()));
@@ -531,12 +557,19 @@ public class GameActivity extends BaseActivity {
 							}
 							return null;
 						}
-						
 					}.execute().get();
 				} catch (InterruptedException | ExecutionException e) {
 					Log.e(TAG, "failed to update dungeon in an async task", e);
 				}
 				dialog.setContentView(R.layout.dialog_dungeon_result);
+				
+				TextView goldFoundView = (TextView) dialog.findViewById(R.id.dungeon_dialog_result_goldFoundValue);
+				goldFoundView.setText(""+loot.getGold());
+				
+				TextView experienceGainedView = (TextView) dialog.findViewById(R.id.dungeon_dialog_result_experienceGainedValue);
+				experienceGainedView.setText(""+battleResult.getExperienceGained());
+
+				displayItemsAftermath(dialog, loot);
 				
 				displayPlayerArmyAftermath(battleResult.getPlayerLosses(), dialog);
 				displayDungeonArmyAftermath(battleResult.getEnemyLosses(), dialog);
@@ -553,6 +586,7 @@ public class GameActivity extends BaseActivity {
 				});
 
 			}
+
 		});
 		
 		Button withdrawButton = (Button) dialog.findViewById(R.id.dungeon_dialog_withdrawButton);
@@ -595,10 +629,18 @@ public class GameActivity extends BaseActivity {
 		int goldGained = (int)(((double)SharedConstants.BASE_GOLD_PER_VICTORY+xpd*SharedConstants.GOLD_XP_MODIFIER)*SharedConstants.GOLD_RANDOM_FACTOR);
 		Random random = new Random();
 		double itemDropped = random.nextDouble();
+		List<Item> items;
 		if(itemDropped < SharedConstants.CHANCE_FOR_ITEM){
-			//TODO
+			Item item = gameView.getRandomItem(SharedConstants.STANDARD);
+			if(item!=null){
+				items = Arrays.asList(item);
+			} else {
+				items = new ArrayList<>(0);
+			}
+		} else {
+			items = new ArrayList<>(0);
 		}
-		return new Loot(goldGained, new ArrayList<Item>(0));
+		return new Loot(goldGained, items);
 	}
 
 	// @Override

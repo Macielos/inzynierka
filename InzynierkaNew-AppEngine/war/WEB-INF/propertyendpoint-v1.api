@@ -48,27 +48,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "propertyendpoint.propertyEndpoint.removeProperty" : {
-      "path" : "property/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.general.PropertyEndpoint.removeProperty",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "propertyendpoint.listProperty" : {
       "path" : "property",
       "httpMethod" : "GET",
@@ -94,20 +73,25 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "propertyendpoint.propertyEndpoint.insertProperty" : {
-      "path" : "property",
-      "httpMethod" : "POST",
+    "propertyendpoint.propertyEndpoint.removeProperty" : {
+      "path" : "property/{id}",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.general.PropertyEndpoint.insertProperty",
+      "rosyMethod" : "com.inzynierkanew.endpoints.general.PropertyEndpoint.removeProperty",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     },
     "propertyendpoint.propertyEndpoint.updateProperty" : {
@@ -118,6 +102,22 @@
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
       "rosyMethod" : "com.inzynierkanew.endpoints.general.PropertyEndpoint.updateProperty",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "propertyendpoint.propertyEndpoint.insertProperty" : {
+      "path" : "property",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.general.PropertyEndpoint.insertProperty",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -163,14 +163,14 @@
           "$ref" : "Property"
         }
       },
-      "com.inzynierkanew.endpoints.general.PropertyEndpoint.removeProperty" : {
-      },
       "com.inzynierkanew.endpoints.general.PropertyEndpoint.listProperty" : {
         "response" : {
           "$ref" : "CollectionResponse_Property"
         }
       },
-      "com.inzynierkanew.endpoints.general.PropertyEndpoint.insertProperty" : {
+      "com.inzynierkanew.endpoints.general.PropertyEndpoint.removeProperty" : {
+      },
+      "com.inzynierkanew.endpoints.general.PropertyEndpoint.updateProperty" : {
         "request" : {
           "$ref" : "Property"
         },
@@ -178,7 +178,7 @@
           "$ref" : "Property"
         }
       },
-      "com.inzynierkanew.endpoints.general.PropertyEndpoint.updateProperty" : {
+      "com.inzynierkanew.endpoints.general.PropertyEndpoint.insertProperty" : {
         "request" : {
           "$ref" : "Property"
         },

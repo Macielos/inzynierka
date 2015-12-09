@@ -69,17 +69,26 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "fieldtypeendpoint.insertFieldType" : {
+    "fieldtypeendpoint.listFieldType" : {
       "path" : "fieldtype",
-      "httpMethod" : "POST",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.listFieldType",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -106,6 +115,22 @@
         "body" : "empty"
       }
     },
+    "fieldtypeendpoint.insertFieldType" : {
+      "path" : "fieldtype",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "fieldtypeendpoint.updateFieldType" : {
       "path" : "fieldtype",
       "httpMethod" : "PUT",
@@ -117,31 +142,6 @@
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "fieldtypeendpoint.listFieldType" : {
-      "path" : "fieldtype",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.listFieldType",
-      "request" : {
-        "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
-          }
-        },
-        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -196,6 +196,13 @@
           "$ref" : "FieldType"
         }
       },
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.listFieldType" : {
+        "response" : {
+          "$ref" : "CollectionResponse_FieldType"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.removeFieldType" : {
+      },
       "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.insertFieldType" : {
         "request" : {
           "$ref" : "FieldType"
@@ -204,19 +211,12 @@
           "$ref" : "FieldType"
         }
       },
-      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.removeFieldType" : {
-      },
       "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.updateFieldType" : {
         "request" : {
           "$ref" : "FieldType"
         },
         "response" : {
           "$ref" : "FieldType"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.FieldTypeEndpoint.listFieldType" : {
-        "response" : {
-          "$ref" : "CollectionResponse_FieldType"
         }
       }
     }

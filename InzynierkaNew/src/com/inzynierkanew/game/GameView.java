@@ -1,6 +1,7 @@
 package com.inzynierkanew.game;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.api.client.json.GenericJson;
 import com.inzynierkanew.R;
-import com.inzynierkanew.battle.BattleResult;
-import com.inzynierkanew.entities.general.propertyendpoint.Propertyendpoint;
-import com.inzynierkanew.entities.general.propertyendpoint.model.Property;
 import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
-import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
-import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
-import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.dungeonendpoint.model.Dungeon;
 import com.inzynierkanew.entities.map.dungeonvisitendpoint.Dungeonvisitendpoint;
 import com.inzynierkanew.entities.map.dungeonvisitendpoint.model.DungeonVisit;
+import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
+import com.inzynierkanew.entities.map.fieldtypeendpoint.model.FieldType;
+import com.inzynierkanew.entities.map.landendpoint.Landendpoint;
 import com.inzynierkanew.entities.map.landendpoint.model.Land;
 import com.inzynierkanew.entities.map.landendpoint.model.Passage;
 import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
@@ -30,6 +28,8 @@ import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.model.Faction;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.model.Hero;
+import com.inzynierkanew.entities.players.itemendpoint.Itemendpoint;
+import com.inzynierkanew.entities.players.itemendpoint.model.Item;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.entities.players.unittypeendpoint.Unittypeendpoint;
@@ -45,6 +45,7 @@ import com.inzynierkanew.utils.IOnChoice;
 import com.inzynierkanew.utils.IOnConfirm;
 import com.inzynierkanew.utils.Point;
 import com.inzynierkanew.utils.SharedConstants;
+import com.inzynierkanew.utils.StringUtils;
 import com.inzynierkanew.utils.TimeUtils;
 
 import android.content.Context;
@@ -83,6 +84,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
 	private final Townvisitendpoint townVisitEndpoint = CloudEndpointUtils.newTownVisitEndpoint();
 	private final Factionendpoint factionEndpoint = CloudEndpointUtils.newFactionEndpoint();
+	private final Itemendpoint itemEndpoint = CloudEndpointUtils.newItemEndpoint();
 
 	private AtomicInteger renderMode = new AtomicInteger(DIALOG_CHOSEN);
 	private Random random = new Random();
@@ -90,6 +92,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private Map<Integer, DrawableFieldType> fieldTypes;
 	private Map<Integer, UnitType> unitTypes;
 	private Map<Integer, Faction> factions;
+	
+	private Map<String, List<Item>> itemCache;
+	private Map<Integer, Item> heroInventory;
 
 	private int townIndex;
 	private int passageIndex;
@@ -100,7 +105,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private Town town;
 	private Hero hero;
 	private List<Dungeon> dungeons;
-	private Map<String, String> properties;
 	private TownVisit townVisit;
 	private Map<Long, DungeonVisit> dungeonVisitHistory;
 
@@ -156,8 +160,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private void downloadInitialData() {
 		try {
 			downloadPlayer();
-			downloadHero();
 			downloadTypes();
+			downloadHero();
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to download game status from server", e);
 		}
@@ -199,6 +203,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		if (hero.getCurrentLandId() == null) {
 			throw new RuntimeException("Hero is not in any land on server");
 		}
+		List<Item> heroItemList = hero.getItems() == null ? new ArrayList<Item>(0) : new AsyncTask<Void, Void, List<Item>>() {
+			protected List<Item> doInBackground(Void[] params) {
+				try {
+					return itemEndpoint.getItems(StringUtils.join(hero.getItems())).execute().getItems();
+				} catch (IOException e) {
+					Log.e(TAG, "Failed to download items", e);
+					return null;
+				}
+			};
+		}.execute().get();
+		heroInventory = createHeroInventory(heroItemList);
 		heroObject = new HeroModel(this, getPlayerBitmap(), hero);
 	}
 
@@ -289,7 +304,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 					try {
 						return dungeonEndpoint.listDungeon(land.getId()).execute().getItems();
 					} catch (IOException e) {
-						Log.e(TAG, "Failed to download town", e);
+						Log.e(TAG, "Failed to download dungeons", e);
 						return null;
 					}
 				};
@@ -318,6 +333,41 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 					}
 				};
 			}.execute().get();
+			List<Item> standardItems = new AsyncTask<Void, Void, List<Item>>() {
+				protected List<Item> doInBackground(Void[] params) {
+					try {
+						return itemEndpoint.getRandomItemsByType((int)((double)dungeons.size()*SharedConstants.STANDARD_ITEM_STOCK_FACTOR), hero.getLevel(), SharedConstants.STANDARD).execute().getItems();
+					} catch (IOException e) {
+						Log.e(TAG, "Failed to download items", e);
+						return null;
+					}
+				};
+			}.execute().get();
+			List<Item> magicalItems = new AsyncTask<Void, Void, List<Item>>() {
+				protected List<Item> doInBackground(Void[] params) {
+					try {
+						return itemEndpoint.getRandomItemsByType((int)((double)dungeons.size()*SharedConstants.MAGICAL_ITEM_STOCK_FACTOR), hero.getLevel(), SharedConstants.MAGICAL).execute().getItems();
+					} catch (IOException e) {
+						Log.e(TAG, "Failed to download items", e);
+						return null;
+					}
+				};
+			}.execute().get();
+			List<Item> legendaryItems = new AsyncTask<Void, Void, List<Item>>() {
+				protected List<Item> doInBackground(Void[] params) {
+					try {
+						return itemEndpoint.getRandomItemsByType((int)((double)dungeons.size()*SharedConstants.LEGENDARY_ITEM_STOCK_FACTOR), hero.getLevel(), SharedConstants.LEGENDARY).execute().getItems();
+					} catch (IOException e) {
+						Log.e(TAG, "Failed to download items", e);
+						return null;
+					}
+				};
+			}.execute().get();
+			itemCache = new HashMap<>(3);
+			itemCache.put(SharedConstants.STANDARD, standardItems);
+			itemCache.put(SharedConstants.MAGICAL, magicalItems);
+			itemCache.put(SharedConstants.LEGENDARY, legendaryItems);
+			
 			landMap = new LandModel(this, land, town, dungeons, fieldTypes, townIndex, passageIndex, dungeonIndex);
 			centerCameraOnHero();
 		} catch (InterruptedException | ExecutionException | IllegalAccessException | IllegalArgumentException
@@ -629,6 +679,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		}
 		return dungeonVisitHistory;
 	}
+	
+	private Map<Integer, Item> createHeroInventory(List<Item> heroItemList) {
+		Map<Integer, Item> inventory = new HashMap<>(heroItemList.size());
+		for(Item item: heroItemList){
+			inventory.put(item.getId().intValue(), item);
+		}
+		return inventory;
+	}
 
 	public float getOffsetX() {
 		return offsetX;
@@ -705,6 +763,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	public void setLastDialogOnHeroLocation() {
 		lastDialogX = heroObject.getLocalX();
 		lastDialogY = heroObject.getLocalY();
+	}
+	
+	public Item getRandomItem(String itemClass){
+		List<Item> itemsOfType = itemCache.get(itemClass);
+		if(itemsOfType.isEmpty()){
+			return null;
+		}
+		Item item = itemsOfType.get(random.nextInt(itemsOfType.size()));
+		itemsOfType.remove(item);
+		//TODO if itemsofType empty - load next pack
+		return item;
+	}
+
+	public Map<Integer, Item> getHeroInventory() {
+		return heroInventory;
 	}
 
 }

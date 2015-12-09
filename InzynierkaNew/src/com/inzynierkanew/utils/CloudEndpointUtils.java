@@ -2,10 +2,6 @@ package com.inzynierkanew.utils;
 
 import java.io.IOException;
 
-import android.app.Activity;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -15,7 +11,6 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.inzynierkanew.entities.general.propertyendpoint.Propertyendpoint;
 import com.inzynierkanew.entities.map.dungeonendpoint.Dungeonendpoint;
 import com.inzynierkanew.entities.map.dungeonvisitendpoint.Dungeonvisitendpoint;
 import com.inzynierkanew.entities.map.fieldtypeendpoint.Fieldtypeendpoint;
@@ -24,9 +19,14 @@ import com.inzynierkanew.entities.map.townendpoint.Townendpoint;
 import com.inzynierkanew.entities.map.townvisitendpoint.Townvisitendpoint;
 import com.inzynierkanew.entities.players.factionendpoint.Factionendpoint;
 import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
+import com.inzynierkanew.entities.players.itemendpoint.Itemendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.unittypeendpoint.Unittypeendpoint;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
+
+import android.app.Activity;
+import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Common utilities for working with Cloud Endpoints.
@@ -248,8 +248,8 @@ public class CloudEndpointUtils {
 		return updateBuilder(endpointBuilder).build();
 	}
 	
-	public static Propertyendpoint newPropertyEndpoint(){
-		Propertyendpoint.Builder endpointBuilder = new Propertyendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+	public static Itemendpoint newItemEndpoint(){
+		Itemendpoint.Builder endpointBuilder = new Itemendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {
 					public void initialize(HttpRequest httpRequest) {
 					}

@@ -27,32 +27,49 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "landendpoint.findLandsWithFreePassages" : {
-      "path" : "findLandsWithFreePassages",
-      "httpMethod" : "POST",
+    "landendpoint.updateLand" : {
+      "path" : "land",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand",
       "request" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "landendpoint.findLandsInNeighbourhood" : {
-      "path" : "findLandsInNeighbourhood/{mapSegment}",
+    "landendpoint.insertLand" : {
+      "path" : "land",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.insertLand",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.removeLand" : {
+      "path" : "land/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand",
       "request" : {
         "parameters" : {
-          "mapSegment" : {
+          "id" : {
             "type" : "int64",
             "required" : true
           }
@@ -60,22 +77,7 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "landendpoint.landEndpoint.findLandForNewPlayer" : {
-      "path" : "findLandForNewPlayer",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer",
-      "request" : {
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
       }
     },
     "landendpoint.getLand" : {
@@ -94,22 +96,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "landendpoint.insertLand" : {
-      "path" : "land",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.insertLand",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -140,17 +126,32 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "landendpoint.removeLand" : {
-      "path" : "land/{id}",
-      "httpMethod" : "DELETE",
+    "landendpoint.landEndpoint.findLandForNewPlayer" : {
+      "path" : "findLandForNewPlayer",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.findLandsInNeighbourhood" : {
+      "path" : "findLandsInNeighbourhood/{mapSegment}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood",
       "request" : {
         "parameters" : {
-          "id" : {
+          "mapSegment" : {
             "type" : "int64",
             "required" : true
           }
@@ -158,20 +159,19 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
-    "landendpoint.updateLand" : {
-      "path" : "land",
-      "httpMethod" : "PUT",
+    "landendpoint.findLandsWithFreePassages" : {
+      "path" : "findLandsWithFreePassages",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -180,21 +180,6 @@
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_Land" : {
-        "id" : "CollectionResponse_Land",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Land"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "Land" : {
         "id" : "Land",
         "type" : "object",
@@ -238,10 +223,10 @@
               "type" : "integer"
             }
           },
-          "width" : {
+          "height" : {
             "type" : "integer"
           },
-          "height" : {
+          "width" : {
             "type" : "integer"
           }
         }
@@ -308,25 +293,28 @@
             "type" : "boolean"
           }
         }
+      },
+      "CollectionResponse_Land" : {
+        "id" : "CollectionResponse_Land",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Land"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Land"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Land"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer" : {
-        "response" : {
+      "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand" : {
+        "request" : {
           "$ref" : "Land"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.getLand" : {
+        },
         "response" : {
           "$ref" : "Land"
         }
@@ -339,19 +327,31 @@
           "$ref" : "Land"
         }
       },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand" : {
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.getLand" : {
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
       "com.inzynierkanew.endpoints.map.LandEndpoint.listLand" : {
         "response" : {
           "$ref" : "CollectionResponse_Land"
         }
       },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.removeLand" : {
-      },
-      "com.inzynierkanew.endpoints.map.LandEndpoint.updateLand" : {
-        "request" : {
-          "$ref" : "Land"
-        },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandForNewPlayer" : {
         "response" : {
           "$ref" : "Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsInNeighbourhood" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.LandEndpoint.findLandsWithFreePassages" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
         }
       }
     }

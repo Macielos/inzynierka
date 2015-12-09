@@ -19,33 +19,6 @@
         android:layout_below="@+id/unitsAvailable"
         android:layout_marginTop="5dp"
         android:layout_weight="0.17" />
-<!-- 
-    <android.support.percent.PercentRelativeLayout
-         xmlns:android="http://schemas.android.com/apk/res/android"
-         xmlns:app="http://schemas.android.com/apk/res-auto"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
-
-     <ImageView
-         android:id="@+id/unit0"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_heightPercent="50%"
-         android:layout_marginLeftPercent="25%"
-         android:layout_marginTopPercent="25%"
-         android:layout_widthPercent="50%"
-         android:src="@drawable/swordsman" />
-     <ImageView
-         android:id="@+id/unit1"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_heightPercent="50%"
-         android:layout_marginLeftPercent="25%"
-         android:layout_marginTopPercent="25%"
-         android:layout_widthPercent="50%"
-         android:src="@drawable/swordsman" />
-
- 	</android.support.percent.PercentRelativeLayout/>-->
 
     <LinearLayout
         android:id="@+id/playerUnits"

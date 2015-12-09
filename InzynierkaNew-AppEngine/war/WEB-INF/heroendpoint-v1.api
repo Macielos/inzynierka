@@ -43,20 +43,25 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "heroendpoint.updateHero" : {
-      "path" : "hero",
-      "httpMethod" : "PUT",
+    "heroendpoint.removeHero" : {
+      "path" : "hero/{id}",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     },
     "heroendpoint.listHero" : {
@@ -84,25 +89,20 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "heroendpoint.removeHero" : {
-      "path" : "hero/{id}",
-      "httpMethod" : "DELETE",
+    "heroendpoint.updateHero" : {
+      "path" : "hero",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "heroendpoint.getHero" : {
@@ -211,6 +211,13 @@
           "$ref" : "Hero"
         }
       },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
+      },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.listHero" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Hero"
+        }
+      },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero" : {
         "request" : {
           "$ref" : "Hero"
@@ -218,13 +225,6 @@
         "response" : {
           "$ref" : "Hero"
         }
-      },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.listHero" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Hero"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
       },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero" : {
         "response" : {

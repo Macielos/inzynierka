@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/wOeI0JBlPa_fCVDRhuewf_JULfI\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/9T-mzuxMyH9oVVxHqVIwcBheRQY\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -121,13 +121,6 @@
    "id": "Land",
    "type": "object",
    "properties": {
-    "dungeonIds": {
-     "type": "array",
-     "items": {
-      "type": "string",
-      "format": "int64"
-     }
-    },
     "fields": {
      "type": "array",
      "items": {
@@ -204,6 +197,9 @@
     "nextY": {
      "type": "integer",
      "format": "int32"
+    },
+    "portal": {
+     "type": "boolean"
     },
     "type": {
      "type": "string",

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.inzynierkanew.entities.players.itemendpoint.model.Item;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.model.Unit;
 
@@ -48,5 +49,16 @@ public abstract class GameUtils {
 		}
 		return true;
 	}
-		
+
+	public static List<Item> itemIdsToItems(List<Integer> itemIds, Map<Integer, Item> itemMap) {
+		List<Item> items = new ArrayList<>();
+		Item item;
+		for(Integer i: itemIds){
+			item = itemMap.get(i);
+			if(item!=null){
+				items.add(item);
+			}
+		}
+		return items;
+	}
 }

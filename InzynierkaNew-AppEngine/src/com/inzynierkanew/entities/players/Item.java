@@ -17,16 +17,19 @@ public class Item {
 	private ItemClass itemClass;
 	private int itemLevel;
 	
+	private String icon;
+	
 	private int strengthBonus;
 	private int agilityBonus;
 	private int intelligenceBonus;
 	
-	public Item(Long id, String name, ItemClass itemClass, int itemLevel,
+	public Item(Long id, String name, ItemClass itemClass, int itemLevel, String icon, 
 			int strengthBonus, int agilityBonus, int intelligenceBonus) {
 		this.id = id;
 		this.name = name;
 		this.itemClass = itemClass;
 		this.itemLevel = itemLevel;
+		this.icon = icon;
 		this.strengthBonus = strengthBonus;
 		this.agilityBonus = agilityBonus;
 		this.intelligenceBonus = intelligenceBonus;
@@ -59,5 +62,10 @@ public class Item {
 	public int getIntelligenceBonus() {
 		return intelligenceBonus;
 	}
+
+	public String getIcon() {
+		return icon;
+	}
+	
 	
 }

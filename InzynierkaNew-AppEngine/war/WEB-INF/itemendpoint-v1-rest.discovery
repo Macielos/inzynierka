@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/kqt5zjFOx_U0lR6Rt1kBFG275Og\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/rSIqt_MPTqioIhMpUTeDZJgqrzM\"",
  "discoveryVersion": "v1",
  "id": "itemendpoint:v1",
  "name": "itemendpoint",
@@ -97,6 +97,9 @@
      "type": "integer",
      "format": "int32"
     },
+    "icon": {
+     "type": "string"
+    },
     "id": {
      "type": "string",
      "format": "int64"
@@ -159,30 +162,53 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "getItemsByType": {
-   "id": "itemendpoint.getItemsByType",
-   "path": "collectionresponse_item/{itemLevel}/{itemClass}",
+  "getItems": {
+   "id": "itemendpoint.getItems",
+   "path": "collectionresponse_item/{ids}",
    "httpMethod": "GET",
    "parameters": {
+    "ids": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "ids"
+   ],
+   "response": {
+    "$ref": "CollectionResponse_Item"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getRandomItemsByType": {
+   "id": "itemendpoint.getRandomItemsByType",
+   "path": "collectionresponse_item/{limit}/{heroLevel}/{itemClass}",
+   "httpMethod": "GET",
+   "parameters": {
+    "heroLevel": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
     "itemClass": {
      "type": "string",
      "required": true,
      "location": "path"
     },
-    "itemLevel": {
+    "limit": {
      "type": "integer",
      "required": true,
      "format": "int32",
      "location": "path"
-    },
-    "limit": {
-     "type": "integer",
-     "format": "int32",
-     "location": "query"
     }
    },
    "parameterOrder": [
-    "itemLevel",
+    "limit",
+    "heroLevel",
     "itemClass"
    ],
    "response": {

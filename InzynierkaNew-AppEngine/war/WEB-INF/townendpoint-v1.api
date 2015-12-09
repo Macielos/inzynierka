@@ -27,22 +27,33 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "townendpoint.getTown" : {
-      "path" : "town/{id}",
-      "httpMethod" : "GET",
+    "townendpoint.insertTown" : {
+      "path" : "town",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.getTown",
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.insertTown",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "townendpoint.updateTown" : {
+      "path" : "town",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.updateTown",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -73,6 +84,27 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "townendpoint.getTown" : {
+      "path" : "town/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.getTown",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "townendpoint.removeTown" : {
       "path" : "town/{id}",
       "httpMethod" : "DELETE",
@@ -92,38 +124,6 @@
       },
       "response" : {
         "body" : "empty"
-      }
-    },
-    "townendpoint.updateTown" : {
-      "path" : "town",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.updateTown",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "townendpoint.insertTown" : {
-      "path" : "town",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.insertTown",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
       }
     }
   },
@@ -179,17 +179,13 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.TownEndpoint.getTown" : {
+      "com.inzynierkanew.endpoints.map.TownEndpoint.insertTown" : {
+        "request" : {
+          "$ref" : "Town"
+        },
         "response" : {
           "$ref" : "Town"
         }
-      },
-      "com.inzynierkanew.endpoints.map.TownEndpoint.listTown" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Town"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.TownEndpoint.removeTown" : {
       },
       "com.inzynierkanew.endpoints.map.TownEndpoint.updateTown" : {
         "request" : {
@@ -199,13 +195,17 @@
           "$ref" : "Town"
         }
       },
-      "com.inzynierkanew.endpoints.map.TownEndpoint.insertTown" : {
-        "request" : {
-          "$ref" : "Town"
-        },
+      "com.inzynierkanew.endpoints.map.TownEndpoint.listTown" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Town"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.TownEndpoint.getTown" : {
         "response" : {
           "$ref" : "Town"
         }
+      },
+      "com.inzynierkanew.endpoints.map.TownEndpoint.removeTown" : {
       }
     }
   }

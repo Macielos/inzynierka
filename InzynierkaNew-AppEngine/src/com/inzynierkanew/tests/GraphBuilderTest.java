@@ -5,7 +5,9 @@ import java.util.Set;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.datanucleus.util.StringUtils;
 import org.junit.Assert;
+import org.junit.Test;
 
 import com.inzynierkanew.utils.Point;
 import com.inzynierkanew.world.GraphBuilder;
@@ -17,7 +19,7 @@ public class GraphBuilderTest {
 	private Set<Point> points;
 	private GraphBuilder graphBuilder;
 	
-	@org.junit.Test
+	//@org.junit.Test
 	public void testLandGeneration(){
 		points = new HashSet<>();
 		Point point1 = new Point(1, 2);
@@ -42,6 +44,11 @@ public class GraphBuilderTest {
 		
 		Assert.assertTrue(graphBuilder.isConnected());
 		Assert.assertEquals(4, graphBuilder.getEdgesIfConnected().size());
+	}
+	
+	@Test
+	public void testJoinString(){
+		System.out.println(StringUtils.objectArrayToString(new Object[]{5, 9, 18}));
 	}
 		
 }

@@ -1,9 +1,12 @@
 package com.inzynierkanew.endpoints.players;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -19,7 +22,9 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.players.Item;
+import com.inzynierkanew.utils.CollectionUtils;
 import com.inzynierkanew.utils.EMF;
+import com.inzynierkanew.utils.SharedConstants;
 
 @Api(name = "itemendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players") )
 public class ItemEndpoint {
@@ -69,44 +74,54 @@ public class ItemEndpoint {
 		return CollectionResponse.<Item> builder().setItems(execute).setNextPageToken(cursorString).build();
 	}
 	
+	@ApiMethod(name = "getItems")
+	public CollectionResponse<Item> getItems(@Named("ids") String ids) {
+		String[] idArray = ids.split(SharedConstants.SEPARATOR);
+		List<Item> execute = new ArrayList<>(idArray.length);
+		EntityManager mgr = null;
+		try {
+			mgr = getEntityManager();
+			Item item;
+			for(String i: idArray){
+				item = mgr.find(Item.class, Long.parseLong(i));
+				if(item!=null){
+					execute.add(item);
+				}
+			}
+		} finally {
+			mgr.close();
+		}
+		return CollectionResponse.<Item> builder().setItems(execute).build();
+	}
+	
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "getRandomItemsByType")
 	public CollectionResponse<Item> getRandomItemsByType(@Named("limit") Integer limit, 
-			@Named("itemLevel") Integer itemLevel, @Named("itemClass") String itemClass ) {
+			@Named("heroLevel") Integer heroLevel, @Named("itemClass") String itemClass ) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
 		List<Item> execute = null;
+		
+		int minItemLevel = heroLevel == null ? 0 : (heroLevel - SharedConstants.HERO_ITEM_LEVEL_DIFF);
+		Integer maxItemLevel = heroLevel == null ? null : (heroLevel + SharedConstants.HERO_ITEM_LEVEL_DIFF);
 
 		try {
 			mgr = getEntityManager();
-			String queryString = "select from Item as Item where Item.itemLevel = "+itemLevel;
+			String queryString = "select from Item as Item where Item.itemLevel >= "+minItemLevel;
+			if(maxItemLevel!=null){
+				queryString+=" and Item.itemLevel <= "+maxItemLevel;
+			}
 			if(itemClass!=null){
-				queryString+=" and Item.itemClass = "+itemClass;
+				queryString+=" and Item.itemClass = '"+itemClass+"'";
 			}
 			Query query = mgr.createQuery(queryString);
 			
 			execute = (List<Item>) query.getResultList();
-			
-			if(limit!=null){
-				Random random = new Random();
-				Map<Integer, Item> shaffledItems = new HashMap<>(limit);
-				Item randomItem;
-				int randomIndex;
-				for(int i = 0; i < limit; ){
-					randomIndex = random.nextInt(execute.size());
-					randomItem = execute.get(randomIndex);
-					if(!shaffledItems.containsKey(randomIndex)){
-						++i;
-					}
-					shaffledItems.put(randomIndex, randomItem);
-				}
-				execute = (List<Item>) shaffledItems.values();
-			}
+			execute = CollectionUtils.getNRandomElements(execute, limit);
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Item obj : execute)
-				;
+			for (Item obj : execute);
 		} finally {
 			mgr.close();
 		}
