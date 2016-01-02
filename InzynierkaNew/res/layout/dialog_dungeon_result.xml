@@ -9,7 +9,7 @@
         android:id="@+id/dungeon_dialog_result_title"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="Battle result"
+        android:text="@string/battle_result"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
@@ -25,14 +25,14 @@
             android:id="@+id/dungeon_dialog_result_goldFoundLabel"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:text="Gold found: "
+            android:text="@string/gold_found"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_goldFoundValue"
             android:layout_width="325dp"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="@string/empty"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
@@ -49,14 +49,14 @@
             android:id="@+id/dungeon_dialog_result_experienceGainedLabel"
             android:layout_width="126dp"
             android:layout_height="wrap_content"
-            android:text="XP gained: "
+            android:text="@string/xp_gained"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_experienceGainedValue"
             android:layout_width="325dp"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="@string/empty"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
@@ -65,7 +65,7 @@
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dungeon_dialog_result_experienceGained"
-        android:text="Items gained: "
+        android:text="@string/items_gained"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <LinearLayout
@@ -101,7 +101,7 @@
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dungeon_dialog_result_items"
-        android:text="Your losses: "
+        android:text="@string/your_losses"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
@@ -155,31 +155,31 @@
             android:id="@+id/dungeon_dialog_result_playerLosses_unitCount0"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit1" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_playerLosses_unitCount1"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit2" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_playerLosses_unitCount2"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit3" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_playerLosses_unitCount3"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit4" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_playerLosses_unitCount4"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit5" />
+            android:text="@string/empty" />
     </LinearLayout>
 
     <TextView
@@ -187,7 +187,7 @@
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dungeon_dialog_result_playerLossesCounts"
-        android:text="Enemy losses: "
+        android:text="@string/enemy_losses"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
@@ -241,31 +241,31 @@
             android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount0"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit1" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount1"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit2" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount2"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit3" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount3"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit4" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount4"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit5" />
+            android:text="@string/empty" />
     </LinearLayout>
 
     <Button
@@ -276,6 +276,6 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scrollHorizontally="true"
-        android:text="Back to land" />
+        android:text="@string/back_to_land" />
 
 </RelativeLayout>

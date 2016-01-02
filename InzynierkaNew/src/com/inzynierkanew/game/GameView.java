@@ -94,7 +94,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private Map<Integer, Faction> factions;
 	
 	private Map<String, List<Item>> itemCache;
-	private Map<Integer, Item> heroInventory;
+	private List<Item> heroInventory;
 
 	private int townIndex;
 	private int passageIndex;
@@ -108,7 +108,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	private TownVisit townVisit;
 	private Map<Long, DungeonVisit> dungeonVisitHistory;
 
-	private HeroModel heroObject;
+	private HeroModel heroModel;
 	private LandModel landMap;
 
 	private int[] xpsForNextLevel;
@@ -148,7 +148,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		}
 		
 		downloadInitialData();
-		downloadNextLand(heroObject.getHero().getCurrentLandId());
+		downloadNextLand(heroModel.getHero().getCurrentLandId());
 		try {
 			Log.i(TAG, land == null ? "land is null" : land.toPrettyString());
 		} catch (IOException e) {
@@ -203,7 +203,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		if (hero.getCurrentLandId() == null) {
 			throw new RuntimeException("Hero is not in any land on server");
 		}
-		List<Item> heroItemList = hero.getItems() == null ? new ArrayList<Item>(0) : new AsyncTask<Void, Void, List<Item>>() {
+		heroInventory = hero.getItems() == null ? new ArrayList<Item>(0) : new AsyncTask<Void, Void, List<Item>>() {
 			protected List<Item> doInBackground(Void[] params) {
 				try {
 					return itemEndpoint.getItems(StringUtils.join(hero.getItems())).execute().getItems();
@@ -213,8 +213,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 				}
 			};
 		}.execute().get();
-		heroInventory = createHeroInventory(heroItemList);
-		heroObject = new HeroModel(this, getPlayerBitmap(), hero);
+		//heroInventory = createHeroInventory(heroItemList);
+		heroModel = new HeroModel(this, getPlayerBitmap(), hero);
 	}
 
 	private void downloadTypes() throws InterruptedException, ExecutionException, IllegalAccessException,
@@ -374,30 +374,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 				| NoSuchFieldException e) {
 			Log.e(TAG, "Failed to download land in an async task", e);
 		}
-
-		// com.inzynierkanew.entities.map.townendpoint.model.Town town = null;
-		// try {
-		// town =
-		// townEndpoint.getTown(land.getTown().getKey().getId()).execute();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } finally {
-		// try {
-		// Log.i(TAG, town.toPrettyString());
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-
 	}
 
 	private void centerCameraOnHero() {
-		heroObject.setCornerCoordinates(land.getMinX(), land.getMinY());
+		heroModel.setCornerCoordinates(land.getMinX(), land.getMinY());
 		DisplayMetrics size = getSize();
-		offsetX = -heroObject.getLocalX() * Constants.TILE_SIZE + size.widthPixels / 2;
-		offsetY = -heroObject.getLocalY() * Constants.TILE_SIZE + size.heightPixels / 2;
+		offsetX = -heroModel.getLocalX() * Constants.TILE_SIZE + size.widthPixels / 2;
+		offsetY = -heroModel.getLocalY() * Constants.TILE_SIZE + size.heightPixels / 2;
 		setLastDialogOnHeroLocation();
 	}
 
@@ -420,22 +403,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		// trzeba
 		landMap.render(canvas);
 		// }
-		heroObject.render(canvas);
+		heroModel.render(canvas);
 	}
 
 	public void update() {
 		landMap.update();
-		heroObject.update();
-		if (!heroObject.onObject()) {
+		heroModel.update();
+		if (!heroModel.onObject()) {
 			return;
 		}
 
-		if (heroObject.onTheMove()) {
+		if (heroModel.onTheMove()) {
 			return;
 		}
 
 		if (renderMode.get() == DIALOG_CHOSEN
-				&& (heroObject.getLocalX() != lastDialogX || heroObject.getLocalY() != lastDialogY)) {
+				&& (heroModel.getLocalX() != lastDialogX || heroModel.getLocalY() != lastDialogY)) {
 			renderMode.set(LOOP);
 		}
 
@@ -443,7 +426,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 			return;
 		}
 
-		final GenericJson object = landMap.getObject(heroObject.getLocalX(), heroObject.getLocalY());
+		final GenericJson object = landMap.getObject(heroModel.getLocalX(), heroModel.getLocalY());
 		if (object == null) {
 			return;
 		}
@@ -490,8 +473,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 								@Override
 								public void onConfirm() {
 									renderMode.set(DIALOG_CHOSEN);
-									lastDialogX = heroObject.getLocalX();
-									lastDialogY = heroObject.getLocalY();
+									lastDialogX = heroModel.getLocalX();
+									lastDialogY = heroModel.getLocalY();
 								}
 							});
 				} else {
@@ -503,16 +486,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 									// try {
 									thread.setPaused(true);
 									downloadNextLand(passage.getNextLandId());
-									heroObject.moveToNextLand(passage, land);
+									heroModel.moveToNextLand(passage, land);
 									try {
-										playerEndpoint.moveHeroToDifferentLand(heroObject.getHero().getId(),
+										playerEndpoint.moveHeroToDifferentLand(heroModel.getHero().getId(),
 												passage.getNextLandId(), passage.getNextX(), passage.getNextY());
 									} catch (IOException e) {
 										Log.e(TAG, "Failed to move Hero to land " + passage.getNextLandId(), e);
 									}
 									renderMode.set(DIALOG_CHOSEN);
-									lastDialogX = heroObject.getLocalX();
-									lastDialogY = heroObject.getLocalY();
+									lastDialogX = heroModel.getLocalX();
+									lastDialogY = heroModel.getLocalY();
 									thread.setPaused(false);
 									// } catch (IllegalArgumentException e) {
 									// Log.e(TAG, "Error while downloading next
@@ -523,8 +506,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 								@Override
 								public void onDecline() {
 									renderMode.set(DIALOG_CHOSEN);
-									lastDialogX = heroObject.getLocalX();
-									lastDialogY = heroObject.getLocalY();
+									lastDialogX = heroModel.getLocalX();
+									lastDialogY = heroModel.getLocalY();
 								}
 
 							});
@@ -576,7 +559,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 			if (TimeUtils.timeElapsed(lastTouch) < DELTA_FOR_DOUBLE_TAP) {
 				Point localDestinationPoint = new Point((int) ((event.getX() - offsetX) / Constants.TILE_SIZE),
 						(int) ((event.getY() - offsetY) / Constants.TILE_SIZE));
-				Point localStartPoint = new Point(heroObject.getLocalX(), heroObject.getLocalY());
+				Point localStartPoint = new Point(heroModel.getLocalX(), heroModel.getLocalY());
 
 				// if (localDestinationPoint.equals(localStartPoint)
 				// && landMap.getObject(heroObject.getLocalX(),
@@ -588,13 +571,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 				// return true;
 				// }
 				if (landMap.isFieldPassable(localDestinationPoint.x, localDestinationPoint.y)) {
-					if (heroObject.onTheMove()) {
-						heroObject.haltMovement();
+					if (heroModel.onTheMove()) {
+						heroModel.haltMovement();
 					}
-					heroObject.setHeroCoordinates(localDestinationPoint.x, localDestinationPoint.y);
-					heroObject.setPath(landMap.findPath(localStartPoint, localDestinationPoint));
+					heroModel.setHeroCoordinates(localDestinationPoint.x, localDestinationPoint.y);
+					heroModel.setPath(landMap.findPath(localStartPoint, localDestinationPoint));
 					try {
-						playerEndpoint.updateHeroPosition(heroObject.getHero().getId(),
+						playerEndpoint.updateHeroPosition(heroModel.getHero().getId(),
 								localDestinationPoint.x - landMap.getCornerX(),
 								localDestinationPoint.y - landMap.getCornerY());
 					} catch (IOException e) {
@@ -761,8 +744,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 	}
 
 	public void setLastDialogOnHeroLocation() {
-		lastDialogX = heroObject.getLocalX();
-		lastDialogY = heroObject.getLocalY();
+		lastDialogX = heroModel.getLocalX();
+		lastDialogY = heroModel.getLocalY();
 	}
 	
 	public Item getRandomItem(String itemClass){
@@ -776,8 +759,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 		return item;
 	}
 
-	public Map<Integer, Item> getHeroInventory() {
+	public List<Item> getHeroInventory() {
 		return heroInventory;
+	}
+	
+	public void removeItem(Item toRemove) {
+		for(Item item: heroInventory){
+			if(item.getId().longValue()==toRemove.getId().longValue()){
+				heroInventory.remove(item);
+				hero.getItems().remove(hero.getItems().indexOf(item.getId().intValue()));
+				break;
+			}
+		}
 	}
 
 }

@@ -27,22 +27,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "dungeonvisitendpoint.insertDungeonVisit" : {
-      "path" : "dungeonvisit",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.insertDungeonVisit",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "dungeonvisitendpoint.listDungeonVisitsByIds" : {
       "path" : "dungeonvisit/{heroId}/{relatedEntityId}/{byLand}",
       "httpMethod" : "GET",
@@ -67,6 +51,22 @@
           }
         },
         "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "dungeonvisitendpoint.insertDungeonVisit" : {
+      "path" : "dungeonvisit",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.insertDungeonVisit",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -112,6 +112,21 @@
   },
   "descriptor" : {
     "schemas" : {
+      "CollectionResponse_DungeonVisit" : {
+        "id" : "CollectionResponse_DungeonVisit",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DungeonVisit"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "DungeonVisit" : {
         "id" : "DungeonVisit",
         "type" : "object",
@@ -139,35 +154,20 @@
             }
           }
         }
-      },
-      "CollectionResponse_DungeonVisit" : {
-        "id" : "CollectionResponse_DungeonVisit",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "DungeonVisit"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
       }
     },
     "methods" : {
+      "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.listDungeonVisitsByIds" : {
+        "response" : {
+          "$ref" : "CollectionResponse_DungeonVisit"
+        }
+      },
       "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.insertDungeonVisit" : {
         "request" : {
           "$ref" : "DungeonVisit"
         },
         "response" : {
           "$ref" : "DungeonVisit"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.listDungeonVisitsByIds" : {
-        "response" : {
-          "$ref" : "CollectionResponse_DungeonVisit"
         }
       },
       "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.updateDungeonVisit" : {

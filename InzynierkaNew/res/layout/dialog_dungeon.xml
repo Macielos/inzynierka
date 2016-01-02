@@ -9,7 +9,7 @@
         android:id="@+id/dungeon_dialog_title"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="Dungeon"
+        android:text="@string/dungeon"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -19,7 +19,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/dungeon_dialog_title"
-        android:text="(faction)"
+        android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
@@ -73,31 +73,31 @@
             android:id="@+id/dungeon_dialog_unitCount0"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit1" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_unitCount1"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit2" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_unitCount2"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit3" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_unitCount3"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit4" />
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/dungeon_dialog_unitCount4"
             android:layout_width="59dp"
             android:layout_height="20dp"
-            android:text="unit5" />
+            android:text="@string/empty" />
     </LinearLayout>
         
     <Button
@@ -108,7 +108,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scrollHorizontally="true"
-        android:text="Start combat" />
+        android:text="@string/start_combat" />
 
     <Button
         android:id="@+id/dungeon_dialog_withdrawButton"
@@ -118,6 +118,6 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scrollHorizontally="true"
-        android:text="Back to land" />
+        android:text="@string/back_to_land" />
 
 </RelativeLayout>

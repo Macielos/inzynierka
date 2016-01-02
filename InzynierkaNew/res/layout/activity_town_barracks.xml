@@ -6,10 +6,18 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/barracks"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="@string/town_barracks"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
         android:id="@+id/unitsAvailable"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="Units available"
+        android:layout_below="@+id/barracks"
+        android:text="@string/units_available"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
@@ -24,77 +32,100 @@
         android:id="@+id/playerUnits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.00"
+        android:weightSum="6"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/unit0"
-            android:layout_width="59dp"
-            android:layout_height="51dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:src="@drawable/swordsman" />
 
         <ImageView
             android:id="@+id/unit1"
-            android:layout_width="59dp"
-            android:layout_height="51dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:src="@drawable/swordsman" />
 
         <ImageView
             android:id="@+id/unit2"
-            android:layout_width="59dp"
-            android:layout_height="51dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:src="@drawable/swordsman" />
 
         <ImageView
             android:id="@+id/unit3"
-            android:layout_width="59dp"
-            android:layout_height="51dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:src="@drawable/swordsman" />
 
         <ImageView
             android:id="@+id/unit4"
-            android:layout_width="59dp"
-            android:layout_height="51dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:src="@drawable/swordsman" />
 
+        <ImageView
+            android:id="@+id/unit5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:src="@drawable/swordsman" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/playerUnitCounts"
         android:layout_width="match_parent"
-        android:layout_height="23dp"
+        android:layout_height="32dp"
+        android:weightSum="6"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/unitCount0"
-            android:layout_width="59dp"
-            android:layout_height="20dp"
-            android:text="unit1" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/unitCount1"
-            android:layout_width="59dp"
-            android:layout_height="20dp"
-            android:text="unit2" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/unitCount2"
-            android:layout_width="59dp"
-            android:layout_height="20dp"
-            android:text="unit3" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/unitCount3"
-            android:layout_width="59dp"
-            android:layout_height="20dp"
-            android:text="unit4" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/empty" />
 
         <TextView
             android:id="@+id/unitCount4"
-            android:layout_width="59dp"
-            android:layout_height="20dp"
-            android:text="unit5" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/empty" />
 
+        <TextView
+            android:id="@+id/unitCount5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/empty" />
     </LinearLayout>
 
     <Button
@@ -102,6 +133,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="Back" />
+        android:text="@string/back" />
 
 </LinearLayout>

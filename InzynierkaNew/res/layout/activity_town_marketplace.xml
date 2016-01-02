@@ -7,16 +7,37 @@
 
     <TextView
         android:id="@+id/marketplace"
-        android:layout_width="325dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Marketplace"
+        android:text="@string/town_marketplace"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+     <ListView
+        android:id="@+id/heroInventoryView"
+        android:layout_width="match_parent"
+        android:layout_height="286dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="0.17" />
 
+    <Button
+        android:id="@+id/marketPlaceSellButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="@string/sell" />
+    
+    <Button
+        android:id="@+id/marketPlaceSellAllButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="@string/sell_all" />
+    
     <Button
         android:id="@+id/marketPlaceBackButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="Back" />
+        android:text="@string/back" />
 
 </LinearLayout>

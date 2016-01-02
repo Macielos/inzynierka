@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/rSIqt_MPTqioIhMpUTeDZJgqrzM\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/TBNQWcie3wogbhivqFxEJ32oWv4\"",
  "discoveryVersion": "v1",
  "id": "itemendpoint:v1",
  "name": "itemendpoint",
@@ -93,7 +93,11 @@
    "id": "Item",
    "type": "object",
    "properties": {
-    "agilityBonus": {
+    "attackBonus": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "defenceBonus": {
      "type": "integer",
      "format": "int32"
     },
@@ -103,10 +107,6 @@
     "id": {
      "type": "string",
      "format": "int64"
-    },
-    "intelligenceBonus": {
-     "type": "integer",
-     "format": "int32"
     },
     "itemClass": {
      "$ref": "ItemClass"
@@ -118,7 +118,11 @@
     "name": {
      "type": "string"
     },
-    "strengthBonus": {
+    "powerBonus": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "value": {
      "type": "integer",
      "format": "int32"
     }

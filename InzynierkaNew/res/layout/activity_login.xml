@@ -11,13 +11,13 @@
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.15"
-        android:text="Enter your name and password to log in" />
+        android:text="@string/enter_name" />
 
     <TextView
         android:id="@+id/enterName"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="Your name" />
+        android:text="@string/your_name" />
 
     <EditText
         android:id="@+id/name"
@@ -30,7 +30,7 @@
         android:id="@+id/enterPassword"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="Password" />
+        android:text="@string/password" />
 
     <EditText
         android:id="@+id/password"
@@ -45,20 +45,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="Login" />
+        android:text="@string/login" />
 
     <TextView
         android:id="@+id/noaccount"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.10"
-        android:text="Do not have an account yet? " />
+        android:text="@string/no_account" />
 
   <Button
       android:id="@+id/registerButton"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_weight="0"
-      android:text="Register" />
+      android:text="@string/register" />
 
 </LinearLayout>

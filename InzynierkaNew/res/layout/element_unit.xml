@@ -22,7 +22,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scrollHorizontally="true"
-        android:text="Recruit" />
+        android:text="@string/recruit" />
 
     <TextView
         android:id="@+id/unitName"
@@ -31,7 +31,7 @@
         android:layout_alignLeft="@+id/unitImage"
         android:layout_below="@+id/unitImage"
         android:layout_marginLeft="23dp"
-        android:text="Name"
+        android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView

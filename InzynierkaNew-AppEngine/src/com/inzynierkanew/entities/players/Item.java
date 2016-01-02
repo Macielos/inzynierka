@@ -16,23 +16,25 @@ public class Item {
 	private String name;
 	private ItemClass itemClass;
 	private int itemLevel;
+	private int value;
 	
 	private String icon;
 	
-	private int strengthBonus;
-	private int agilityBonus;
-	private int intelligenceBonus;
-	
-	public Item(Long id, String name, ItemClass itemClass, int itemLevel, String icon, 
-			int strengthBonus, int agilityBonus, int intelligenceBonus) {
+	private int attackBonus;
+	private int defenceBonus;
+	private int powerBonus;
+		
+	public Item(Long id, String name, ItemClass itemClass, int itemLevel, String icon, int value, 
+			int attackBonus, int defenceBonus, int powerBonus) {
 		this.id = id;
 		this.name = name;
 		this.itemClass = itemClass;
 		this.itemLevel = itemLevel;
+		this.value = value;
 		this.icon = icon;
-		this.strengthBonus = strengthBonus;
-		this.agilityBonus = agilityBonus;
-		this.intelligenceBonus = intelligenceBonus;
+		this.attackBonus = attackBonus;
+		this.defenceBonus = defenceBonus;
+		this.powerBonus = powerBonus;
 	}
 	
 	public Long getId() {
@@ -51,21 +53,24 @@ public class Item {
 		return itemLevel;
 	}
 	
-	public int getStrengthBonus() {
-		return strengthBonus;
-	}
-	
-	public int getAgilityBonus() {
-		return agilityBonus;
-	}
-	
-	public int getIntelligenceBonus() {
-		return intelligenceBonus;
+	public int getValue() {
+		return value;
 	}
 
 	public String getIcon() {
 		return icon;
 	}
+		
+	public int getAttackBonus() {
+		return attackBonus;
+	}
 	
+	public int getDefenceBonus() {
+		return defenceBonus;
+	}
 	
+	public int getPowerBonus() {
+		return powerBonus;
+	}
+
 }

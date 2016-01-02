@@ -1,6 +1,8 @@
 package com.inzynierkanew.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +11,20 @@ import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.model.Unit;
 
 public abstract class GameUtils {
+	
+	private static Comparator<Item> itemComparator = new Comparator<Item>() {
+		@Override
+		public int compare(Item lhs, Item rhs) {
+			long diff = lhs.getId() - rhs.getId();
+			if(diff > 0){
+				return 1;
+			}
+			if(diff < 0){
+				return -1;
+			}
+			return 0;
+		}
+	};
 	
 	private GameUtils(){
 		
@@ -60,5 +76,9 @@ public abstract class GameUtils {
 			}
 		}
 		return items;
+	}
+	
+	public static void sortItems(List<Item> items){
+		Collections.sort(items, itemComparator);
 	}
 }

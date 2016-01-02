@@ -10,16 +10,10 @@ import javax.servlet.ServletContextListener;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
-import com.inzynierkanew.dumps.WorldDump;
-import com.inzynierkanew.endpoints.general.PropertyEndpoint;
-import com.inzynierkanew.endpoints.map.DungeonEndpoint;
 import com.inzynierkanew.endpoints.map.FieldTypeEndpoint;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
-import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.endpoints.players.FactionEndpoint;
-import com.inzynierkanew.endpoints.players.HeroEndpoint;
 import com.inzynierkanew.endpoints.players.ItemEndpoint;
-import com.inzynierkanew.endpoints.players.PlayerEndpoint;
 import com.inzynierkanew.endpoints.players.UnitTypeEndpoint;
 import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.entities.players.Faction;
@@ -27,7 +21,6 @@ import com.inzynierkanew.entities.players.Item;
 import com.inzynierkanew.entities.players.Item.ItemClass;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.utils.EMF;
-import com.inzynierkanew.world.WorldGenerationException;
 import com.inzynierkanew.world.WorldGeneratorFactory;
 
 public class ApplicationInitializer implements ServletContextListener {
@@ -125,20 +118,20 @@ public class ApplicationInitializer implements ServletContextListener {
 				new FieldType(100L, "Grass", true, "grass"), new FieldType(110L, "Mountains", false, "mountains"));
 
 		List<Item> items = Arrays.asList(
-				new Item(1L, "Sword of Might +5", ItemClass.STANDARD, 1, "item_sword", 5, 0, 0),
-				new Item(2L, "Sword of Might +10", ItemClass.STANDARD, 6, "item_sword", 10, 0, 0),
-				new Item(3L, "Sword of Might +20", ItemClass.STANDARD, 11, "item_sword", 20, 0, 0),
-				new Item(11L, "Dagger of Swiftness +5", ItemClass.STANDARD, 1, "item_dagger", 0, 5, 0),
-				new Item(12L, "Dagger of Swiftness +10", ItemClass.STANDARD, 6, "item_dagger", 0, 10, 0),
-				new Item(13L, "Dagger of Swiftness +20", ItemClass.STANDARD, 11, "item_dagger", 0, 20, 0),
-				new Item(21L, "Staff of Enlightment +5", ItemClass.STANDARD, 1, "item_staff", 0, 0, 5),
-				new Item(22L, "Staff of Enlightment +10", ItemClass.STANDARD, 6, "item_staff", 0, 0, 10),
-				new Item(23L, "Staff of Enlightment +20", ItemClass.STANDARD, 11, "item_staff",  0, 0, 20),
-				new Item(101L, "Divine Shield", ItemClass.MAGICAL, 11, "item_shield_magical", 30, 35, 0),
-				new Item(201L, "Sword of Punishment", ItemClass.MAGICAL, 11, "item_sword_long", 60, 10, 5),
-				new Item(301L, "Staff of Eternity", ItemClass.MAGICAL, 11, "item_staff_magical", 10, 10, 50),
-				new Item(401L, "Ring of Fortitude", ItemClass.MAGICAL, 11, "item_ring_magical", 10, 25, 25),
-				new Item(1001L, "Lightbringer", ItemClass.LEGENDARY, 11, "item_sword_holy", 160, 20, 80));
+				new Item(1L, "Sword of Might +5", ItemClass.STANDARD, 1, "item_sword", 650, 5, 0, 0),
+				new Item(2L, "Sword of Might +10", ItemClass.STANDARD, 6, "item_sword", 950, 10, 0, 0),
+				new Item(3L, "Sword of Might +20", ItemClass.STANDARD, 11, "item_sword", 1350, 20, 0, 0),
+				new Item(11L, "Dagger of Swiftness +5", ItemClass.STANDARD, 1, "item_dagger", 600, 0, 5, 0),
+				new Item(12L, "Dagger of Swiftness +10", ItemClass.STANDARD, 6, "item_dagger", 1000, 0, 10, 0),
+				new Item(13L, "Dagger of Swiftness +20", ItemClass.STANDARD, 11, "item_dagger", 1300, 0, 20, 0),
+				new Item(21L, "Staff of Enlightment +5", ItemClass.STANDARD, 1, "item_staff", 750, 0, 0, 5),
+				new Item(22L, "Staff of Enlightment +10", ItemClass.STANDARD, 6, "item_staff", 1050, 0, 0, 10),
+				new Item(23L, "Staff of Enlightment +20", ItemClass.STANDARD, 11, "item_staff",  1450, 0, 0, 20),
+				new Item(101L, "Divine Shield", ItemClass.MAGICAL, 11, "item_shield_magical", 2700, 30, 35, 0),
+				new Item(201L, "Sword of Punishment", ItemClass.MAGICAL, 11, "item_sword_long", 3100, 60, 10, 5),
+				new Item(301L, "Staff of Eternity", ItemClass.MAGICAL, 11, "item_staff_magical", 3500, 10, 10, 50),
+				new Item(401L, "Ring of Fortitude", ItemClass.MAGICAL, 11, "item_ring_magical", 3800, 10, 25, 25),
+				new Item(1001L, "Lightbringer", ItemClass.LEGENDARY, 11, "item_sword_holy", 11000, 160, 20, 80));
 
 		for (Faction faction : factions) {
 			factionEndpoint.insertFaction(faction);
@@ -158,8 +151,6 @@ public class ApplicationInitializer implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		log.info("Application is stopping...");
-
 		log.info("Application stopped");
 	}
 

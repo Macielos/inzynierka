@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/factionendpoint/v1/20151209022447/java/1.18.0-rc/inzynierkanew.com-factionendpoint-v1-20151209022447-java-1.18.0-rc-sources.jar", 
-      "path": "inzynierkanew.com-factionendpoint-v1-20151209022447-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/factionendpoint/v1/20160101221205/java/1.18.0-rc/inzynierkanew.com-factionendpoint-v1-20160101221205-java-1.18.0-rc-sources.jar", 
+      "path": "inzynierkanew.com-factionendpoint-v1-20160101221205-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-12-09 02:24"
+      "timestamp": "2016-01-01 22:12"
     }, 
     {
-      "path": "inzynierkanew.com-factionendpoint-v1-20151209022447-java-1.18.0-rc.jar.properties", 
+      "path": "inzynierkanew.com-factionendpoint-v1-20160101221205-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "entities.players", 
   "language_version": "1.18.0-rc", 
   "id": "factionendpoint:v1", 
-  "revision": 20151209022447
+  "revision": 20160101221205
 }

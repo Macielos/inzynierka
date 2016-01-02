@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".TownActivity" >
+
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/swordsman" />
+    
+	<TextView
+        android:id="@+id/itemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/itemIsEquipped"
+        android:text="@string/empty"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toRightOf="@+id/itemImage" />
+    
+    <TextView
+        android:id="@+id/itemIsEquipped"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/itemName"
+        android:text="@string/equipped"
+        android:layout_toRightOf="@+id/itemImage" />
+
+    <CheckBox
+        android:id="@+id/itemMarkedToSell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemIsEquipped"
+        android:layout_toRightOf="@+id/itemImage"
+        android:text="@string/marked_to_sell" />
+    
+</RelativeLayout>

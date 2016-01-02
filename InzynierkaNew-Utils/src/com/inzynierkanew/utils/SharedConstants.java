@@ -18,9 +18,7 @@ public class SharedConstants {
 	public static final int INVENTORY_SIZE = 30;
 	
 	public static final int INITIAL_SKILL_VALUE = 10;
-	
 	public static final int INITAL_SKILL_POINTS = 25;
-	
 	public static final int HERO_ITEM_LEVEL_DIFF = 5;
 	
 	public static final String STANDARD = "STANDARD";
@@ -30,6 +28,9 @@ public class SharedConstants {
 	public static final double STANDARD_ITEM_STOCK_FACTOR = 1.0;
 	public static final double MAGICAL_ITEM_STOCK_FACTOR = 0.4;
 	public static final double LEGENDARY_ITEM_STOCK_FACTOR = 0.1;
+	
+	public static final double ITEM_SELL_MODIFIER = 0.6;
+	public static final double ITEM_BUY_MODIFIER = 1.8;
 	
 	public static final String SEPARATOR = ",";
 	

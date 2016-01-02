@@ -27,23 +27,103 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.players",
   "methods" : {
-    "playerendpoint.listPlayer" : {
-      "path" : "player",
-      "httpMethod" : "GET",
+    "playerendpoint.updateHeroPosition" : {
+      "path" : "void/{id}/{x}/{y}",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.updateHeroPosition",
       "request" : {
         "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
+          "id" : {
+            "type" : "int64",
+            "required" : true
           },
-          "limit" : {
+          "x" : {
             "type" : "int32",
-            "required" : false
+            "required" : true
+          },
+          "y" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "playerendpoint.registerPlayer" : {
+      "path" : "registerPlayer/{strength}/{agility}/{intelligence}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.registerPlayer",
+      "request" : {
+        "parameters" : {
+          "strength" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "agility" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "intelligence" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "playerendpoint.removePlayerByRegistrationId" : {
+      "path" : "playerbyregistrationid/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayerByRegistrationId",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "playerendpoint.authenticatePlayer" : {
+      "path" : "authenticatePlayer/{name}/{password}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer",
+      "request" : {
+        "parameters" : {
+          "name" : {
+            "type" : "string",
+            "required" : true
+          },
+          "password" : {
+            "type" : "string",
+            "required" : true
           }
         },
         "body" : "empty"
@@ -52,20 +132,58 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "playerendpoint.updatePlayer" : {
-      "path" : "player",
-      "httpMethod" : "PUT",
+    "playerendpoint.findPlayerBySessionId" : {
+      "path" : "findPlayerBySessionId/{id}",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerBySessionId",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "playerendpoint.moveHeroToDifferentLand" : {
+      "path" : "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.moveHeroToDifferentLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "nextLandId" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "x" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "y" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
       }
     },
     "playerendpoint.getPlayer" : {
@@ -110,50 +228,15 @@
         "body" : "empty"
       }
     },
-    "playerendpoint.findPlayerBySessionId" : {
-      "path" : "findPlayerBySessionId/{id}",
-      "httpMethod" : "POST",
+    "playerendpoint.updatePlayer" : {
+      "path" : "player",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerBySessionId",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "playerendpoint.registerPlayer" : {
-      "path" : "registerPlayer/{strength}/{agility}/{intelligence}",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.registerPlayer",
-      "request" : {
-        "parameters" : {
-          "strength" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "agility" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "intelligence" : {
-            "type" : "int32",
-            "required" : true
-          }
-        },
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
       },
@@ -161,23 +244,23 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "playerendpoint.authenticatePlayer" : {
-      "path" : "authenticatePlayer/{name}/{password}",
-      "httpMethod" : "POST",
+    "playerendpoint.listPlayer" : {
+      "path" : "player",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer",
       "request" : {
         "parameters" : {
-          "name" : {
+          "cursor" : {
             "type" : "string",
-            "required" : true
+            "required" : false
           },
-          "password" : {
-            "type" : "string",
-            "required" : true
+          "limit" : {
+            "type" : "int32",
+            "required" : false
           }
         },
         "body" : "empty"
@@ -185,108 +268,10 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
-    },
-    "playerendpoint.updateHeroPosition" : {
-      "path" : "void/{id}/{x}/{y}",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.updateHeroPosition",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          },
-          "x" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "y" : {
-            "type" : "int32",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "playerendpoint.removePlayerByRegistrationId" : {
-      "path" : "playerbyregistrationid/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayerByRegistrationId",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "playerendpoint.moveHeroToDifferentLand" : {
-      "path" : "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.PlayerEndpoint.moveHeroToDifferentLand",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          },
-          "nextLandId" : {
-            "type" : "int64",
-            "required" : true
-          },
-          "x" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "y" : {
-            "type" : "int32",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_Player" : {
-        "id" : "CollectionResponse_Player",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Player"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "Player" : {
         "id" : "Player",
         "type" : "object",
@@ -329,33 +314,25 @@
             "type" : "string"
           }
         }
+      },
+      "CollectionResponse_Player" : {
+        "id" : "CollectionResponse_Player",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Player"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Player"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer" : {
-        "request" : {
-          "$ref" : "Player"
-        },
-        "response" : {
-          "$ref" : "Player"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.getPlayer" : {
-        "response" : {
-          "$ref" : "Player"
-        }
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayer" : {
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerBySessionId" : {
-        "response" : {
-          "$ref" : "Player"
-        }
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.updateHeroPosition" : {
       },
       "com.inzynierkanew.endpoints.players.PlayerEndpoint.registerPlayer" : {
         "request" : {
@@ -365,16 +342,39 @@
           "$ref" : "Player"
         }
       },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayerByRegistrationId" : {
+      },
       "com.inzynierkanew.endpoints.players.PlayerEndpoint.authenticatePlayer" : {
         "response" : {
           "$ref" : "LoginResponse"
         }
       },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.updateHeroPosition" : {
-      },
-      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayerByRegistrationId" : {
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.findPlayerBySessionId" : {
+        "response" : {
+          "$ref" : "Player"
+        }
       },
       "com.inzynierkanew.endpoints.players.PlayerEndpoint.moveHeroToDifferentLand" : {
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.getPlayer" : {
+        "response" : {
+          "$ref" : "Player"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.removePlayer" : {
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.updatePlayer" : {
+        "request" : {
+          "$ref" : "Player"
+        },
+        "response" : {
+          "$ref" : "Player"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.PlayerEndpoint.listPlayer" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Player"
+        }
       }
     }
   }

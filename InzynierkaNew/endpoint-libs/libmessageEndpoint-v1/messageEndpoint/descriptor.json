@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/messageEndpoint/v1/20151209022414/java/1.18.0-rc/inzynierkanew.com-messageEndpoint-v1-20151209022414-java-1.18.0-rc-sources.jar", 
-      "path": "inzynierkanew.com-messageEndpoint-v1-20151209022414-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/messageEndpoint/v1/20160101221107/java/1.18.0-rc/inzynierkanew.com-messageEndpoint-v1-20160101221107-java-1.18.0-rc-sources.jar", 
+      "path": "inzynierkanew.com-messageEndpoint-v1-20160101221107-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-12-09 02:24"
+      "timestamp": "2016-01-01 22:11"
     }, 
     {
-      "path": "inzynierkanew.com-messageEndpoint-v1-20151209022414-java-1.18.0-rc.jar.properties", 
+      "path": "inzynierkanew.com-messageEndpoint-v1-20160101221107-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -674,5 +674,5 @@
   "version": "v1", 
   "language_version": "1.18.0-rc", 
   "id": "messageEndpoint:v1", 
-  "revision": 20151209022414
+  "revision": 20160101221107
 }

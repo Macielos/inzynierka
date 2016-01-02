@@ -9,14 +9,14 @@
         android:id="@+id/dispose_skill_points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dispose skill points"
+        android:text="@string/dispose_skill_points"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <TextView
         android:id="@+id/register_hero_points_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(0 left)"
+        android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="0.87"
-            android:text="Strength"
+            android:text="@string/attack"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <NumberPicker
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="0.87"
-            android:text="Agility"
+            android:text="@string/defence"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <NumberPicker
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="0.87"
-            android:text="Intelligence"
+            android:text="@string/power"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <NumberPicker
@@ -86,12 +86,12 @@
       android:id="@+id/register_hero_registerButton"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:text="Register" />
+      android:text="@string/register" />
 
   <Button
       android:id="@+id/register_hero_backButton"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:text="Back" />
+      android:text="@string/back" />
 
 </LinearLayout>

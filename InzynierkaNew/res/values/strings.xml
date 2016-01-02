@@ -1,8 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- general -->
     <string name="app_name">InzynierkaNew</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+    <string name="empty"></string>
+    <string name="next">Next</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="quit">Quit</string>
+    <!-- register/login -->
+    <string name="enter_name">Enter your name and password to log in</string>
+    <string name="your_name">Your name</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="no_account">Do not have an account yet?</string>
+    <string name="register">Register</string>
+    <!-- hero -->
+    <string name="dispose_skill_points">Dispose skill points</string>
+    <string name="attack">Attack</string>
+    <string name="defence">Defence</string>
+    <string name="power">Power</string>
+    <!-- town main -->
+    <string name="marketplace">Marketplace</string>
+    <string name="barracks">Barracks</string>
+    <string name="recruit">Recruit</string>
+    <!-- town barracks -->
+    <string name="town_barracks">Town barracks</string>
+    <string name="units_available">Units available</string>
+    <!-- town marketplace -->
+    <string name="town_marketplace">Town marketplace</string>
+    <string name="equipped">Equipped</string>
+    <string name="marked_to_sell">Marked to sell</string>
+    <string name="sell">Sell selected</string>
+    <string name="sell_all">Sell all</string>
+    <!-- dungeon -->
+    <string name="dungeon">Dungeon</string>
+    <string name="start_combat">Start combat</string>
+    <string name="battle_result">Battle result</string>
+    <string name="gold_found">Gold found: </string>
+    <string name="xp_gained">XP gained: </string>
+    <string name="items_gained">Items gained: </string>
+    <string name="your_losses">Your losses</string>
+    <string name="enemy_losses">Enemy losses</string>
+    <string name="back_to_land">Back to land</string>
 
 </resources>

@@ -9,14 +9,14 @@
         android:id="@+id/townName"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="(town name)"
+        android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/townFaction"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="(faction)"
+        android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
@@ -24,20 +24,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="Barracks" />
+        android:text="@string/barracks" />
 
     <Button
         android:id="@+id/townMarketplaceButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="Marketplace" />
+        android:text="@string/marketplace" />
 
     <Button
         android:id="@+id/townQuitButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="Quit" />
+        android:text="@string/quit" />
 
 </LinearLayout>

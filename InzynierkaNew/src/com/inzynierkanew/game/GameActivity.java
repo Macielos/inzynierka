@@ -3,9 +3,13 @@ package com.inzynierkanew.game;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import com.inzynierkanew.R;
@@ -44,6 +48,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -64,8 +69,9 @@ public class GameActivity extends BaseActivity {
 	private List<Integer> townArmy;
 	private Hero hero;
 	private List<Unit> availableUnits;
-	
+
 	private boolean recruitmentTookPlace = false;
+	private boolean saleTookPlace = false;
 
 	private final Heroendpoint heroEndpoint = CloudEndpointUtils.newHeroEndpoint();
 	private final Townendpoint townEndpoint = CloudEndpointUtils.newTownEndpoint();
@@ -79,31 +85,31 @@ public class GameActivity extends BaseActivity {
 		gameView = new GameView(this, getIntent().getStringExtra(Constants.SESSION_ID));
 		initWorldView();
 	}
-	
+
 	public void initWorldView() {
 		setContentView(R.layout.activity_main);
-		
+
 		unitTypes = gameView.getUnitTypes();
 		hero = gameView.getHero();
-		
+
 		LinearLayout surface = (LinearLayout) findViewById(R.id.main_gameSurface);
 		surface.addView(gameView);
-		
+
 		displayPlayerGold();
-		
+
 		displayHeroExperience();
 		displayPlayerArmyMain();
-		
+
 		gameView.setRenderMode(GameView.DIALOG_CHOSEN);
 		gameView.setLastDialogOnHeroLocation();
 	}
 
 	private void displayPlayerGold() {
 		TextView playerGold = (TextView) findViewById(R.id.main_goldCount);
-		playerGold.setText(""+hero.getGold());
+		playerGold.setText("" + hero.getGold());
 	}
-	
-	public void initTownView(){
+
+	public void initTownView() {
 		LinearLayout surface = (LinearLayout) findViewById(R.id.main_gameSurface);
 		surface.removeView(gameView);
 		loadTownData();
@@ -128,26 +134,26 @@ public class GameActivity extends BaseActivity {
 			Log.e(TAG, "failed to download town data in an async task", e);
 		}
 		townVisit = gameView.getTownVisit();
-		townArmy = townVisit==null ? town.getArmy() : townVisit.getArmy();
+		townArmy = townVisit == null ? town.getArmy() : townVisit.getArmy();
 
-//		try {
-//			hero = new AsyncTask<Long, Void, Hero>() {
-//
-//				@Override
-//				protected Hero doInBackground(Long... params) {
-//					try {
-//						return heroEndpoint.getHero(params[0]).execute();
-//					} catch (IOException e) {
-//						Log.e(TAG, "failed to download hero data", e);
-//						return null;
-//					}
-//				}
-//
-//			}.execute(player.getHero().getKey().getId()).get();
-//		} catch (InterruptedException | ExecutionException e) {
-//			Log.e(TAG, "failed to download hero data in an async task", e);
-//		}
-		
+		// try {
+		// hero = new AsyncTask<Long, Void, Hero>() {
+		//
+		// @Override
+		// protected Hero doInBackground(Long... params) {
+		// try {
+		// return heroEndpoint.getHero(params[0]).execute();
+		// } catch (IOException e) {
+		// Log.e(TAG, "failed to download hero data", e);
+		// return null;
+		// }
+		// }
+		//
+		// }.execute(player.getHero().getKey().getId()).get();
+		// } catch (InterruptedException | ExecutionException e) {
+		// Log.e(TAG, "failed to download hero data in an async task", e);
+		// }
+
 		availableUnits = GameUtils.armyToUnitList(townArmy, unitTypes);
 	}
 
@@ -158,7 +164,8 @@ public class GameActivity extends BaseActivity {
 		townNameTextView.setText(town.getName());
 
 		TextView factionTextView = (TextView) findViewById(R.id.townFaction);
-		factionTextView.setText("Town owned by " + gameView.getFactions().get(town.getFactionId().intValue()).getName());
+		factionTextView
+				.setText("Town owned by " + gameView.getFactions().get(town.getFactionId().intValue()).getName());
 
 		Button barracksButton = (Button) findViewById(R.id.townBarracksButton);
 		barracksButton.setOnClickListener(new OnClickListener() {
@@ -177,7 +184,7 @@ public class GameActivity extends BaseActivity {
 				showTownMarketplace();
 			}
 		});
-		
+
 		Button quitButton = (Button) findViewById(R.id.townQuitButton);
 		quitButton.setOnClickListener(new OnClickListener() {
 
@@ -190,21 +197,7 @@ public class GameActivity extends BaseActivity {
 
 	private void showTownBarracks() {
 		recruitmentTookPlace = false;
-		// townView = new TownView(this, gameView.getTown(),
-		// gameView.getUnitTypes());
-		// setContentView(townView);
-		// getLayoutInflater().inflate(R.id.townView, (ViewGroup) townView);
-
 		setContentView(R.layout.activity_town_barracks);
-
-		// new TownView(this, gameView.getTown(), gameView.getUnitTypes()));
-
-		// viewWrapper = (RelativeLayout) findViewById(R.id.townView);
-		// viewWrapper.removeAllViews();
-		// LayoutInflater layoutInflater =
-		// (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// viewWrapper.addView(layoutInflater.inflate(R.layout.activity_town,
-		// null));
 
 		ListView listUnitsView = (ListView) findViewById(R.id.listUnitsView);
 		listUnitsView.setAdapter(new BaseAdapter() {
@@ -228,7 +221,8 @@ public class GameActivity extends BaseActivity {
 			public View getView(final int position, View convertView, ViewGroup parent) {
 				View view = convertView;
 				if (view == null) {
-					LayoutInflater inflater = (LayoutInflater) GameActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+					LayoutInflater inflater = (LayoutInflater) GameActivity.this
+							.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 					view = inflater.inflate(R.layout.element_unit, null);
 				}
 
@@ -270,7 +264,9 @@ public class GameActivity extends BaseActivity {
 					Log.e(TAG, "Failed to display texture for unit " + availableUnit, e);
 				}
 
-				//TODO nie dziala rekrutacja max liczby dostêpnych jednostek - jednostki nie znikaj¹ z miasta, pasek i podpis siê nie updatuj¹
+				// TODO nie dziala rekrutacja max liczby dostêpnych jednostek -
+				// jednostki nie znikaj¹ z miasta, pasek i podpis siê nie
+				// updatuj¹
 				// Handle buttons and add onClickListeners
 				final Button recruitBtn = (Button) view.findViewById(R.id.recruitButton);
 				recruitBtn.setOnClickListener(new View.OnClickListener() {
@@ -281,18 +277,20 @@ public class GameActivity extends BaseActivity {
 						if (hero.getGold() >= recruitmentCost) {
 							Log.i(TAG, "recruiting " + recruitedUnits + "x " + availableUnit.getUnitType().getName());
 							hero.setGold(hero.getGold() - recruitmentCost);
-							boolean recruitAll = unitsToRecruitSeekBar.getMax()==recruitedUnits;
+							boolean recruitAll = unitsToRecruitSeekBar.getMax() == recruitedUnits;
 							recruit(availableUnit.getUnitType().getId().intValue(), recruitedUnits);
 							unitsToRecruitSeekBar.setProgress(0);
-							if(recruitAll){
-								//TODO pasek sie nie odswieza choc przycisk jest disabled jak powinien
+							if (recruitAll) {
+								// TODO pasek sie nie odswieza choc przycisk
+								// jest disabled jak powinien
 								unitsToRecruitSeekBar.setMax(1);
 								unitsToRecruitSeekBar.setEnabled(false);
 								unitCountText.setText("0 / 0");
 								recruitBtn.setEnabled(false);
 							} else {
 								unitsToRecruitSeekBar.setMax(unitsToRecruitSeekBar.getMax() - recruitedUnits);
-								unitCountText.setText(unitsToRecruitSeekBar.getProgress() + " / " + unitsToRecruitSeekBar.getMax());
+								unitCountText.setText(
+										unitsToRecruitSeekBar.getProgress() + " / " + unitsToRecruitSeekBar.getMax());
 							}
 							displayPlayerArmyTown();
 						} else {
@@ -324,7 +322,7 @@ public class GameActivity extends BaseActivity {
 							@Override
 							protected Void doInBackground(Void... params) {
 								try {
-									//playerEndpoint.updatePlayer(player).execute();
+									// playerEndpoint.updatePlayer(player).execute();
 									gameView.setTownVisit(townVisit);
 									townVisitEndpoint.updateTownVisit(townVisit).execute();
 									heroEndpoint.updateHero(hero).execute();
@@ -342,91 +340,7 @@ public class GameActivity extends BaseActivity {
 			}
 		});
 	}
-
-	private void displayPlayerArmyAftermath(List<Unit> losses, Dialog dialog){
-		displayArmy("dungeon_dialog_result_playerLosses_", losses, dialog);
-	}
 	
-	private void displayDungeonArmyAftermath(List<Unit> losses, Dialog dialog){
-		displayArmy("dungeon_dialog_result_enemyLosses_", losses, dialog);
-	}
-		
-	private void displayDungeonArmy(List<Integer> dungeonArmy, Dialog dialog){
-		displayArmy("dungeon_dialog_", GameUtils.armyToUnitList(dungeonArmy, unitTypes), dialog);
-	}
-	
-	private void displayPlayerArmyMain() {
-		displayArmy("main_", GameUtils.armyToUnitList(hero.getArmy(), unitTypes), null);
-	}
-	
-	private void displayPlayerArmyTown() {
-		displayArmy("", GameUtils.armyToUnitList(hero.getArmy(), unitTypes), null);
-	}
-	
-	private void displayArmy(String fieldPrefix, List<Unit> army, Dialog dialog) {
-		int armySize = army == null ? 0 : army.size();
-		try {
-			ImageView unitImage;
-			TextView unitCount;
-			// List<ImageView> unitImages = new
-			// ArrayList<>(Constants.PLAYER_ARMY_MAX_SIZE);
-			// List<TextView> unitCounts = new
-			// ArrayList<>(Constants.PLAYER_ARMY_MAX_SIZE);
-			for (int i = 0; i < Constants.PLAYER_ARMY_MAX_SIZE; ++i) {
-				unitImage = (ImageView) findByField(fieldPrefix+"unit" + i, dialog);
-				unitCount = (TextView) findByField(fieldPrefix+"unitCount" + i, dialog);
-				if (i < armySize) {
-					unitImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
-							R.drawable.class.getField(""+army.get(i).getUnitType().getTexture()).getInt(null)));
-					unitCount.setText(""+army.get(i).getCount());
-				} else {
-					unitImage.setImageBitmap(null);
-					unitCount.setText("");
-				}
-			}
-		} catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-			Log.e(TAG, "Error while displaying player army", e);
-		}
-	}
-	
-	private void displayItemsAftermath(final Dialog dialog, Loot loot) {
-		displayItems("dungeon_dialog_result_", loot.getItems(), dialog);
-	}
-	
-	private void displayItems(String fieldPrefix, List<Item> items, Dialog dialog) {
-		try {
-			ImageView itemImage;
-			for (int i = 0; i < Constants.LOOT_MAX_SIZE; ++i) {
-				itemImage = (ImageView) findByField(fieldPrefix+"item" + i, dialog);
-				if (i < items.size()) {
-					itemImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
-							R.drawable.class.getField(""+items.get(i).getIcon()).getInt(null)));
-				} else {
-					itemImage.setImageBitmap(null);
-				}
-			}
-		} catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-			Log.e(TAG, "Error while displaying player army", e);
-		}
-	}
-	
-	private View findByField(String field, Dialog dialog) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException{
-		int id = R.id.class.getField(field).getInt(null);
-		return dialog == null ? findViewById(id) : dialog.findViewById(id);
-	}
-
-	private void showTownMarketplace() {
-		setContentView(R.layout.activity_town_marketplace);
-		Button backButton = (Button) findViewById(R.id.marketPlaceBackButton);
-		backButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				showTownMain();
-			}
-		});
-	}
-
 	private void recruit(int unitType, int recruitedCount) {
 		recruitmentTookPlace = true;
 		List<Integer> heroArmy = (List<Integer>) (hero.getArmy() == null ? new ArrayList<>() : hero.getArmy());
@@ -434,7 +348,7 @@ public class GameActivity extends BaseActivity {
 			if (townArmy.get(i).equals(unitType) && townArmy.get(i + 1) >= recruitedCount) {
 				if (townArmy.get(i + 1) > recruitedCount) {
 					townArmy.set(i + 1, townArmy.get(i + 1) - recruitedCount);
-				} 
+				}
 				break;
 			}
 		}
@@ -446,11 +360,11 @@ public class GameActivity extends BaseActivity {
 				break;
 			}
 		}
-		if(!found){
+		if (!found) {
 			heroArmy.add(unitType);
 			heroArmy.add(recruitedCount);
 		}
-		if(townVisit == null){
+		if (townVisit == null) {
 			townVisit = new TownVisit().setHeroId(hero.getId()).setTownId(town.getId()).setArmy(townArmy);
 		} else {
 			townVisit.setArmy(townArmy);
@@ -460,10 +374,144 @@ public class GameActivity extends BaseActivity {
 		availableUnits = GameUtils.armyToUnitList(townArmy, unitTypes);
 	}
 
+	private View findByField(String field, Dialog dialog)
+			throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException {
+		int id = R.id.class.getField(field).getInt(null);
+		return dialog == null ? findViewById(id) : dialog.findViewById(id);
+	}
+
+	private void showTownMarketplace() {
+		setContentView(R.layout.activity_town_marketplace);
+		saleTookPlace = false;
+		final Set<CheckBox> itemCheckBoxes = new HashSet<>(gameView.getHeroInventory().size());
+		
+		final ListView heroInventoryView = (ListView) findViewById(R.id.heroInventoryView);
+		final BaseAdapter adapter = new BaseAdapter() {
+
+			@Override
+			public int getCount() {
+				return gameView.getHeroInventory().size();
+			}
+
+			@Override
+			public Object getItem(int position) {
+				return gameView.getHeroInventory().get(position);
+			}
+
+			@Override
+			public long getItemId(int position) {
+				return gameView.getHeroInventory().get(position).getId().longValue();
+			}
+
+			@Override
+			public View getView(int position, View view, ViewGroup parent) {
+				if (view == null) {
+					LayoutInflater inflater = (LayoutInflater) GameActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+					view = inflater.inflate(R.layout.element_item, null);
+				}
+				
+				Item item = gameView.getHeroInventory().get(position);
+				
+				final ImageView itemImageView = (ImageView) view.findViewById(R.id.itemImage);
+				try {
+					itemImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+							R.drawable.class.getField(item.getIcon()).getInt(null)));
+				} catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
+					Log.e(TAG, "Failed to display icon for item " + item, e);
+				}
+				
+				TextView itemNameView = (TextView) view.findViewById(R.id.itemName);
+				itemNameView.setText(item.getName());
+				
+				//TextView isEquippedView = (TextView) view.findViewById(R.id.itemIsEquipped);
+				//setVisible
+				//TODO
+				
+				CheckBox markedToSell = (CheckBox) view.findViewById(R.id.itemMarkedToSell);
+				itemCheckBoxes.add(markedToSell);
+				
+				return view;
+			}
+		};
+		
+		heroInventoryView.setAdapter(adapter);
+		
+		Button sellButton = (Button) findViewById(R.id.marketPlaceSellButton);
+		sellButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				List<Item> toSell = new ArrayList<>();
+				int i=0; 
+				for(CheckBox checkBox: itemCheckBoxes){
+					if(checkBox.isChecked()){
+						toSell.add(gameView.getHeroInventory().get(i));
+					}
+					++i;
+				}
+				sellItems(toSell);
+				adapter.notifyDataSetChanged();
+			}
+		});
+		
+		Button sellAllButton = (Button) findViewById(R.id.marketPlaceSellAllButton);
+		sellAllButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				List<Item> toSell = new ArrayList<>();
+				int i=0; 
+				for(CheckBox checkBox: itemCheckBoxes){
+					toSell.add(gameView.getHeroInventory().get(i));
+					++i;
+				}
+				sellItems(toSell);
+				adapter.notifyDataSetChanged();
+			}
+		});
+		
+		Button backButton = (Button) findViewById(R.id.marketPlaceBackButton);
+		backButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if(saleTookPlace){
+					try {
+						new AsyncTask<Void, Void, Void>() {
+
+							@Override
+							protected Void doInBackground(Void... params) {
+								try {
+									heroEndpoint.updateHero(hero).execute();
+								} catch (IOException e) {
+									Log.e(TAG, "failed to update hero after sale", e);
+								}
+								return null;
+							}
+						}.execute().get();
+					} catch (InterruptedException | ExecutionException e) {
+						Log.e(TAG, "failed to update entities after recruitment in an async task", e);
+					}
+				}
+				showTownMain();
+			}
+		});
+	}
+
+	protected void sellItems(Collection<Item> toSell) {
+		saleTookPlace = true;
+		int goldEarned = 0;
+		for(Item item: toSell){
+			gameView.removeItem(item);
+			goldEarned += Math.round(((double)item.getValue() * SharedConstants.ITEM_SELL_MODIFIER));
+		}
+		hero.setGold(hero.getGold()+goldEarned);
+	}
+
 	public void showDungeonDialog(final Long dungeonId) {
 		Dungeon dungeonInit = null;
 		try {
-			dungeonInit = new AsyncTask<Void, Void, Dungeon>(){
+			dungeonInit = new AsyncTask<Void, Void, Dungeon>() {
 				protected Dungeon doInBackground(Void[] params) {
 					try {
 						return dungeonEndpoint.getDungeon(dungeonId).execute();
@@ -478,52 +526,54 @@ public class GameActivity extends BaseActivity {
 			// TODO Auto-generated catch block
 			Log.e(TAG, "Failed to get dungeon", e1);
 		}
-		
+
 		final Dungeon dungeon = dungeonInit;
-		
+
 		final Dialog dialog = new Dialog(this);
 		dialog.setContentView(R.layout.dialog_dungeon);
-		
+
 		DungeonVisit dungeonVisit = gameView.getDungeonVisit(dungeon.getId());
 		List<Integer> army = dungeonVisit == null ? dungeon.getArmy() : dungeonVisit.getArmy();
-		
+
 		displayDungeonArmy(army, dialog);
-		
+
 		boolean guardiansPresent = !GameUtils.isArmyEmpty(army);
-		
+
 		TextView factionTextView = (TextView) dialog.findViewById(R.id.dungeon_dialog_faction);
-		factionTextView.setText(guardiansPresent 
-					? "Guarded by "+gameView.getFactions().get(dungeon.getFactionId().intValue()).getName()
-					: "Deserted");
-				
+		factionTextView.setText(guardiansPresent
+				? "Guarded by " + gameView.getFactions().get(dungeon.getFactionId().intValue()).getName() : "Deserted");
+
 		Button combatButton = (Button) dialog.findViewById(R.id.dungeon_dialog_combatButton);
 		AndroidUtils.setVisible(combatButton, guardiansPresent);
 		combatButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Log.i(TAG, "battle!");
-				final BattleResult battleResult = new BattleResolver(hero.getArmy(), dungeon.getArmy(), gameView).runAutoResolve().getBattleResult();
+				final BattleResult battleResult = new BattleResolver(hero.getArmy(), dungeon.getArmy(), gameView)
+						.runAutoResolve().getBattleResult();
 				Loot loot = getLoot(battleResult);
 				hero.setArmy(GameUtils.unitListToArmy(battleResult.getHeroArmy()));
 				updateHeroExperience(battleResult.getExperienceGained());
-				hero.setGold(hero.getGold()+loot.getGold());
+				hero.setGold(hero.getGold() + loot.getGold());
 				displayPlayerGold();
 				List<Integer> heroItems = hero.getItems();
-				if(heroItems == null){
+				if (heroItems == null) {
 					heroItems = new ArrayList<>();
 				}
-				for(Item item: loot.getItems()){
-					gameView.getHeroInventory().put(item.getId().intValue(), item);
+				for (Item item : loot.getItems()) {
+					gameView.getHeroInventory().add(item);
 					heroItems.add(item.getId().intValue());
 				}
+				GameUtils.sortItems(gameView.getHeroInventory());
+				Collections.sort(heroItems);
 				hero.setItems(heroItems);
-				
+
 				displayPlayerArmyMain();
 				displayHeroExperience();
 				dungeon.setArmy(GameUtils.unitListToArmy(battleResult.getEnemyArmy()));
 				try {
-					new AsyncTask<Void, Void, Void>(){
+					new AsyncTask<Void, Void, Void>() {
 
 						@Override
 						protected Void doInBackground(Void... arg0) {
@@ -534,21 +584,19 @@ public class GameActivity extends BaseActivity {
 							}
 							return null;
 						}
-						
+
 					}.execute().get();
 				} catch (InterruptedException | ExecutionException e) {
 					Log.e(TAG, "failed to update hero in an async task", e);
 				}
 				try {
-					new AsyncTask<Void, Void, Void>(){
+					new AsyncTask<Void, Void, Void>() {
 
 						@Override
 						protected Void doInBackground(Void... arg0) {
 							try {
-								DungeonVisit dungeonVisit = new DungeonVisit()
-										.setHeroId(hero.getId())
-										.setDungeonId(dungeon.getId())
-										.setLandId(gameView.getLandId())
+								DungeonVisit dungeonVisit = new DungeonVisit().setHeroId(hero.getId())
+										.setDungeonId(dungeon.getId()).setLandId(gameView.getLandId())
 										.setArmy(GameUtils.unitListToArmy(battleResult.getEnemyArmy()));
 								gameView.addDungeonVisit(dungeonVisit);
 								dungeonVisitEndpoint.insertDungeonVisit(dungeonVisit).execute();
@@ -562,77 +610,142 @@ public class GameActivity extends BaseActivity {
 					Log.e(TAG, "failed to update dungeon in an async task", e);
 				}
 				dialog.setContentView(R.layout.dialog_dungeon_result);
-				
+
 				TextView goldFoundView = (TextView) dialog.findViewById(R.id.dungeon_dialog_result_goldFoundValue);
-				goldFoundView.setText(""+loot.getGold());
-				
-				TextView experienceGainedView = (TextView) dialog.findViewById(R.id.dungeon_dialog_result_experienceGainedValue);
-				experienceGainedView.setText(""+battleResult.getExperienceGained());
+				goldFoundView.setText("" + loot.getGold());
+
+				TextView experienceGainedView = (TextView) dialog
+						.findViewById(R.id.dungeon_dialog_result_experienceGainedValue);
+				experienceGainedView.setText("" + battleResult.getExperienceGained());
 
 				displayItemsAftermath(dialog, loot);
-				
+
 				displayPlayerArmyAftermath(battleResult.getPlayerLosses(), dialog);
 				displayDungeonArmyAftermath(battleResult.getEnemyLosses(), dialog);
-				
+
 				Button quitButton = (Button) dialog.findViewById(R.id.dungeon_dialog_result_quitButton);
 				quitButton.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						dialog.hide();
 						gameView.setRenderMode(GameView.DIALOG_CHOSEN);
-						gameView.setLastDialogOnHeroLocation();                                                     
+						gameView.setLastDialogOnHeroLocation();
 					}
 				});
 
 			}
 
 		});
-		
+
 		Button withdrawButton = (Button) dialog.findViewById(R.id.dungeon_dialog_withdrawButton);
 		withdrawButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Log.i(TAG, "withdraw!");
 				dialog.hide();
 				gameView.setRenderMode(GameView.DIALOG_CHOSEN);
-				gameView.setLastDialogOnHeroLocation();    
+				gameView.setLastDialogOnHeroLocation();
 			}
 		});
 		dialog.show();
 	}
 	
+
+	private void displayPlayerArmyAftermath(List<Unit> losses, Dialog dialog) {
+		displayArmy("dungeon_dialog_result_playerLosses_", losses, dialog);
+	}
+
+	private void displayDungeonArmyAftermath(List<Unit> losses, Dialog dialog) {
+		displayArmy("dungeon_dialog_result_enemyLosses_", losses, dialog);
+	}
+
+	private void displayDungeonArmy(List<Integer> dungeonArmy, Dialog dialog) {
+		displayArmy("dungeon_dialog_", GameUtils.armyToUnitList(dungeonArmy, unitTypes), dialog);
+	}
+
+	private void displayPlayerArmyMain() {
+		displayArmy("main_", GameUtils.armyToUnitList(hero.getArmy(), unitTypes), null);
+	}
+
+	private void displayPlayerArmyTown() {
+		displayArmy("", GameUtils.armyToUnitList(hero.getArmy(), unitTypes), null);
+	}
+
+	private void displayArmy(String fieldPrefix, List<Unit> army, Dialog dialog) {
+		int armySize = army == null ? 0 : army.size();
+		try {
+			ImageView unitImage;
+			TextView unitCount;
+			for (int i = 0; i < Constants.PLAYER_ARMY_MAX_SIZE; ++i) {
+				unitImage = (ImageView) findByField(fieldPrefix + "unit" + i, dialog);
+				unitCount = (TextView) findByField(fieldPrefix + "unitCount" + i, dialog);
+				if (i < armySize) {
+					unitImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+							R.drawable.class.getField("" + army.get(i).getUnitType().getTexture()).getInt(null)));
+					unitCount.setText("" + army.get(i).getCount());
+				} else {
+					unitImage.setImageBitmap(null);
+					unitCount.setText("");
+				}
+			}
+		} catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+			Log.e(TAG, "Error while displaying player army", e);
+		}
+	}
+
+	private void displayItemsAftermath(final Dialog dialog, Loot loot) {
+		displayItems("dungeon_dialog_result_", loot.getItems(), dialog);
+	}
+
+	private void displayItems(String fieldPrefix, List<Item> items, Dialog dialog) {
+		try {
+			ImageView itemImage;
+			for (int i = 0; i < Constants.LOOT_MAX_SIZE; ++i) {
+				itemImage = (ImageView) findByField(fieldPrefix + "item" + i, dialog);
+				if (i < items.size()) {
+					itemImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+							R.drawable.class.getField("" + items.get(i).getIcon()).getInt(null)));
+				} else {
+					itemImage.setImageBitmap(null);
+				}
+			}
+		} catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+			Log.e(TAG, "Error while displaying player army", e);
+		}
+	}
+
 	protected void updateHeroExperience(int experienceGained) {
-		hero.setExperience(hero.getExperience()+experienceGained);
+		hero.setExperience(hero.getExperience() + experienceGained);
 		hero.setLevel(gameView.getHeroLevelForXp(hero.getLevel(), hero.getExperience()));
 	}
 
 	private void displayHeroExperience() {
-
 		TextView playerLevel = (TextView) findViewById(R.id.main_level);
-		playerLevel.setText(""+hero.getLevel());
-		
+		playerLevel.setText("Level " + hero.getLevel());
+
 		int xpForThisLevel = gameView.getXpForNextLevel(hero.getLevel());
-		int xpForNextLevel = gameView.getXpForNextLevel(hero.getLevel()+1);
-		
+		int xpForNextLevel = gameView.getXpForNextLevel(hero.getLevel() + 1);
+
 		TextView playerExperience = (TextView) findViewById(R.id.main_experienceText);
-		playerExperience.setText(""+hero.getExperience()+"/"+xpForNextLevel);
-		
+		playerExperience.setText("" + hero.getExperience() + "/" + xpForNextLevel);
+
 		ProgressBar playerExperienceBar = (ProgressBar) findViewById(R.id.main_experienceBar);
 		playerExperienceBar.setMax(xpForNextLevel - xpForThisLevel);
 		playerExperienceBar.setProgress(hero.getExperience() - xpForThisLevel);
 	}
-	
-	private Loot getLoot(BattleResult battleResult){
+
+	private Loot getLoot(BattleResult battleResult) {
 		double xpd = (double) battleResult.getExperienceGained();
-		int goldGained = (int)(((double)SharedConstants.BASE_GOLD_PER_VICTORY+xpd*SharedConstants.GOLD_XP_MODIFIER)*SharedConstants.GOLD_RANDOM_FACTOR);
+		int goldGained = (int) (((double) SharedConstants.BASE_GOLD_PER_VICTORY
+				+ xpd * SharedConstants.GOLD_XP_MODIFIER) * SharedConstants.GOLD_RANDOM_FACTOR);
 		Random random = new Random();
 		double itemDropped = random.nextDouble();
 		List<Item> items;
-		if(itemDropped < SharedConstants.CHANCE_FOR_ITEM){
+		if (itemDropped < SharedConstants.CHANCE_FOR_ITEM) {
 			Item item = gameView.getRandomItem(SharedConstants.STANDARD);
-			if(item!=null){
+			if (item != null) {
 				items = Arrays.asList(item);
 			} else {
 				items = new ArrayList<>(0);
