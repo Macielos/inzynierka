@@ -1,13 +1,9 @@
 package com.inzynierkanew.init;
 
-import com.inzynierkanew.R;
-import com.inzynierkanew.R.layout;
 import com.inzynierkanew.activities.BaseActivity;
 import com.inzynierkanew.utils.Constants;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 

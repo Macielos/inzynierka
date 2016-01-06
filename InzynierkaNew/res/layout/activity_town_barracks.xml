@@ -5,134 +5,188 @@
     android:gravity="center_vertical|center_horizontal|center"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/barracks"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:text="@string/town_barracks"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/unitsAvailable"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/barracks"
-        android:text="@string/units_available"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <ListView
-        android:id="@+id/listUnitsView"
-        android:layout_width="match_parent"
-        android:layout_height="286dp"
-        android:layout_below="@+id/unitsAvailable"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.17" />
-
     <LinearLayout
-        android:id="@+id/playerUnits"
+        android:id="@+id/town_barracks_statusBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="6"
-        android:orientation="horizontal" >
+        android:layout_height="64dp" >
 
         <ImageView
-            android:id="@+id/unit0"
-            android:layout_width="fill_parent"
+            android:id="@+id/town_barracks_goldIcon"
+            android:layout_width="64dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:src="@drawable/swordsman" />
+            android:src="@drawable/gold" />
 
-        <ImageView
-            android:id="@+id/unit1"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/town_barracks_goldCount"
+            android:layout_width="80dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:src="@drawable/swordsman" />
+            android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/unit2"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/town_barracks_level"
+            android:layout_width="64dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:src="@drawable/swordsman" />
+            android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/unit3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:src="@drawable/swordsman" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-        <ImageView
-            android:id="@+id/unit4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:src="@drawable/swordsman" />
+            <ProgressBar
+                android:id="@+id/town_barracks_experienceBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <ImageView
-            android:id="@+id/unit5"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:src="@drawable/swordsman" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/town_barracks_experienceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/playerUnitCounts"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:weightSum="6"
-        android:orientation="horizontal" >
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/unitCount0"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/empty" />
+            android:id="@+id/barracks"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:text="@string/town_barracks"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/unitCount1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/empty" />
+            android:id="@+id/unitsAvailable"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/barracks"
+            android:text="@string/units_available"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/unitCount2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/empty" />
+        <ListView
+            android:id="@+id/listUnitsView"
+            android:layout_width="match_parent"
+            android:layout_height="286dp"
+            android:layout_below="@+id/unitsAvailable"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.17" />
 
-        <TextView
-            android:id="@+id/unitCount3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/empty" />
+        <LinearLayout
+            android:id="@+id/playerUnits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6" >
 
-        <TextView
-            android:id="@+id/unitCount4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/empty" />
+            <ImageView
+                android:id="@+id/unit0"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/swordsman" />
 
-        <TextView
-            android:id="@+id/unitCount5"
+            <ImageView
+                android:id="@+id/unit1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/swordsman" />
+
+            <ImageView
+                android:id="@+id/unit2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/swordsman" />
+
+            <ImageView
+                android:id="@+id/unit3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/swordsman" />
+
+            <ImageView
+                android:id="@+id/unit4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/swordsman" />
+
+            <ImageView
+                android:id="@+id/unit5"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/swordsman" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/playerUnitCounts"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:orientation="horizontal"
+            android:weightSum="6" >
+
+            <TextView
+                android:id="@+id/unitCount0"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/empty" />
+
+            <TextView
+                android:id="@+id/unitCount1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/empty" />
+
+            <TextView
+                android:id="@+id/unitCount2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/empty" />
+
+            <TextView
+                android:id="@+id/unitCount3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/empty" />
+
+            <TextView
+                android:id="@+id/unitCount4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/empty" />
+
+            <TextView
+                android:id="@+id/unitCount5"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/empty" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/barracksBackButton"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/empty" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/back" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/barracksBackButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/back" />
 
 </LinearLayout>

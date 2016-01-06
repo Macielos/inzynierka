@@ -2,16 +2,12 @@ package com.inzynierkanew.entities.players;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
-import org.datanucleus.api.jpa.annotations.PersistenceAware;
-
-@PersistenceAware
+//@PersistenceAware
 @Entity
 public class Player {
 

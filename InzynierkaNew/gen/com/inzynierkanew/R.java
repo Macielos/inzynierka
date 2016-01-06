@@ -9,483 +9,315 @@ package com.inzynierkanew;
 
 public final class R {
     public static final class attr {
-        /** 
-        When set to alignMargins, causes alignment to take place between the outer
-        boundary of a view, as defined by its margins. When set to alignBounds,
-        causes alignment to take place between the edges of the view.
-        The default is alignMargins.
-        See {@link android.widget.GridLayout#setAlignmentMode(int)}.
-        
-         <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>alignBounds</code></td><td>0</td><td>
-            Align the bounds of the children.
-            See {@link android.widget.GridLayout#ALIGN_BOUNDS}.
-            </td></tr>
-<tr><td><code>alignMargins</code></td><td>1</td><td>
-            Align the margins of the children.
-            See {@link android.widget.GridLayout#ALIGN_MARGINS}.
-            </td></tr>
-</table>
-         */
-        public static final int alignmentMode=0x7f010004;
-        /**  The maximum number of columns to create when automatically positioning children. 
-         <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int columnCount=0x7f010002;
-        /** 
-        When set to true, forces column boundaries to appear in the same order
-        as column indices.
-        The default is true.
-        See {@link android.widget.GridLayout#setColumnOrderPreserved(boolean)}.
-        
-         <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int columnOrderPreserved=0x7f010006;
-        /** 
-        The column boundary delimiting the left of the group of cells
-        occupied by this view.
-        
-         <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_column=0x7f01000a;
-        /** 
-        The column span: the difference between the right and left
-        boundaries delimiting the group of cells occupied by this view.
-        The default is one.
-        See {@link android.widget.GridLayout.Spec}.
-        
-         <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_columnSpan=0x7f01000b;
-        /**  The relative proportion of horizontal space that should be allocated to this view
-        during excess space distribution. 
-         <p>Must be a floating point value, such as "<code>1.2</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_columnWeight=0x7f01000c;
-        /** 
-        Gravity specifies how a component should be placed in its group of cells.
-        The default is LEFT | BASELINE.
-        See {@link android.widget.GridLayout.LayoutParams#setGravity(int)}.
-        
-         <p>Must be one or more (separated by '|') of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>top</code></td><td>0x30</td><td> Push object to the top of its container, not changing its size. </td></tr>
-<tr><td><code>bottom</code></td><td>0x50</td><td> Push object to the bottom of its container, not changing its size. </td></tr>
-<tr><td><code>left</code></td><td>0x03</td><td> Push object to the left of its container, not changing its size. </td></tr>
-<tr><td><code>right</code></td><td>0x05</td><td> Push object to the right of its container, not changing its size. </td></tr>
-<tr><td><code>center_vertical</code></td><td>0x10</td><td> Place object in the vertical center of its container, not changing its size. </td></tr>
-<tr><td><code>fill_vertical</code></td><td>0x70</td><td> Grow the vertical size of the object if needed so it completely fills its container. </td></tr>
-<tr><td><code>center_horizontal</code></td><td>0x01</td><td> Place object in the horizontal center of its container, not changing its size. </td></tr>
-<tr><td><code>fill_horizontal</code></td><td>0x07</td><td> Grow the horizontal size of the object if needed so it completely fills its container. </td></tr>
-<tr><td><code>center</code></td><td>0x11</td><td> Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. </td></tr>
-<tr><td><code>fill</code></td><td>0x77</td><td> Grow the horizontal and vertical size of the object if needed so it completely fills its container. </td></tr>
-<tr><td><code>clip_vertical</code></td><td>0x80</td><td>
-             Additional option that can be set to have the top and/or bottom edges of
-             the child clipped to its container's bounds.
-             The clip will be based on the vertical gravity: a top gravity will clip the bottom
-             edge, a bottom gravity will clip the top edge, and neither will clip both edges.
-            </td></tr>
-<tr><td><code>clip_horizontal</code></td><td>0x08</td><td>
-             Additional option that can be set to have the left and/or right edges of
-             the child clipped to its container's bounds.
-             The clip will be based on the horizontal gravity: a left gravity will clip the right
-             edge, a right gravity will clip the left edge, and neither will clip both edges.
-            </td></tr>
-<tr><td><code>start</code></td><td>0x00800003</td><td> Push object to the beginning of its container, not changing its size. </td></tr>
-<tr><td><code>end</code></td><td>0x00800005</td><td> Push object to the end of its container, not changing its size. </td></tr>
-</table>
-         */
-        public static final int layout_gravity=0x7f01000d;
-        /**  END MarginLayout layoutparams 
-
-        The row boundary delimiting the top of the group of cells
-        occupied by this view.
-        
-         <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_row=0x7f010007;
-        /** 
-        The row span: the difference between the top and bottom
-        boundaries delimiting the group of cells occupied by this view.
-        The default is one.
-        See {@link android.widget.GridLayout.Spec}.
-        
-         <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_rowSpan=0x7f010008;
-        /**  The relative proportion of vertical space that should be allocated to this view
-        during excess space distribution. 
-         <p>Must be a floating point value, such as "<code>1.2</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_rowWeight=0x7f010009;
-        /** 
-              support versions. All attributes not present in ViewGroup/View are
-              redefined in the support library namespace.
-        
-
-        The orientation property is not used during layout. It is only used to
-        allocate row and column parameters when they are not specified by its children's
-        layout parameters. GridLayout works like LinearLayout in this case;
-        putting all the components either in a single row or in a single column -
-        depending on the value of this flag. In the horizontal case, a columnCount
-        property may be additionally supplied to force new rows to be created when a
-        row is full. The rowCount attribute may be used similarly in the vertical case.
-        The default is horizontal.
-        
-         <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>horizontal</code></td><td>0</td><td> Defines an horizontal widget. </td></tr>
-<tr><td><code>vertical</code></td><td>1</td><td> Defines a vertical widget. </td></tr>
-</table>
-         */
-        public static final int orientation=0x7f010000;
-        /**  The maximum number of rows to create when automatically positioning children. 
-         <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int rowCount=0x7f010001;
-        /** 
-        When set to true, forces row boundaries to appear in the same order
-        as row indices.
-        The default is true.
-        See {@link android.widget.GridLayout#setRowOrderPreserved(boolean)}.
-        
-         <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int rowOrderPreserved=0x7f010005;
-        /** 
-        When set to true, tells GridLayout to use default margins when none are specified
-        in a view's layout parameters.
-        The default value is false.
-        See {@link android.widget.GridLayout#setUseDefaultMargins(boolean)}.
-        
-         <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int useDefaultMargins=0x7f010003;
-    }
-    public static final class dimen {
-        /**  The default gap between components in a layout. 
-         */
-        public static final int default_gap=0x7f040000;
     }
     public static final class drawable {
         public static final int archer=0x7f020000;
-        public static final int dungeon=0x7f020001;
-        public static final int empty=0x7f020002;
-        public static final int forest=0x7f020003;
-        public static final int goblin=0x7f020004;
-        public static final int gold=0x7f020005;
-        public static final int grass=0x7f020006;
-        public static final int hero=0x7f020007;
-        public static final int hero_overview=0x7f020008;
-        public static final int ic_launcher=0x7f020009;
-        public static final int item_dagger=0x7f02000a;
-        public static final int item_ring_magical=0x7f02000b;
-        public static final int item_shield_magical=0x7f02000c;
-        public static final int item_staff=0x7f02000d;
-        public static final int item_staff_magical=0x7f02000e;
-        public static final int item_sword=0x7f02000f;
-        public static final int item_sword_holy=0x7f020010;
-        public static final int item_sword_long=0x7f020011;
-        public static final int knight=0x7f020012;
-        public static final int mountains=0x7f020013;
-        public static final int orc=0x7f020014;
-        public static final int passage=0x7f020015;
-        public static final int portal=0x7f020016;
-        public static final int road=0x7f020017;
-        public static final int road_horizontal=0x7f020018;
-        public static final int road_vertical=0x7f020019;
-        public static final int swordsman=0x7f02001a;
-        public static final int town=0x7f02001b;
-        public static final int troll=0x7f02001c;
+        public static final int credits=0x7f020001;
+        public static final int dungeon=0x7f020002;
+        public static final int empty=0x7f020003;
+        public static final int exit=0x7f020004;
+        public static final int forest=0x7f020005;
+        public static final int goblin=0x7f020006;
+        public static final int gold=0x7f020007;
+        public static final int grass=0x7f020008;
+        public static final int hero=0x7f020009;
+        public static final int hero_inventory=0x7f02000a;
+        public static final int hero_overview=0x7f02000b;
+        public static final int ic_launcher=0x7f02000c;
+        public static final int item_dagger=0x7f02000d;
+        public static final int item_ring_magical=0x7f02000e;
+        public static final int item_shield_magical=0x7f02000f;
+        public static final int item_staff=0x7f020010;
+        public static final int item_staff_magical=0x7f020011;
+        public static final int item_sword=0x7f020012;
+        public static final int item_sword_holy=0x7f020013;
+        public static final int item_sword_long=0x7f020014;
+        public static final int knight=0x7f020015;
+        public static final int mountains=0x7f020016;
+        public static final int orc=0x7f020017;
+        public static final int passage=0x7f020018;
+        public static final int portal=0x7f020019;
+        public static final int road=0x7f02001a;
+        public static final int road_horizontal=0x7f02001b;
+        public static final int road_vertical=0x7f02001c;
+        public static final int show_menu=0x7f02001d;
+        public static final int swordsman=0x7f02001e;
+        public static final int town=0x7f02001f;
+        public static final int troll=0x7f020020;
     }
     public static final class id {
-        public static final int alignBounds=0x7f070002;
-        public static final int alignMargins=0x7f070003;
-        public static final int barracks=0x7f070044;
-        public static final int barracksBackButton=0x7f070055;
-        public static final int bottom=0x7f070004;
-        public static final int center=0x7f070005;
-        public static final int center_horizontal=0x7f070006;
-        public static final int center_vertical=0x7f070007;
-        public static final int clip_horizontal=0x7f070008;
-        public static final int clip_vertical=0x7f070009;
-        public static final int dispose_skill_points=0x7f070035;
-        public static final int dungeon_dialog_combatButton=0x7f070069;
-        public static final int dungeon_dialog_faction=0x7f07005c;
-        public static final int dungeon_dialog_playerUnitCounts=0x7f070063;
-        public static final int dungeon_dialog_playerUnits=0x7f07005d;
-        public static final int dungeon_dialog_result_enemyLosses=0x7f070085;
-        public static final int dungeon_dialog_result_enemyLossesCounts=0x7f07008b;
-        public static final int dungeon_dialog_result_enemyLossesTitle=0x7f070084;
-        public static final int dungeon_dialog_result_enemyLosses_unit0=0x7f070086;
-        public static final int dungeon_dialog_result_enemyLosses_unit1=0x7f070087;
-        public static final int dungeon_dialog_result_enemyLosses_unit2=0x7f070088;
-        public static final int dungeon_dialog_result_enemyLosses_unit3=0x7f070089;
-        public static final int dungeon_dialog_result_enemyLosses_unit4=0x7f07008a;
-        public static final int dungeon_dialog_result_enemyLosses_unitCount0=0x7f07008c;
-        public static final int dungeon_dialog_result_enemyLosses_unitCount1=0x7f07008d;
-        public static final int dungeon_dialog_result_enemyLosses_unitCount2=0x7f07008e;
-        public static final int dungeon_dialog_result_enemyLosses_unitCount3=0x7f07008f;
-        public static final int dungeon_dialog_result_enemyLosses_unitCount4=0x7f070090;
-        public static final int dungeon_dialog_result_experienceGained=0x7f07006f;
-        public static final int dungeon_dialog_result_experienceGainedLabel=0x7f070070;
-        public static final int dungeon_dialog_result_experienceGainedValue=0x7f070071;
-        public static final int dungeon_dialog_result_goldFound=0x7f07006c;
-        public static final int dungeon_dialog_result_goldFoundLabel=0x7f07006d;
-        public static final int dungeon_dialog_result_goldFoundValue=0x7f07006e;
-        public static final int dungeon_dialog_result_item0=0x7f070074;
-        public static final int dungeon_dialog_result_item1=0x7f070075;
-        public static final int dungeon_dialog_result_item2=0x7f070076;
-        public static final int dungeon_dialog_result_items=0x7f070073;
-        public static final int dungeon_dialog_result_itemsTitle=0x7f070072;
-        public static final int dungeon_dialog_result_playerLosses=0x7f070078;
-        public static final int dungeon_dialog_result_playerLossesCounts=0x7f07007e;
-        public static final int dungeon_dialog_result_playerLossesTitle=0x7f070077;
-        public static final int dungeon_dialog_result_playerLosses_unit0=0x7f070079;
-        public static final int dungeon_dialog_result_playerLosses_unit1=0x7f07007a;
-        public static final int dungeon_dialog_result_playerLosses_unit2=0x7f07007b;
-        public static final int dungeon_dialog_result_playerLosses_unit3=0x7f07007c;
-        public static final int dungeon_dialog_result_playerLosses_unit4=0x7f07007d;
-        public static final int dungeon_dialog_result_playerLosses_unitCount0=0x7f07007f;
-        public static final int dungeon_dialog_result_playerLosses_unitCount1=0x7f070080;
-        public static final int dungeon_dialog_result_playerLosses_unitCount2=0x7f070081;
-        public static final int dungeon_dialog_result_playerLosses_unitCount3=0x7f070082;
-        public static final int dungeon_dialog_result_playerLosses_unitCount4=0x7f070083;
-        public static final int dungeon_dialog_result_quitButton=0x7f070091;
-        public static final int dungeon_dialog_result_title=0x7f07006b;
-        public static final int dungeon_dialog_title=0x7f07005b;
-        public static final int dungeon_dialog_unit0=0x7f07005e;
-        public static final int dungeon_dialog_unit1=0x7f07005f;
-        public static final int dungeon_dialog_unit2=0x7f070060;
-        public static final int dungeon_dialog_unit3=0x7f070061;
-        public static final int dungeon_dialog_unit4=0x7f070062;
-        public static final int dungeon_dialog_unitCount0=0x7f070064;
-        public static final int dungeon_dialog_unitCount1=0x7f070065;
-        public static final int dungeon_dialog_unitCount2=0x7f070066;
-        public static final int dungeon_dialog_unitCount3=0x7f070067;
-        public static final int dungeon_dialog_unitCount4=0x7f070068;
-        public static final int dungeon_dialog_withdrawButton=0x7f07006a;
-        public static final int end=0x7f07000a;
-        public static final int enterName=0x7f070013;
-        public static final int enterPassword=0x7f070015;
-        public static final int fill=0x7f07000b;
-        public static final int fill_horizontal=0x7f07000c;
-        public static final int fill_vertical=0x7f07000d;
-        public static final int heroInventoryView=0x7f070057;
-        public static final int horizontal=0x7f070000;
-        public static final int itemImage=0x7f070092;
-        public static final int itemIsEquipped=0x7f070094;
-        public static final int itemMarkedToSell=0x7f070095;
-        public static final int itemName=0x7f070093;
-        public static final int left=0x7f07000e;
-        public static final int listUnitsView=0x7f070046;
-        public static final int login=0x7f070012;
-        public static final int loginButton=0x7f070017;
-        public static final int main_experienceBar=0x7f07001e;
-        public static final int main_experienceText=0x7f07001f;
-        public static final int main_gameSurface=0x7f070020;
-        public static final int main_goldCount=0x7f07001c;
-        public static final int main_goldIcon=0x7f07001b;
-        public static final int main_level=0x7f07001d;
-        public static final int main_playerUnitCounts=0x7f070028;
-        public static final int main_playerUnits=0x7f070021;
-        public static final int main_statusBar=0x7f07001a;
-        public static final int main_unit0=0x7f070022;
-        public static final int main_unit1=0x7f070023;
-        public static final int main_unit2=0x7f070024;
-        public static final int main_unit3=0x7f070025;
-        public static final int main_unit4=0x7f070026;
-        public static final int main_unit5=0x7f070027;
-        public static final int main_unitCount0=0x7f070029;
-        public static final int main_unitCount1=0x7f07002a;
-        public static final int main_unitCount2=0x7f07002b;
-        public static final int main_unitCount3=0x7f07002c;
-        public static final int main_unitCount4=0x7f07002d;
-        public static final int main_unitCount5=0x7f07002e;
-        public static final int marketPlaceBackButton=0x7f07005a;
-        public static final int marketPlaceSellAllButton=0x7f070059;
-        public static final int marketPlaceSellButton=0x7f070058;
-        public static final int marketplace=0x7f070056;
-        public static final int name=0x7f070014;
-        public static final int noaccount=0x7f070018;
-        public static final int password=0x7f070016;
-        public static final int playerUnitCounts=0x7f07004e;
-        public static final int playerUnits=0x7f070047;
-        public static final int recruitButton=0x7f070098;
-        public static final int registerButton=0x7f070019;
-        public static final int register_cancelButton=0x7f070034;
-        public static final int register_enterName=0x7f07002f;
-        public static final int register_enterPassword=0x7f070031;
-        public static final int register_hero_agility=0x7f070039;
-        public static final int register_hero_agility_numberpicker=0x7f07003a;
-        public static final int register_hero_backButton=0x7f07003e;
-        public static final int register_hero_intelligence=0x7f07003b;
-        public static final int register_hero_intelligence_numberPicker=0x7f07003c;
-        public static final int register_hero_points_left=0x7f070036;
-        public static final int register_hero_registerButton=0x7f07003d;
-        public static final int register_hero_strength=0x7f070037;
-        public static final int register_hero_strength_numberpicker=0x7f070038;
-        public static final int register_name=0x7f070030;
-        public static final int register_nextButton=0x7f070033;
-        public static final int register_password=0x7f070032;
-        public static final int right=0x7f07000f;
-        public static final int start=0x7f070010;
-        public static final int top=0x7f070011;
-        public static final int townBarracksButton=0x7f070041;
-        public static final int townFaction=0x7f070040;
-        public static final int townMarketplaceButton=0x7f070042;
-        public static final int townName=0x7f07003f;
-        public static final int townQuitButton=0x7f070043;
-        public static final int unit0=0x7f070048;
-        public static final int unit1=0x7f070049;
-        public static final int unit2=0x7f07004a;
-        public static final int unit3=0x7f07004b;
-        public static final int unit4=0x7f07004c;
-        public static final int unit5=0x7f07004d;
-        public static final int unitCount=0x7f07009a;
-        public static final int unitCount0=0x7f07004f;
-        public static final int unitCount1=0x7f070050;
-        public static final int unitCount2=0x7f070051;
-        public static final int unitCount3=0x7f070052;
-        public static final int unitCount4=0x7f070053;
-        public static final int unitCount5=0x7f070054;
-        public static final int unitImage=0x7f070097;
-        public static final int unitName=0x7f070099;
-        public static final int unitsAvailable=0x7f070045;
-        public static final int unitsToRecruit=0x7f070096;
-        public static final int vertical=0x7f070001;
+        public static final int barracks=0x7f060058;
+        public static final int barracksBackButton=0x7f060069;
+        public static final int dispose_skill_points=0x7f06003d;
+        public static final int dungeon_dialog_combatButton=0x7f060085;
+        public static final int dungeon_dialog_faction=0x7f060076;
+        public static final int dungeon_dialog_playerUnitCounts=0x7f06007e;
+        public static final int dungeon_dialog_playerUnits=0x7f060077;
+        public static final int dungeon_dialog_result_enemyLosses=0x7f0600a3;
+        public static final int dungeon_dialog_result_enemyLossesCounts=0x7f0600aa;
+        public static final int dungeon_dialog_result_enemyLossesTitle=0x7f0600a2;
+        public static final int dungeon_dialog_result_enemyLosses_unit0=0x7f0600a4;
+        public static final int dungeon_dialog_result_enemyLosses_unit1=0x7f0600a5;
+        public static final int dungeon_dialog_result_enemyLosses_unit2=0x7f0600a6;
+        public static final int dungeon_dialog_result_enemyLosses_unit3=0x7f0600a7;
+        public static final int dungeon_dialog_result_enemyLosses_unit4=0x7f0600a8;
+        public static final int dungeon_dialog_result_enemyLosses_unit5=0x7f0600a9;
+        public static final int dungeon_dialog_result_enemyLosses_unitCount0=0x7f0600ab;
+        public static final int dungeon_dialog_result_enemyLosses_unitCount1=0x7f0600ac;
+        public static final int dungeon_dialog_result_enemyLosses_unitCount2=0x7f0600ad;
+        public static final int dungeon_dialog_result_enemyLosses_unitCount3=0x7f0600ae;
+        public static final int dungeon_dialog_result_enemyLosses_unitCount4=0x7f0600af;
+        public static final int dungeon_dialog_result_enemyLosses_unitCount5=0x7f0600b0;
+        public static final int dungeon_dialog_result_experienceGained=0x7f06008b;
+        public static final int dungeon_dialog_result_experienceGainedLabel=0x7f06008c;
+        public static final int dungeon_dialog_result_experienceGainedValue=0x7f06008d;
+        public static final int dungeon_dialog_result_goldFound=0x7f060088;
+        public static final int dungeon_dialog_result_goldFoundLabel=0x7f060089;
+        public static final int dungeon_dialog_result_goldFoundValue=0x7f06008a;
+        public static final int dungeon_dialog_result_item0=0x7f060090;
+        public static final int dungeon_dialog_result_item1=0x7f060091;
+        public static final int dungeon_dialog_result_item2=0x7f060092;
+        public static final int dungeon_dialog_result_items=0x7f06008f;
+        public static final int dungeon_dialog_result_itemsTitle=0x7f06008e;
+        public static final int dungeon_dialog_result_playerLosses=0x7f060094;
+        public static final int dungeon_dialog_result_playerLossesCounts=0x7f06009b;
+        public static final int dungeon_dialog_result_playerLossesTitle=0x7f060093;
+        public static final int dungeon_dialog_result_playerLosses_unit0=0x7f060095;
+        public static final int dungeon_dialog_result_playerLosses_unit1=0x7f060096;
+        public static final int dungeon_dialog_result_playerLosses_unit2=0x7f060097;
+        public static final int dungeon_dialog_result_playerLosses_unit3=0x7f060098;
+        public static final int dungeon_dialog_result_playerLosses_unit4=0x7f060099;
+        public static final int dungeon_dialog_result_playerLosses_unit5=0x7f06009a;
+        public static final int dungeon_dialog_result_playerLosses_unitCount0=0x7f06009c;
+        public static final int dungeon_dialog_result_playerLosses_unitCount1=0x7f06009d;
+        public static final int dungeon_dialog_result_playerLosses_unitCount2=0x7f06009e;
+        public static final int dungeon_dialog_result_playerLosses_unitCount3=0x7f06009f;
+        public static final int dungeon_dialog_result_playerLosses_unitCount4=0x7f0600a0;
+        public static final int dungeon_dialog_result_playerLosses_unitCount5=0x7f0600a1;
+        public static final int dungeon_dialog_result_quitButton=0x7f0600b1;
+        public static final int dungeon_dialog_result_title=0x7f060087;
+        public static final int dungeon_dialog_title=0x7f060075;
+        public static final int dungeon_dialog_unit0=0x7f060078;
+        public static final int dungeon_dialog_unit1=0x7f060079;
+        public static final int dungeon_dialog_unit2=0x7f06007a;
+        public static final int dungeon_dialog_unit3=0x7f06007b;
+        public static final int dungeon_dialog_unit4=0x7f06007c;
+        public static final int dungeon_dialog_unit5=0x7f06007d;
+        public static final int dungeon_dialog_unitCount0=0x7f06007f;
+        public static final int dungeon_dialog_unitCount1=0x7f060080;
+        public static final int dungeon_dialog_unitCount2=0x7f060081;
+        public static final int dungeon_dialog_unitCount3=0x7f060082;
+        public static final int dungeon_dialog_unitCount4=0x7f060083;
+        public static final int dungeon_dialog_unitCount5=0x7f060084;
+        public static final int dungeon_dialog_withdrawButton=0x7f060086;
+        public static final int enterName=0x7f060014;
+        public static final int enterPassword=0x7f060016;
+        public static final int hero_inventoryView=0x7f060001;
+        public static final int hero_inventory_backButton=0x7f060002;
+        public static final int hero_inventory_title=0x7f060000;
+        public static final int hero_overview_agility=0x7f06000c;
+        public static final int hero_overview_agility_numberpicker=0x7f06000d;
+        public static final int hero_overview_agility_value=0x7f06000e;
+        public static final int hero_overview_backButton=0x7f060012;
+        public static final int hero_overview_dispose_skill_points=0x7f060007;
+        public static final int hero_overview_experienceBar=0x7f060005;
+        public static final int hero_overview_experienceText=0x7f060006;
+        public static final int hero_overview_intelligence=0x7f06000f;
+        public static final int hero_overview_intelligence_numberPicker=0x7f060010;
+        public static final int hero_overview_intelligence_value=0x7f060011;
+        public static final int hero_overview_level=0x7f060004;
+        public static final int hero_overview_name=0x7f060003;
+        public static final int hero_overview_points_left=0x7f060008;
+        public static final int hero_overview_strength=0x7f060009;
+        public static final int hero_overview_strength_numberpicker=0x7f06000a;
+        public static final int hero_overview_strength_value=0x7f06000b;
+        public static final int itemImage=0x7f0600b2;
+        public static final int itemIsEquipped=0x7f0600b4;
+        public static final int itemMarkedToSell=0x7f0600b5;
+        public static final int itemName=0x7f0600b3;
+        public static final int listUnitsView=0x7f06005a;
+        public static final int login=0x7f060013;
+        public static final int loginButton=0x7f060018;
+        public static final int main_armyContainer=0x7f060027;
+        public static final int main_credits=0x7f060024;
+        public static final int main_exit=0x7f060023;
+        public static final int main_experienceBar=0x7f06001f;
+        public static final int main_experienceText=0x7f060020;
+        public static final int main_gameSurface=0x7f060021;
+        public static final int main_goldCount=0x7f06001d;
+        public static final int main_goldIcon=0x7f06001c;
+        public static final int main_hero_inventory=0x7f060026;
+        public static final int main_hero_overview=0x7f060025;
+        public static final int main_level=0x7f06001e;
+        public static final int main_options=0x7f060022;
+        public static final int main_playerUnitCounts=0x7f06002f;
+        public static final int main_playerUnits=0x7f060028;
+        public static final int main_show_menu=0x7f060036;
+        public static final int main_statusBar=0x7f06001b;
+        public static final int main_unit0=0x7f060029;
+        public static final int main_unit1=0x7f06002a;
+        public static final int main_unit2=0x7f06002b;
+        public static final int main_unit3=0x7f06002c;
+        public static final int main_unit4=0x7f06002d;
+        public static final int main_unit5=0x7f06002e;
+        public static final int main_unitCount0=0x7f060030;
+        public static final int main_unitCount1=0x7f060031;
+        public static final int main_unitCount2=0x7f060032;
+        public static final int main_unitCount3=0x7f060033;
+        public static final int main_unitCount4=0x7f060034;
+        public static final int main_unitCount5=0x7f060035;
+        public static final int marketplace=0x7f060070;
+        public static final int name=0x7f060015;
+        public static final int noaccount=0x7f060019;
+        public static final int password=0x7f060017;
+        public static final int playerUnitCounts=0x7f060062;
+        public static final int playerUnits=0x7f06005b;
+        public static final int recruitButton=0x7f0600b8;
+        public static final int registerButton=0x7f06001a;
+        public static final int register_cancelButton=0x7f06003c;
+        public static final int register_enterName=0x7f060037;
+        public static final int register_enterPassword=0x7f060039;
+        public static final int register_hero_agility=0x7f060041;
+        public static final int register_hero_agility_numberpicker=0x7f060042;
+        public static final int register_hero_backButton=0x7f060046;
+        public static final int register_hero_intelligence=0x7f060043;
+        public static final int register_hero_intelligence_numberPicker=0x7f060044;
+        public static final int register_hero_points_left=0x7f06003e;
+        public static final int register_hero_registerButton=0x7f060045;
+        public static final int register_hero_strength=0x7f06003f;
+        public static final int register_hero_strength_numberpicker=0x7f060040;
+        public static final int register_name=0x7f060038;
+        public static final int register_nextButton=0x7f06003b;
+        public static final int register_password=0x7f06003a;
+        public static final int townBarracksButton=0x7f06004f;
+        public static final int townFaction=0x7f06004e;
+        public static final int townMarketplaceButton=0x7f060050;
+        public static final int townName=0x7f06004d;
+        public static final int townQuitButton=0x7f060051;
+        public static final int town_barracks_experienceBar=0x7f060056;
+        public static final int town_barracks_experienceText=0x7f060057;
+        public static final int town_barracks_goldCount=0x7f060054;
+        public static final int town_barracks_goldIcon=0x7f060053;
+        public static final int town_barracks_level=0x7f060055;
+        public static final int town_barracks_statusBar=0x7f060052;
+        public static final int town_experienceBar=0x7f06004b;
+        public static final int town_experienceText=0x7f06004c;
+        public static final int town_goldCount=0x7f060049;
+        public static final int town_goldIcon=0x7f060048;
+        public static final int town_level=0x7f06004a;
+        public static final int town_marketplace_backButton=0x7f060074;
+        public static final int town_marketplace_experienceBar=0x7f06006e;
+        public static final int town_marketplace_experienceText=0x7f06006f;
+        public static final int town_marketplace_goldCount=0x7f06006c;
+        public static final int town_marketplace_goldIcon=0x7f06006b;
+        public static final int town_marketplace_heroInventoryView=0x7f060071;
+        public static final int town_marketplace_level=0x7f06006d;
+        public static final int town_marketplace_sellAllButton=0x7f060073;
+        public static final int town_marketplace_sellButton=0x7f060072;
+        public static final int town_marketplace_statusBar=0x7f06006a;
+        public static final int town_statusBar=0x7f060047;
+        public static final int unit0=0x7f06005c;
+        public static final int unit1=0x7f06005d;
+        public static final int unit2=0x7f06005e;
+        public static final int unit3=0x7f06005f;
+        public static final int unit4=0x7f060060;
+        public static final int unit5=0x7f060061;
+        public static final int unitCount=0x7f0600ba;
+        public static final int unitCount0=0x7f060063;
+        public static final int unitCount1=0x7f060064;
+        public static final int unitCount2=0x7f060065;
+        public static final int unitCount3=0x7f060066;
+        public static final int unitCount4=0x7f060067;
+        public static final int unitCount5=0x7f060068;
+        public static final int unitImage=0x7f0600b7;
+        public static final int unitName=0x7f0600b9;
+        public static final int unitsAvailable=0x7f060059;
+        public static final int unitsToRecruit=0x7f0600b6;
     }
     public static final class layout {
-        public static final int activity_login=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int activity_register=0x7f030002;
-        public static final int activity_register_hero=0x7f030003;
-        public static final int activity_town=0x7f030004;
-        public static final int activity_town_barracks=0x7f030005;
-        public static final int activity_town_marketplace=0x7f030006;
-        public static final int dialog_dungeon=0x7f030007;
-        public static final int dialog_dungeon_result=0x7f030008;
-        public static final int element_item=0x7f030009;
-        public static final int element_unit=0x7f03000a;
+        public static final int activity_hero_inventory=0x7f030000;
+        public static final int activity_hero_overview=0x7f030001;
+        public static final int activity_login=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int activity_register=0x7f030004;
+        public static final int activity_register_hero=0x7f030005;
+        public static final int activity_town=0x7f030006;
+        public static final int activity_town_barracks=0x7f030007;
+        public static final int activity_town_marketplace=0x7f030008;
+        public static final int dialog_dungeon=0x7f030009;
+        public static final int dialog_dungeon_result=0x7f03000a;
+        public static final int element_item=0x7f03000b;
+        public static final int element_unit=0x7f03000c;
     }
     public static final class string {
+        public static final int agility=0x7f04000e;
         /**  general 
          */
-        public static final int app_name=0x7f050000;
-        public static final int attack=0x7f05000d;
-        public static final int back=0x7f050004;
-        public static final int back_to_land=0x7f050022;
-        public static final int barracks=0x7f050011;
-        public static final int battle_result=0x7f05001c;
-        public static final int cancel=0x7f050003;
-        public static final int defence=0x7f05000e;
+        public static final int app_name=0x7f040000;
+        public static final int back=0x7f040004;
+        public static final int back_to_land=0x7f040027;
+        public static final int barracks=0x7f040013;
+        public static final int cancel=0x7f040003;
+        /**  credits 
+         */
+        public static final int credits=0x7f04002a;
+        public static final int defeat=0x7f040021;
+        public static final int deserted=0x7f04001e;
         /**  hero 
          */
-        public static final int dispose_skill_points=0x7f05000c;
+        public static final int dispose_skill_points=0x7f04000c;
         /**  dungeon 
          */
-        public static final int dungeon=0x7f05001a;
-        public static final int empty=0x7f050001;
-        public static final int enemy_losses=0x7f050021;
+        public static final int dungeon=0x7f04001c;
+        public static final int empty=0x7f040001;
+        public static final int enemy_losses=0x7f040026;
         /**  register/login 
          */
-        public static final int enter_name=0x7f050006;
-        public static final int equipped=0x7f050016;
-        public static final int gold_found=0x7f05001d;
-        public static final int items_gained=0x7f05001f;
-        public static final int login=0x7f050009;
-        public static final int marked_to_sell=0x7f050017;
+        public static final int enter_name=0x7f040006;
+        public static final int equipped=0x7f040018;
+        public static final int gold_found=0x7f040022;
+        public static final int guarded_by=0x7f04001d;
+        /**  hero overview 
+         */
+        public static final int hero_overview=0x7f040010;
+        public static final int intelligence=0x7f04000f;
+        public static final int inventory=0x7f04002c;
+        public static final int items_gained=0x7f040024;
+        public static final int level=0x7f04002d;
+        public static final int login=0x7f040009;
+        public static final int marked_to_sell=0x7f040019;
         /**  town main 
          */
-        public static final int marketplace=0x7f050010;
-        public static final int next=0x7f050002;
-        public static final int no_account=0x7f05000a;
-        public static final int password=0x7f050008;
-        public static final int power=0x7f05000f;
-        public static final int quit=0x7f050005;
-        public static final int recruit=0x7f050012;
-        public static final int register=0x7f05000b;
-        public static final int sell=0x7f050018;
-        public static final int sell_all=0x7f050019;
-        public static final int start_combat=0x7f05001b;
+        public static final int marketplace=0x7f040011;
+        /**  passages 
+         */
+        public static final int move_to_land=0x7f040028;
+        public static final int next=0x7f040002;
+        public static final int no_account=0x7f04000a;
+        public static final int not_available=0x7f040029;
+        public static final int owned_by=0x7f040012;
+        public static final int password=0x7f040008;
+        public static final int quit=0x7f040005;
+        public static final int recruit=0x7f040014;
+        public static final int register=0x7f04000b;
+        public static final int sell=0x7f04001a;
+        public static final int sell_all=0x7f04001b;
+        public static final int start_combat=0x7f04001f;
+        public static final int strength=0x7f04000d;
         /**  town barracks 
          */
-        public static final int town_barracks=0x7f050013;
+        public static final int town_barracks=0x7f040015;
         /**  town marketplace 
          */
-        public static final int town_marketplace=0x7f050015;
-        public static final int units_available=0x7f050014;
-        public static final int xp_gained=0x7f05001e;
-        public static final int your_losses=0x7f050020;
-        public static final int your_name=0x7f050007;
+        public static final int town_marketplace=0x7f040017;
+        public static final int units_available=0x7f040016;
+        /**   dungeon result 
+         */
+        public static final int victory=0x7f040020;
+        public static final int want_to_quit=0x7f04002b;
+        public static final int xp_gained=0x7f040023;
+        public static final int your_losses=0x7f040025;
+        public static final int your_name=0x7f040007;
     }
     public static final class style {
         /** 
@@ -498,505 +330,10 @@ containing a value of this type.
             backward-compatibility can go here.
         
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f050000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f050001;
     }
-    public static final class styleable {
-        /** Attributes that can be used with a GridLayout.
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #GridLayout_alignmentMode com.inzynierkanew:alignmentMode}</code></td><td>
-        When set to alignMargins, causes alignment to take place between the outer
-        boundary of a view, as defined by its margins.</td></tr>
-           <tr><td><code>{@link #GridLayout_columnCount com.inzynierkanew:columnCount}</code></td><td> The maximum number of columns to create when automatically positioning children.</td></tr>
-           <tr><td><code>{@link #GridLayout_columnOrderPreserved com.inzynierkanew:columnOrderPreserved}</code></td><td>
-        When set to true, forces column boundaries to appear in the same order
-        as column indices.</td></tr>
-           <tr><td><code>{@link #GridLayout_orientation com.inzynierkanew:orientation}</code></td><td>
-              support versions.</td></tr>
-           <tr><td><code>{@link #GridLayout_rowCount com.inzynierkanew:rowCount}</code></td><td> The maximum number of rows to create when automatically positioning children.</td></tr>
-           <tr><td><code>{@link #GridLayout_rowOrderPreserved com.inzynierkanew:rowOrderPreserved}</code></td><td>
-        When set to true, forces row boundaries to appear in the same order
-        as row indices.</td></tr>
-           <tr><td><code>{@link #GridLayout_useDefaultMargins com.inzynierkanew:useDefaultMargins}</code></td><td>
-        When set to true, tells GridLayout to use default margins when none are specified
-        in a view's layout parameters.</td></tr>
-           </table>
-           @see #GridLayout_alignmentMode
-           @see #GridLayout_columnCount
-           @see #GridLayout_columnOrderPreserved
-           @see #GridLayout_orientation
-           @see #GridLayout_rowCount
-           @see #GridLayout_rowOrderPreserved
-           @see #GridLayout_useDefaultMargins
-         */
-        public static final int[] GridLayout = {
-            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
-            0x7f010004, 0x7f010005, 0x7f010006
-        };
-        /**
-          <p>
-          @attr description
-          
-        When set to alignMargins, causes alignment to take place between the outer
-        boundary of a view, as defined by its margins. When set to alignBounds,
-        causes alignment to take place between the edges of the view.
-        The default is alignMargins.
-        See {@link android.widget.GridLayout#setAlignmentMode(int)}.
-        
-
-
-          <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>alignBounds</code></td><td>0</td><td>
-            Align the bounds of the children.
-            See {@link android.widget.GridLayout#ALIGN_BOUNDS}.
-            </td></tr>
-<tr><td><code>alignMargins</code></td><td>1</td><td>
-            Align the margins of the children.
-            See {@link android.widget.GridLayout#ALIGN_MARGINS}.
-            </td></tr>
-</table>
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:alignmentMode
-        */
-        public static final int GridLayout_alignmentMode = 4;
-        /**
-          <p>
-          @attr description
-           The maximum number of columns to create when automatically positioning children. 
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:columnCount
-        */
-        public static final int GridLayout_columnCount = 2;
-        /**
-          <p>
-          @attr description
-          
-        When set to true, forces column boundaries to appear in the same order
-        as column indices.
-        The default is true.
-        See {@link android.widget.GridLayout#setColumnOrderPreserved(boolean)}.
-        
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:columnOrderPreserved
-        */
-        public static final int GridLayout_columnOrderPreserved = 6;
-        /**
-          <p>
-          @attr description
-          
-              support versions. All attributes not present in ViewGroup/View are
-              redefined in the support library namespace.
-        
-
-        The orientation property is not used during layout. It is only used to
-        allocate row and column parameters when they are not specified by its children's
-        layout parameters. GridLayout works like LinearLayout in this case;
-        putting all the components either in a single row or in a single column -
-        depending on the value of this flag. In the horizontal case, a columnCount
-        property may be additionally supplied to force new rows to be created when a
-        row is full. The rowCount attribute may be used similarly in the vertical case.
-        The default is horizontal.
-        
-
-
-          <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>horizontal</code></td><td>0</td><td> Defines an horizontal widget. </td></tr>
-<tr><td><code>vertical</code></td><td>1</td><td> Defines a vertical widget. </td></tr>
-</table>
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:orientation
-        */
-        public static final int GridLayout_orientation = 0;
-        /**
-          <p>
-          @attr description
-           The maximum number of rows to create when automatically positioning children. 
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:rowCount
-        */
-        public static final int GridLayout_rowCount = 1;
-        /**
-          <p>
-          @attr description
-          
-        When set to true, forces row boundaries to appear in the same order
-        as row indices.
-        The default is true.
-        See {@link android.widget.GridLayout#setRowOrderPreserved(boolean)}.
-        
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:rowOrderPreserved
-        */
-        public static final int GridLayout_rowOrderPreserved = 5;
-        /**
-          <p>
-          @attr description
-          
-        When set to true, tells GridLayout to use default margins when none are specified
-        in a view's layout parameters.
-        The default value is false.
-        See {@link android.widget.GridLayout#setUseDefaultMargins(boolean)}.
-        
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:useDefaultMargins
-        */
-        public static final int GridLayout_useDefaultMargins = 3;
-        /** Attributes that can be used with a GridLayout_Layout.
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_height android:layout_height}</code></td><td></td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_margin android:layout_margin}</code></td><td>
-              Specifies extra space on the left, top, right and bottom
-              sides of this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_marginBottom android:layout_marginBottom}</code></td><td>
-              Specifies extra space on the bottom side of this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_marginLeft android:layout_marginLeft}</code></td><td>
-              Specifies extra space on the left side of this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_marginRight android:layout_marginRight}</code></td><td>
-              Specifies extra space on the right side of this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_marginTop android:layout_marginTop}</code></td><td>
-              Specifies extra space on the top side of this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_android_layout_width android:layout_width}</code></td><td>
-              support versions.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_column com.inzynierkanew:layout_column}</code></td><td>
-        The column boundary delimiting the left of the group of cells
-        occupied by this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_columnSpan com.inzynierkanew:layout_columnSpan}</code></td><td>
-        The column span: the difference between the right and left
-        boundaries delimiting the group of cells occupied by this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_columnWeight com.inzynierkanew:layout_columnWeight}</code></td><td> The relative proportion of horizontal space that should be allocated to this view
-        during excess space distribution.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_gravity com.inzynierkanew:layout_gravity}</code></td><td>
-        Gravity specifies how a component should be placed in its group of cells.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_row com.inzynierkanew:layout_row}</code></td><td> END MarginLayout layoutparams 
-
-        The row boundary delimiting the top of the group of cells
-        occupied by this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_rowSpan com.inzynierkanew:layout_rowSpan}</code></td><td>
-        The row span: the difference between the top and bottom
-        boundaries delimiting the group of cells occupied by this view.</td></tr>
-           <tr><td><code>{@link #GridLayout_Layout_layout_rowWeight com.inzynierkanew:layout_rowWeight}</code></td><td> The relative proportion of vertical space that should be allocated to this view
-        during excess space distribution.</td></tr>
-           </table>
-           @see #GridLayout_Layout_android_layout_height
-           @see #GridLayout_Layout_android_layout_margin
-           @see #GridLayout_Layout_android_layout_marginBottom
-           @see #GridLayout_Layout_android_layout_marginLeft
-           @see #GridLayout_Layout_android_layout_marginRight
-           @see #GridLayout_Layout_android_layout_marginTop
-           @see #GridLayout_Layout_android_layout_width
-           @see #GridLayout_Layout_layout_column
-           @see #GridLayout_Layout_layout_columnSpan
-           @see #GridLayout_Layout_layout_columnWeight
-           @see #GridLayout_Layout_layout_gravity
-           @see #GridLayout_Layout_layout_row
-           @see #GridLayout_Layout_layout_rowSpan
-           @see #GridLayout_Layout_layout_rowWeight
-         */
-        public static final int[] GridLayout_Layout = {
-            0x010100f4, 0x010100f5, 0x010100f6, 0x010100f7,
-            0x010100f8, 0x010100f9, 0x010100fa, 0x7f010007,
-            0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b,
-            0x7f01000c, 0x7f01000d
-        };
-        /**
-          <p>This symbol is the offset where the {@link android.R.attr#layout_height}
-          attribute's value can be found in the {@link #GridLayout_Layout} array.
-          @attr name android:layout_height
-        */
-        public static final int GridLayout_Layout_android_layout_height = 1;
-        /**
-          <p>
-          @attr description
-          
-              Specifies extra space on the left, top, right and bottom
-              sides of this view. This space is outside this view's bounds.
-        
-          <p>This corresponds to the global attribute
-          resource symbol {@link android.R.attr#layout_margin}.
-          @attr name android:layout_margin
-        */
-        public static final int GridLayout_Layout_android_layout_margin = 2;
-        /**
-          <p>
-          @attr description
-          
-              Specifies extra space on the bottom side of this view.
-              This space is outside this view's bounds.
-        
-          <p>This corresponds to the global attribute
-          resource symbol {@link android.R.attr#layout_marginBottom}.
-          @attr name android:layout_marginBottom
-        */
-        public static final int GridLayout_Layout_android_layout_marginBottom = 6;
-        /**
-          <p>
-          @attr description
-          
-              Specifies extra space on the left side of this view.
-              This space is outside this view's bounds.
-        
-          <p>This corresponds to the global attribute
-          resource symbol {@link android.R.attr#layout_marginLeft}.
-          @attr name android:layout_marginLeft
-        */
-        public static final int GridLayout_Layout_android_layout_marginLeft = 3;
-        /**
-          <p>
-          @attr description
-          
-              Specifies extra space on the right side of this view.
-              This space is outside this view's bounds.
-        
-          <p>This corresponds to the global attribute
-          resource symbol {@link android.R.attr#layout_marginRight}.
-          @attr name android:layout_marginRight
-        */
-        public static final int GridLayout_Layout_android_layout_marginRight = 5;
-        /**
-          <p>
-          @attr description
-          
-              Specifies extra space on the top side of this view.
-              This space is outside this view's bounds.
-        
-          <p>This corresponds to the global attribute
-          resource symbol {@link android.R.attr#layout_marginTop}.
-          @attr name android:layout_marginTop
-        */
-        public static final int GridLayout_Layout_android_layout_marginTop = 4;
-        /**
-          <p>
-          @attr description
-          
-              support versions. All attributes not present in MarginLayout are
-              redefined in the support library name space.
-        
- START MarginLayout layoutparams 
-          <p>This corresponds to the global attribute
-          resource symbol {@link android.R.attr#layout_width}.
-          @attr name android:layout_width
-        */
-        public static final int GridLayout_Layout_android_layout_width = 0;
-        /**
-          <p>
-          @attr description
-          
-        The column boundary delimiting the left of the group of cells
-        occupied by this view.
-        
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_column
-        */
-        public static final int GridLayout_Layout_layout_column = 10;
-        /**
-          <p>
-          @attr description
-          
-        The column span: the difference between the right and left
-        boundaries delimiting the group of cells occupied by this view.
-        The default is one.
-        See {@link android.widget.GridLayout.Spec}.
-        
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_columnSpan
-        */
-        public static final int GridLayout_Layout_layout_columnSpan = 11;
-        /**
-          <p>
-          @attr description
-           The relative proportion of horizontal space that should be allocated to this view
-        during excess space distribution. 
-
-
-          <p>Must be a floating point value, such as "<code>1.2</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_columnWeight
-        */
-        public static final int GridLayout_Layout_layout_columnWeight = 12;
-        /**
-          <p>
-          @attr description
-          
-        Gravity specifies how a component should be placed in its group of cells.
-        The default is LEFT | BASELINE.
-        See {@link android.widget.GridLayout.LayoutParams#setGravity(int)}.
-        
-
-
-          <p>Must be one or more (separated by '|') of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>top</code></td><td>0x30</td><td> Push object to the top of its container, not changing its size. </td></tr>
-<tr><td><code>bottom</code></td><td>0x50</td><td> Push object to the bottom of its container, not changing its size. </td></tr>
-<tr><td><code>left</code></td><td>0x03</td><td> Push object to the left of its container, not changing its size. </td></tr>
-<tr><td><code>right</code></td><td>0x05</td><td> Push object to the right of its container, not changing its size. </td></tr>
-<tr><td><code>center_vertical</code></td><td>0x10</td><td> Place object in the vertical center of its container, not changing its size. </td></tr>
-<tr><td><code>fill_vertical</code></td><td>0x70</td><td> Grow the vertical size of the object if needed so it completely fills its container. </td></tr>
-<tr><td><code>center_horizontal</code></td><td>0x01</td><td> Place object in the horizontal center of its container, not changing its size. </td></tr>
-<tr><td><code>fill_horizontal</code></td><td>0x07</td><td> Grow the horizontal size of the object if needed so it completely fills its container. </td></tr>
-<tr><td><code>center</code></td><td>0x11</td><td> Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. </td></tr>
-<tr><td><code>fill</code></td><td>0x77</td><td> Grow the horizontal and vertical size of the object if needed so it completely fills its container. </td></tr>
-<tr><td><code>clip_vertical</code></td><td>0x80</td><td>
-             Additional option that can be set to have the top and/or bottom edges of
-             the child clipped to its container's bounds.
-             The clip will be based on the vertical gravity: a top gravity will clip the bottom
-             edge, a bottom gravity will clip the top edge, and neither will clip both edges.
-            </td></tr>
-<tr><td><code>clip_horizontal</code></td><td>0x08</td><td>
-             Additional option that can be set to have the left and/or right edges of
-             the child clipped to its container's bounds.
-             The clip will be based on the horizontal gravity: a left gravity will clip the right
-             edge, a right gravity will clip the left edge, and neither will clip both edges.
-            </td></tr>
-<tr><td><code>start</code></td><td>0x00800003</td><td> Push object to the beginning of its container, not changing its size. </td></tr>
-<tr><td><code>end</code></td><td>0x00800005</td><td> Push object to the end of its container, not changing its size. </td></tr>
-</table>
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_gravity
-        */
-        public static final int GridLayout_Layout_layout_gravity = 13;
-        /**
-          <p>
-          @attr description
-           END MarginLayout layoutparams 
-
-        The row boundary delimiting the top of the group of cells
-        occupied by this view.
-        
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_row
-        */
-        public static final int GridLayout_Layout_layout_row = 7;
-        /**
-          <p>
-          @attr description
-          
-        The row span: the difference between the top and bottom
-        boundaries delimiting the group of cells occupied by this view.
-        The default is one.
-        See {@link android.widget.GridLayout.Spec}.
-        
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_rowSpan
-        */
-        public static final int GridLayout_Layout_layout_rowSpan = 8;
-        /**
-          <p>
-          @attr description
-           The relative proportion of vertical space that should be allocated to this view
-        during excess space distribution. 
-
-
-          <p>Must be a floating point value, such as "<code>1.2</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          <p>This is a private symbol.
-          @attr name com.inzynierkanew:layout_rowWeight
-        */
-        public static final int GridLayout_Layout_layout_rowWeight = 9;
-    };
 }

@@ -9,13 +9,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
+import org.datanucleus.store.appengine.query.JPACursorHelper;
+
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
-import com.inzynierkanew.dumps.WorldDump;
 import com.inzynierkanew.endpoints.map.LandEndpoint;
 import com.inzynierkanew.endpoints.map.TownEndpoint;
 import com.inzynierkanew.entities.map.Land;
@@ -23,11 +23,10 @@ import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.Player;
 import com.inzynierkanew.entities.players.PlayerSession;
+import com.inzynierkanew.shared.SharedConstants;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.utils.RequestValidator;
 import com.inzynierkanew.utils.StringUtils;
-import com.inzynierkanew.world.WorldGenerator;
-import com.inzynierkanew.world.WorldGeneratorFactory;
 import com.inzynierkanew.wrappers.LoginResponse;
 
 @Api(name = "playerendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players"))
@@ -112,23 +111,23 @@ public class PlayerEndpoint {
 	public Player registerPlayer(Player player, 
 			@Named("strength") Integer strength, 
 			@Named("agility") Integer agility, 
-			@Named("intelligence") Integer intelligence) {
+			@Named("intelligence") Integer intelligence, 
+			@Named("freeSkillPoints") Integer freeSkillPoints) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (containsPlayer(player)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			//WorldGeneratorFactory.fireWorldGeneration();
 			Land startingLand = landEndpoint.findLandForNewPlayer();
 			Town startingTown = townEndpoint.getTown(startingLand.getTownId());
-			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId(), WorldGenerator.HERO_INITIAL_GOLD, strength, agility, intelligence);
+			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId(), SharedConstants.HERO_INITIAL_GOLD, strength, agility, intelligence, freeSkillPoints);
 			hero = heroEndpoint.insertHero(hero);
 			player.setHeroId(hero.getId());
 			mgr.persist(player);
 		} finally {
 			mgr.close();
 		}
-		new WorldDump(new LandEndpoint()).dumpTerrain();
+		//new WorldDump(landEndpoint).dumpLands().dumpTerrain();
 		return player;
 	}
 

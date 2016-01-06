@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:paddingRight="40dp"
+        android:paddingEnd="40dp"
         android:src="@drawable/swordsman" />
     
 	<TextView

@@ -65,12 +65,12 @@ public class HeroModel implements IRenderable {
 
 	@Override
 	public void render(Canvas canvas) {
-		canvas.drawBitmap(bitmap, gameView.getOffsetX()+Constants.TILE_SIZE*localFloatX, gameView.getOffsetY()+Constants.TILE_SIZE*localFloatY, null);
+		canvas.drawBitmap(bitmap, gameView.getOffsetX()+gameView.getZoom()*Constants.TILE_SIZE*localFloatX, gameView.getOffsetY()+gameView.getZoom()*Constants.TILE_SIZE*localFloatY, null);
 	}
 
 	@Override
 	public void update() {
-		if(path==null){
+		if(path==null || nextPoint==null){
 			return;
 		}
 		setDirection();

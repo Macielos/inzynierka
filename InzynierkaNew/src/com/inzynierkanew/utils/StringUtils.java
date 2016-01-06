@@ -2,6 +2,8 @@ package com.inzynierkanew.utils;
 
 import java.util.List;
 
+import com.inzynierkanew.shared.SharedConstants;
+
 public class StringUtils {
 
 	private StringUtils(){

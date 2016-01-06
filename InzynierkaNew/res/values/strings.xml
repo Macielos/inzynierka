@@ -17,11 +17,14 @@
     <string name="register">Register</string>
     <!-- hero -->
     <string name="dispose_skill_points">Dispose skill points</string>
-    <string name="attack">Attack</string>
-    <string name="defence">Defence</string>
-    <string name="power">Power</string>
+    <string name="strength">Strength</string>
+    <string name="agility">Agility</string>
+    <string name="intelligence">Intelligence</string>
+    <!-- hero overview -->
+    <string name="hero_overview">Hero overview</string>
     <!-- town main -->
     <string name="marketplace">Marketplace</string>
+    <string name="owned_by">Town owned by </string>
     <string name="barracks">Barracks</string>
     <string name="recruit">Recruit</string>
     <!-- town barracks -->
@@ -35,13 +38,24 @@
     <string name="sell_all">Sell all</string>
     <!-- dungeon -->
     <string name="dungeon">Dungeon</string>
+    <string name="guarded_by">Guarded by</string>
+    <string name="deserted">Deserted</string>
     <string name="start_combat">Start combat</string>
-    <string name="battle_result">Battle result</string>
+    <!--  dungeon result -->
+    <string name="victory">You are victorious!</string>
+    <string name="defeat">You have been defeated!</string>
     <string name="gold_found">Gold found: </string>
     <string name="xp_gained">XP gained: </string>
     <string name="items_gained">Items gained: </string>
     <string name="your_losses">Your losses</string>
     <string name="enemy_losses">Enemy losses</string>
     <string name="back_to_land">Back to land</string>
-
+    <!-- passages -->
+    <string name="move_to_land">Do you want to move to the next land?</string>
+    <string name="not_available">Lands beyond this border are not available yet. Come back later</string>
+    <!-- credits -->
+    <string name="credits">Credits\n\nAutor: Maciej Gańko\n\nAplikacja stworzona jako praca inżynierska pod kierunkiem dr inż. Andrzeja Ratkowskiego\n\nOd momentu jej obrony prawa autorskie należą do Politechniki Warszawskiej</string>
+    <string name="want_to_quit">Are you sure you want to quit game?</string>
+    <string name="inventory">Inventory</string>
+    <string name="level">Level </string>
 </resources>

@@ -15,6 +15,8 @@ public abstract class DatastoreUtils {
 	}
 	
 	public static void fetchLand(Land land){
+		for(Passage passage: land.getPassages());
+/*
 		boolean freePassageFound = false;
 		Log log = LogFactory.getLog(DatastoreUtils.class);
 		for(Passage passage: land.getPassages()){
@@ -29,7 +31,7 @@ public abstract class DatastoreUtils {
 				log.error("  passage "+passage.getKey().getId()+", "+passage.getNextLandId());
 			}
 			//throw new RuntimeException("Land has no free passages, but has flag!");
-		}
+		}*/
 	}
 	
 	public static void fetchLands(Collection<Land> lands){

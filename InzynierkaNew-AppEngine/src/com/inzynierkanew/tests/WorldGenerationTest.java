@@ -440,12 +440,12 @@ public class WorldGenerationTest {
 		return Arrays.asList(
 				// name cost texture faction mindmg maxdmg hp speed ranged
 				// missiles
-				new UnitType(1L, "Goblin", 100, "goblin.png", newMonsterFaction().getId(), 3, 6, 50, 6, true, 10),
-				new UnitType(2L, "Orc", 400, "orc.png", newMonsterFaction().getId(), 10, 15, 200, 5, false, 0),
-				new UnitType(3L, "Troll", 2000, "troll.png", newMonsterFaction().getId(), 30, 100, 1000, 3, false, 0),
-				new UnitType(101L, "Swordsman", 300, "swordsman.png", newHumanFaction().getId(), 3, 6, 50, 5, false, 0),
-				new UnitType(102L, "Archer", 450, "archer.png", newHumanFaction().getId(), 3, 6, 50, 5, true, 10),
-				new UnitType(103L, "Knight", 1500, "knight.png", newHumanFaction().getId(), 3, 6, 50, 7, false, 0));
+				new UnitType(1L, "Goblin", 100, "goblin.png", newMonsterFaction().getId(), 3, 6, 50, 6, true, 10, 1),
+				new UnitType(2L, "Orc", 400, "orc.png", newMonsterFaction().getId(), 10, 15, 200, 5, false, 0, 1),
+				new UnitType(3L, "Troll", 2000, "troll.png", newMonsterFaction().getId(), 30, 100, 1000, 3, false, 0, 11),
+				new UnitType(101L, "Swordsman", 300, "swordsman.png", newHumanFaction().getId(), 3, 6, 50, 5, false, 0, 1),
+				new UnitType(102L, "Archer", 450, "archer.png", newHumanFaction().getId(), 3, 6, 50, 5, true, 10, 1),
+				new UnitType(103L, "Knight", 1500, "knight.png", newHumanFaction().getId(), 3, 6, 50, 7, false, 0, 11));
 	}
 
 	private static Faction newHumanFaction() {

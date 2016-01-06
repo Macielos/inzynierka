@@ -1,0 +1,110 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:136), pid=11244, tid=11060
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version:  (7.0_79-b15) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (24.79-b02 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000002173800):  JavaThread "Unknown thread" [_thread_in_vm, id=11060, stack(0x0000000002070000,0x0000000002170000)]
+
+Stack: [0x0000000002070000,0x0000000002170000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000002173800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=11060, stack(0x0000000002070000,0x0000000002170000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.010 loading class 0x00000000021b7bf0 done
+Event: 0.010 loading class 0x00000000021b75f0 done
+Event: 0.010 loading class 0x00000000021b75d0
+Event: 0.010 loading class 0x00000000021bf770
+Event: 0.010 loading class 0x00000000021bf770 done
+Event: 0.010 loading class 0x00000000021bf7a0
+Event: 0.011 loading class 0x00000000021bf7a0 done
+Event: 0.011 loading class 0x00000000021bf7d0
+Event: 0.011 loading class 0x00000000021bf7d0 done
+Event: 0.011 loading class 0x00000000021b75d0 done
+
+
+Dynamic libraries:
+0x00007ff6ca200000 - 0x00007ff6ca233000 	C:\Program Files\Java\jre7\bin\javaw.exe
+0x00007fff5e4f0000 - 0x00007fff5e6b1000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007fff5c220000 - 0x00007fff5c2cd000 	C:\WINDOWS\system32\KERNEL32.DLL
+0x00007fff5b9e0000 - 0x00007fff5bbbd000 	C:\WINDOWS\system32\KERNELBASE.dll
+0x00007fff5e020000 - 0x00007fff5e0c6000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x00007fff5bc90000 - 0x00007fff5bd2d000 	C:\WINDOWS\system32\msvcrt.dll
+0x00007fff5bbc0000 - 0x00007fff5bc1b000 	C:\WINDOWS\system32\sechost.dll
+0x00007fff5d860000 - 0x00007fff5d986000 	C:\WINDOWS\system32\RPCRT4.dll
+0x00007fff5daf0000 - 0x00007fff5dc3e000 	C:\WINDOWS\system32\USER32.dll
+0x00007fff5e0d0000 - 0x00007fff5e256000 	C:\WINDOWS\system32\GDI32.dll
+0x00007fff57ae0000 - 0x00007fff57d54000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.10240.16384_none_f41f7b285750ef43\COMCTL32.dll
+0x00007fff5dab0000 - 0x00007fff5dae6000 	C:\WINDOWS\system32\IMM32.DLL
+0x00007fff5dd70000 - 0x00007fff5decc000 	C:\WINDOWS\system32\MSCTF.dll
+0x000000006fa40000 - 0x000000006fb12000 	C:\Program Files\Java\jre7\bin\msvcr100.dll
+0x00000000700a0000 - 0x0000000070875000 	C:\Program Files\Java\jre7\bin\server\jvm.dll
+0x00007fff5dc40000 - 0x00007fff5dc48000 	C:\WINDOWS\system32\PSAPI.DLL
+0x00007fff59620000 - 0x00007fff59643000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007fff58500000 - 0x00007fff58509000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007fff5dfb0000 - 0x00007fff5e019000 	C:\WINDOWS\system32\WS2_32.dll
+0x00007fff5e4e0000 - 0x00007fff5e4e8000 	C:\WINDOWS\system32\NSI.dll
+0x00007fff595c0000 - 0x00007fff595ec000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007fff5b020000 - 0x00007fff5b064000 	C:\WINDOWS\system32\cfgmgr32.dll
+0x00007fff59890000 - 0x00007fff598b7000 	C:\WINDOWS\SYSTEM32\DEVOBJ.dll
+0x0000000070d70000 - 0x0000000070d7f000 	C:\Program Files\Java\jre7\bin\verify.dll
+0x000000006ff90000 - 0x000000006ffb8000 	C:\Program Files\Java\jre7\bin\java.dll
+0x000000006ff70000 - 0x000000006ff85000 	C:\Program Files\Java\jre7\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1250 -Xbootclasspath:C:\Users\Arjan\android-sdks\platforms\android-23\android.jar;C:\Users\Arjan\android-sdks\add-ons\addon-google_apis-google-23\libs\effects.jar;C:\Users\Arjan\android-sdks\add-ons\addon-google_apis-google-23\libs\usb.jar;C:\Users\Arjan\android-sdks\add-ons\addon-google_apis-google-23\libs\maps.jar 
+java_command: org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 54148 -testLoaderClass org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoader -loaderpluginname org.eclipse.jdt.junit4.runtime -classNames test.BattleResolverTest
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:/Program Files/Java/jre7/bin/server;C:/Program Files/Java/jre7/bin;C:/Program Files/Java/jre7/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Skype\Phone\;C:\Program Files (x86)\OpenVPN\bin;C:\Users\Arjan\eclipse\jee-mars\eclipse;
+USERNAME=Arjan
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 61 Stepping 4, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 8.1 , 64 bit Build 9600 
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 61 stepping 4, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, erms, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 8288768k(2730396k free), swap 14438220k(5166600k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (24.79-b02) for windows-amd64 JRE (1.7.0_79-b15), built on Apr 10 2015 12:36:16 by "java_re" with unknown MS VC++:1600
+
+time: Sun Jan 03 22:44:25 2016
+elapsed time: 0 seconds
+

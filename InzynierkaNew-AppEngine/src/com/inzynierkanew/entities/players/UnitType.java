@@ -14,6 +14,8 @@ public class UnitType {
 	private String texture;
 	private Long factionId;
 	
+	private int minLandLevel;
+	
 	private int minDamage;
 	private int maxDamage;
 	private int hitpoints;
@@ -21,7 +23,7 @@ public class UnitType {
 	private boolean ranged;
 	private int missiles;
 	
-	public UnitType(Long id, String name, int cost, String texture, Long factionId, int minDamage, int maxDamage, int hitpoints, int speed, boolean ranged, int missiles) {
+	public UnitType(Long id, String name, int cost, String texture, Long factionId, int minDamage, int maxDamage, int hitpoints, int speed, boolean ranged, int missiles, int minLandLevel) {
 		this.id = id;
 		this.name = name;
 		this.cost = cost;
@@ -33,6 +35,7 @@ public class UnitType {
 		this.speed = speed;
 		this.ranged = ranged;
 		this.missiles = missiles;
+		this.minLandLevel = minLandLevel;
 	}
 
 	public String getName() {
@@ -118,13 +121,23 @@ public class UnitType {
 	public Long getId() {
 		return id;
 	}
+	
+	public int getMinLandLevel() {
+		return minLandLevel;
+	}
 
-	public int calcUnitStrength(){
+	public void setMinLandLevel(int minLandLevel) {
+		this.minLandLevel = minLandLevel;
+	}
+
+	public double calcUnitStrength(){
 		int cost = ((minDamage+maxDamage)/2+hitpoints/4+speed*2);
 		if(ranged){
 			cost = cost * (20+missiles)/20;
 		}
-		return cost;
+		return (double)cost;
 	}
+	
+	
 
 }

@@ -9,7 +9,7 @@
         android:id="@+id/dungeon_dialog_result_title"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:text="@string/battle_result"
+        android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
@@ -67,7 +67,7 @@
         android:layout_below="@+id/dungeon_dialog_result_experienceGained"
         android:text="@string/items_gained"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+
     <LinearLayout
         android:id="@+id/dungeon_dialog_result_items"
         android:layout_width="match_parent"
@@ -142,6 +142,12 @@
             android:layout_width="59dp"
             android:layout_height="51dp"
             android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unit5"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
     </LinearLayout>
 
     <LinearLayout
@@ -177,6 +183,12 @@
 
         <TextView
             android:id="@+id/dungeon_dialog_result_playerLosses_unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="@string/empty" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_playerLosses_unitCount5"
             android:layout_width="59dp"
             android:layout_height="20dp"
             android:text="@string/empty" />
@@ -228,6 +240,12 @@
             android:layout_width="59dp"
             android:layout_height="51dp"
             android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unit5"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
     </LinearLayout>
 
     <LinearLayout
@@ -263,6 +281,12 @@
 
         <TextView
             android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount4"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="@string/empty" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_result_enemyLosses_unitCount5"
             android:layout_width="59dp"
             android:layout_height="20dp"
             android:text="@string/empty" />

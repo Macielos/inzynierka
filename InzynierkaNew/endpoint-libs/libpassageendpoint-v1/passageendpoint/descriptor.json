@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/passageendpoint/v1/20160101221121/java/1.18.0-rc/inzynierkanew.com-passageendpoint-v1-20160101221121-java-1.18.0-rc-sources.jar", 
-      "path": "inzynierkanew.com-passageendpoint-v1-20160101221121-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/passageendpoint/v1/20160106134859/java/1.18.0-rc/inzynierkanew.com-passageendpoint-v1-20160106134859-java-1.18.0-rc-sources.jar", 
+      "path": "inzynierkanew.com-passageendpoint-v1-20160106134859-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2016-01-01 22:11"
+      "timestamp": "2016-01-06 13:49"
     }, 
     {
-      "path": "inzynierkanew.com-passageendpoint-v1-20160101221121-java-1.18.0-rc.jar.properties", 
+      "path": "inzynierkanew.com-passageendpoint-v1-20160106134859-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "entities.map", 
   "language_version": "1.18.0-rc", 
   "id": "passageendpoint:v1", 
-  "revision": 20160101221121
+  "revision": 20160106134859
 }

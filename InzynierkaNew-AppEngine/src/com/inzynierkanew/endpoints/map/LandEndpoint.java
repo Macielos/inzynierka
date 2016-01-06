@@ -3,6 +3,7 @@ package com.inzynierkanew.endpoints.map;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -11,36 +12,32 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
+import org.datanucleus.store.appengine.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.Land;
-import com.inzynierkanew.entities.map.Town;
 import com.inzynierkanew.utils.DatastoreUtils;
 import com.inzynierkanew.utils.EMF;
 import com.inzynierkanew.world.WorldGenerator;
 
-@Api(name = "landendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map"))
+@Api(name = "landendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map") )
 public class LandEndpoint {
 
-	private Log log = LogFactory.getLog(getClass());
-	
 	/**
-	 * This method lists all the entities inserted in datastore.
-	 * It uses HTTP GET method and paging support.
+	 * This method lists all the entities inserted in datastore. It uses HTTP
+	 * GET method and paging support.
 	 *
 	 * @return A CollectionResponse class containing the list of all entities
-	 * persisted and a cursor to the next page.
+	 *         persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listLand")
-	public CollectionResponse<Land> listLand(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit) {
+	public CollectionResponse<Land> listLand(@Nullable @Named("cursor") String cursorString,
+			@Nullable @Named("limit") Integer limit) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
@@ -64,7 +61,8 @@ public class LandEndpoint {
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
-			// Tight loop for fetching all entities from datastore and accomodate
+			// Tight loop for fetching all entities from datastore and
+			// accomodate
 			// for lazy fetch.
 			DatastoreUtils.fetchLands(execute);
 		} finally {
@@ -75,9 +73,11 @@ public class LandEndpoint {
 	}
 
 	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
+	 * This method gets the entity having primary key id. It uses HTTP GET
+	 * method.
 	 *
-	 * @param id the primary key of the java bean.
+	 * @param id
+	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
 	@ApiMethod(name = "getLand")
@@ -92,58 +92,53 @@ public class LandEndpoint {
 		}
 		return land;
 	}
-	
-//	@ApiMethod(name = "getTown")
-//	public Town getTown(@Named("landId") Long id) {
-//		EntityManager mgr = getEntityManager();
-//		Town town = null;
-//		try {
-//			Land land = mgr.find(Land.class, id);
-//			if(land!=null){
-//				town = land.getTown();
-//			}
-//		} finally {
-//			mgr.close();
-//		}
-//		return town;
-//	}
-	
-	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "findLandsInNeighbourhood")
-	public CollectionResponse<Land> findLandsInNeighbourhood(@Named("mapSegment") long mapSegment) {	
+
+	public CollectionResponse<Land> findLandsInNeighbourhood(@Named("mapSegment") long mapSegment) {
 		EntityManager mgr = null;
 		List<Land> lands = new ArrayList<>();
 		try {
 			mgr = getEntityManager();
-			for(long l: getNeighbourMapSegments(mapSegment)){
+			for (long l : getNeighbourMapSegments(mapSegment)) {
 				lands.addAll(findLandsInTheNeighbourhoodInternal(mgr, l));
 			}
 			DatastoreUtils.fetchLands(lands);
-			return CollectionResponse.<Land>builder().setItems(lands).build();
+			return CollectionResponse.<Land> builder().setItems(lands).build();
 		} finally {
 			mgr.close();
 		}
 	}
-	
-	private Collection<Land> findLandsInTheNeighbourhoodInternal(EntityManager mgr, long mapSegment){
-		return mgr.createQuery("select from Land as Land where mapSegment = "+mapSegment).getResultList();
+
+	private Collection<Land> findLandsInTheNeighbourhoodInternal(EntityManager mgr, long mapSegment) {
+		return mgr.createQuery("select from Land as Land where mapSegment = " + mapSegment).getResultList();
 	}
-	
-	public Land findLandForNewPlayer(){
-		EntityManager entityManager = EMF.get().createEntityManager();
-		List<Land> lands = entityManager.createQuery("select from Land as Land where Land.townId > NULL").setMaxResults(1).getResultList();
-		Land land = lands.isEmpty() ? null : lands.get(0);
-		DatastoreUtils.fetchLand(land);
-		return land;
+
+	public Land findLandForNewPlayer() {
+		EntityManager entityManager = null;
+		try {
+			entityManager = EMF.get().createEntityManager();
+			Random random = new Random();
+			List<Land> lands = entityManager
+					.createQuery("select from Land as Land where Land.hasTown = true and Land.suggestedLevel = 1")
+					.getResultList();
+			if (!lands.isEmpty()) {
+				return lands.get(random.nextInt(lands.size()));
+			}
+
+			lands = entityManager
+					.createQuery("select from Land as Land where Land.hasTown = true order by Land.suggestedLevel")
+					.setMaxResults(5).getResultList();
+			return lands.isEmpty() ? null : lands.get(random.nextInt(lands.size()));
+		} finally {
+			entityManager.close();
+		}
 	}
-		
-	private long[] getNeighbourMapSegments(long mapSegment){
-		return new long[]{mapSegment, mapSegment+1, mapSegment+WorldGenerator.MAP_SEGMENT_FACTOR, mapSegment+WorldGenerator.MAP_SEGMENT_FACTOR+1};
+
+	private long[] getNeighbourMapSegments(long mapSegment) {
+		return new long[] { mapSegment, mapSegment + 1, mapSegment + WorldGenerator.MAP_SEGMENT_FACTOR,
+				mapSegment + WorldGenerator.MAP_SEGMENT_FACTOR + 1 };
 	}
-	
-	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "findLandsWithFreePassages")
-	public CollectionResponse<Land> findLandsWithFreePassages() {	
+
+	public CollectionResponse<Land> findLandsWithFreePassages() {
 		EntityManager mgr = null;
 		String queryString = "select from Land as Land where Land.hasFreePassage = true";
 		try {
@@ -151,18 +146,19 @@ public class LandEndpoint {
 			Query query = mgr.createQuery(queryString);
 			List<Land> lands = (List<Land>) query.getResultList();
 			DatastoreUtils.fetchLands(lands);
-			return CollectionResponse.<Land>builder().setItems(lands).build();
+			return CollectionResponse.<Land> builder().setItems(lands).build();
 		} finally {
 			mgr.close();
 		}
 	}
-		
+
 	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already
-	 * exists in the datastore, an exception is thrown.
-	 * It uses HTTP POST method.
+	 * This inserts a new entity into App Engine datastore. If the entity
+	 * already exists in the datastore, an exception is thrown. It uses HTTP
+	 * POST method.
 	 *
-	 * @param land the entity to be inserted.
+	 * @param land
+	 *            the entity to be inserted.
 	 * @return The inserted entity.
 	 */
 	@ApiMethod(name = "insertLand")
@@ -180,11 +176,12 @@ public class LandEndpoint {
 	}
 
 	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
+	 * This method is used for updating an existing entity. If the entity does
+	 * not exist in the datastore, an exception is thrown. It uses HTTP PUT
+	 * method.
 	 *
-	 * @param land the entity to be updated.
+	 * @param land
+	 *            the entity to be updated.
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updateLand")
@@ -200,23 +197,13 @@ public class LandEndpoint {
 		}
 		return land;
 	}
-	
-//	@ApiMethod(name = "updateTown")
-//	public Town updateTown(Town town) {
-//		EntityManager mgr = getEntityManager();
-//		try {
-//			mgr.merge(town);
-//		} finally {
-//			mgr.close();
-//		}
-//		return town;
-//	}
 
 	/**
-	 * This method removes the entity with primary key id.
-	 * It uses HTTP DELETE method.
+	 * This method removes the entity with primary key id. It uses HTTP DELETE
+	 * method.
 	 *
-	 * @param id the primary key of the entity to be deleted.
+	 * @param id
+	 *            the primary key of the entity to be deleted.
 	 */
 	@ApiMethod(name = "removeLand")
 	public void removeLand(@Named("id") Long id) {
@@ -230,7 +217,7 @@ public class LandEndpoint {
 	}
 
 	private boolean containsLand(Land land) {
-		if(land.getId()==null){
+		if (land.getId() == null) {
 			return false;
 		}
 		EntityManager mgr = getEntityManager();

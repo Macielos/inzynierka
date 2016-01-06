@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.inzynierkanew.shared.SharedConstants;
+
 @Entity
 public class Hero {
 
@@ -17,6 +19,7 @@ public class Hero {
 
 	private int level;
 	private int experience;
+	private int freeSkillPoints;
 
 	private Long currentLandId;
 	
@@ -30,15 +33,16 @@ public class Hero {
 	private int[] equippedItems;
 	private int[] items;
 
-	public Hero(int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence){
-		this(x, y, currentLandId, initialGold, strength, agility, intelligence, null, null, null);
+	public Hero(int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int freeSkillPoints){
+		this(x, y, currentLandId, initialGold, strength, agility, intelligence, freeSkillPoints, null, null, null);
 	}
 	
-	public Hero(int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int[] army, int[] equippedItems, int[] items) {
+	public Hero(int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int freeSkillPoints, int[] army, int[] equippedItems, int[] items) {
 		this.x = x;
 		this.y = y;
 		this.level = 1;
 		this.experience = 0;
+		this.freeSkillPoints = freeSkillPoints;
 		this.currentLandId = currentLandId;
 		this.gold = initialGold;
 		this.strength = strength;
@@ -83,6 +87,14 @@ public class Hero {
 
 	public void setExperience(int experience) {
 		this.experience = experience;
+	}
+
+	public int getFreeSkillPoints() {
+		return freeSkillPoints;
+	}
+
+	public void setFreeSkillPoints(int freeSkillPoints) {
+		this.freeSkillPoints = freeSkillPoints;
 	}
 
 	public Long getCurrentLandId() {

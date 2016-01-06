@@ -5,39 +5,93 @@
     android:gravity="center_vertical|center_horizontal|center"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/marketplace"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/town_marketplace"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-     <ListView
-        android:id="@+id/heroInventoryView"
+    <LinearLayout
+        android:id="@+id/town_marketplace_statusBar"
         android:layout_width="match_parent"
-        android:layout_height="286dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.17" />
+        android:layout_height="64dp" >
 
-    <Button
-        android:id="@+id/marketPlaceSellButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/sell" />
-    
-    <Button
-        android:id="@+id/marketPlaceSellAllButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/sell_all" />
-    
-    <Button
-        android:id="@+id/marketPlaceBackButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/back" />
+        <ImageView
+            android:id="@+id/town_marketplace_goldIcon"
+            android:layout_width="64dp"
+            android:layout_height="fill_parent"
+            android:src="@drawable/gold" />
+
+        <TextView
+            android:id="@+id/town_marketplace_goldCount"
+            android:layout_width="80dp"
+            android:layout_height="fill_parent"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/town_marketplace_level"
+            android:layout_width="64dp"
+            android:layout_height="fill_parent"
+            android:textSize="20sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ProgressBar
+                android:id="@+id/town_marketplace_experienceBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/town_marketplace_experienceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/marketplace"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/town_marketplace"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ListView
+            android:id="@+id/town_marketplace_heroInventoryView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.17" />
+
+        <Button
+            android:id="@+id/town_marketplace_sellButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/sell" />
+
+        <Button
+            android:id="@+id/town_marketplace_sellAllButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/sell_all" />
+
+        <Button
+            android:id="@+id/town_marketplace_backButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/back" />
+    </LinearLayout>
 
 </LinearLayout>

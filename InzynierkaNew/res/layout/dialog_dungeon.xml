@@ -16,8 +16,8 @@
         android:id="@+id/dungeon_dialog_faction"
         android:layout_width="325dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/dungeon_dialog_title"
         android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -26,8 +26,8 @@
         android:id="@+id/dungeon_dialog_playerUnits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/dungeon_dialog_faction"
         android:orientation="horizontal" >
 
@@ -57,6 +57,12 @@
 
         <ImageView
             android:id="@+id/dungeon_dialog_unit4"
+            android:layout_width="59dp"
+            android:layout_height="51dp"
+            android:src="@drawable/swordsman" />
+
+        <ImageView
+            android:id="@+id/dungeon_dialog_unit5"
             android:layout_width="59dp"
             android:layout_height="51dp"
             android:src="@drawable/swordsman" />
@@ -98,8 +104,14 @@
             android:layout_width="59dp"
             android:layout_height="20dp"
             android:text="@string/empty" />
+
+        <TextView
+            android:id="@+id/dungeon_dialog_unitCount5"
+            android:layout_width="59dp"
+            android:layout_height="20dp"
+            android:text="@string/empty" />
     </LinearLayout>
-        
+
     <Button
         android:id="@+id/dungeon_dialog_combatButton"
         android:layout_width="fill_parent"

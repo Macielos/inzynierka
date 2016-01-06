@@ -21,17 +21,16 @@ import com.inzynierkanew.utils.EMF;
 public class DungeonVisitEndpoint {
 
 	/**
-	 * This method lists all the entities inserted in datastore.
-	 * It uses HTTP GET method and paging support.
+	 * This method lists all the entities inserted in datastore. It uses HTTP
+	 * GET method and paging support.
 	 *
 	 * @return A CollectionResponse class containing the list of all entities
-	 * persisted and a cursor to the next page.
+	 *         persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listDungeonVisitsByIds")
-	public CollectionResponse<DungeonVisit> listDungeonVisitsByIds( @Named("heroId") Long heroId, 
-			@Named("relatedEntityId") Long relatedEntityId,
-			@Named("byLand") Boolean byLand) {
+	public CollectionResponse<DungeonVisit> listDungeonVisitsByIds(@Named("heroId") Long heroId,
+			@Named("relatedEntityId") Long relatedEntityId, @Named("byLand") Boolean byLand) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
@@ -39,16 +38,17 @@ public class DungeonVisitEndpoint {
 
 		try {
 			mgr = getEntityManager();
-			String queryString = "select from DungeonVisit as DungeonVisit where DungeonVisit.heroId = "+heroId;
-			if(byLand){
-				queryString+=" and DungeonVisit.landId = "+relatedEntityId;
+			String queryString = "select from DungeonVisit as DungeonVisit where DungeonVisit.heroId = " + heroId;
+			if (byLand) {
+				queryString += " and DungeonVisit.landId = " + relatedEntityId;
 			} else {
-				queryString+=" and DungeonVisit.dungeonId = "+relatedEntityId;
-			} 
+				queryString += " and DungeonVisit.dungeonId = " + relatedEntityId;
+			}
 			Query query = mgr.createQuery(queryString);
 			execute = (List<DungeonVisit>) query.getResultList();
 
-			for (DungeonVisit obj : execute);
+			for (DungeonVisit obj : execute)
+				;
 		} finally {
 			mgr.close();
 		}
@@ -57,51 +57,43 @@ public class DungeonVisitEndpoint {
 	}
 
 	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already
-	 * exists in the datastore, an exception is thrown.
-	 * It uses HTTP POST method.
+	 * This inserts a new entity into App Engine datastore. If the entity
+	 * already exists in the datastore, an exception is thrown. It uses HTTP
+	 * POST method.
 	 *
-	 * @param dungeonvisit the entity to be inserted.
+	 * @param dungeonvisit
+	 *            the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertDungeonVisit")
-	public DungeonVisit insertDungeonVisit(DungeonVisit dungeonvisit) {
-		EntityManager mgr = getEntityManager();
+	@ApiMethod(name = "saveDungeonVisit")
+	public DungeonVisit saveDungeonVisit(DungeonVisit dungeonvisit) {
+		EntityManager mgr = null;
+		DungeonVisit newDungeonVisit;
 		try {
-			mgr.merge(dungeonvisit);
-		} finally {
-			mgr.close();
-		}
-		return dungeonvisit;
-	}
-
-	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
-	 *
-	 * @param dungeonvisit the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateDungeonVisit")
-	public DungeonVisit updateDungeonVisit(DungeonVisit dungeonvisit) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsDungeonVisit(dungeonvisit)) {
-				throw new EntityNotFoundException("Object does not exist");
+			mgr = getEntityManager();
+			List<DungeonVisit> dungeonVisits = mgr
+					.createQuery("select from DungeonVisit as DungeonVisit where DungeonVisit.heroId = "
+							+ dungeonvisit.getHeroId() + " and DungeonVisit.dungeonId = " + dungeonvisit.getDungeonId())
+					.getResultList();
+			if (dungeonVisits.isEmpty()) {
+				newDungeonVisit = dungeonvisit;
+			} else {
+				newDungeonVisit = dungeonVisits.get(0);
+				newDungeonVisit.setArmy(dungeonvisit.getArmy());
 			}
-			mgr.persist(dungeonvisit);
+			mgr.merge(newDungeonVisit);
 		} finally {
 			mgr.close();
 		}
-		return dungeonvisit;
+		return newDungeonVisit;
 	}
 
 	/**
-	 * This method removes the entity with primary key id.
-	 * It uses HTTP DELETE method.
+	 * This method removes the entity with primary key id. It uses HTTP DELETE
+	 * method.
 	 *
-	 * @param id the primary key of the entity to be deleted.
+	 * @param id
+	 *            the primary key of the entity to be deleted.
 	 */
 	@ApiMethod(name = "removeDungeonVisit")
 	public void removeDungeonVisit(@Named("id") Long id) {
@@ -115,7 +107,7 @@ public class DungeonVisitEndpoint {
 	}
 
 	private boolean containsDungeonVisit(DungeonVisit dungeonvisit) {
-		if(dungeonvisit == null || dungeonvisit.getId()==null){
+		if (dungeonvisit == null || dungeonvisit.getId() == null) {
 			return false;
 		}
 		EntityManager mgr = getEntityManager();

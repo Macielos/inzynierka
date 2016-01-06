@@ -5,39 +5,93 @@
     android:gravity="center_vertical|center_horizontal|center"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/townName"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <LinearLayout
+        android:id="@+id/town_statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp" >
 
-    <TextView
-        android:id="@+id/townFaction"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <ImageView
+            android:id="@+id/town_goldIcon"
+            android:layout_width="64dp"
+            android:layout_height="fill_parent"
+            android:src="@drawable/gold" />
 
-    <Button
-        android:id="@+id/townBarracksButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/barracks" />
+        <TextView
+            android:id="@+id/town_goldCount"
+            android:layout_width="80dp"
+            android:layout_height="fill_parent"
+            android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/townMarketplaceButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/marketplace" />
+        <TextView
+            android:id="@+id/town_level"
+            android:layout_width="64dp"
+            android:layout_height="fill_parent"
+            android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/townQuitButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="@string/quit" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ProgressBar
+                android:id="@+id/town_experienceBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/town_experienceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/townName"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:text="@string/empty"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/townFaction"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:text="@string/empty"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/townBarracksButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/barracks" />
+
+        <Button
+            android:id="@+id/townMarketplaceButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/marketplace" />
+
+        <Button
+            android:id="@+id/townQuitButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/quit" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -9,9 +9,9 @@ import com.inzynierkanew.R;
 import com.inzynierkanew.activities.BaseActivity;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
 import com.inzynierkanew.messageEndpoint.MessageEndpoint;
+import com.inzynierkanew.shared.SharedConstants;
 import com.inzynierkanew.utils.RegistrationContainer;
 import com.inzynierkanew.utils.RequestValidator;
-import com.inzynierkanew.utils.SharedConstants;
 import com.inzynierkanew.utils.ValidationResult;
 
 import android.content.Intent;
@@ -52,7 +52,7 @@ import android.widget.TextView;
 public class RegisterActivity extends BaseActivity {
 
 	enum State {
-		REGISTERED, REGISTERING, UNREGISTERED, UNREGISTERING
+		REGISTERED, REGISTERING, UNREGISTERED
 	}
 
 	private State curState = State.UNREGISTERED;
@@ -74,8 +74,7 @@ public class RegisterActivity extends BaseActivity {
 			public void onClick(View v) {
 				final String name = nameView.getText().toString();
 				final byte[] password = passwordView.getText().toString().getBytes();
-				Log.i("X", name);
-				Log.i("X", password.toString());
+
 				ValidationResult result = RequestValidator.validateRegisterRequest(name, password);
 				if (!result.valid) {
 					showDialog(result.error);
@@ -102,7 +101,7 @@ public class RegisterActivity extends BaseActivity {
 				for (NumberPicker numberPicker : numberPickers) {
 					numberPicker.setMinValue(SharedConstants.INITIAL_SKILL_VALUE);
 					numberPicker.setValue(SharedConstants.INITIAL_SKILL_VALUE);
-					numberPicker.setMaxValue(SharedConstants.INITIAL_SKILL_VALUE+pointsLeft.get());
+					numberPicker.setMaxValue(SharedConstants.INITIAL_SKILL_VALUE + pointsLeft.get());
 					numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
 						@Override
@@ -128,11 +127,11 @@ public class RegisterActivity extends BaseActivity {
 						} else {
 							updateState(State.REGISTERING);
 							try {
-								Player player = new Player().setName(name)
-										.setPassword(passwordHash);
+								Player player = new Player().setName(name).setPassword(passwordHash);
 								GCMIntentService.register(getApplicationContext(),
 										new RegistrationContainer(player, strengthNumberPicker.getValue(),
-												agilityNumberPicker.getValue(), intelligenceNumberPicker.getValue()));
+												agilityNumberPicker.getValue(), intelligenceNumberPicker.getValue(),
+												pointsLeft.get()));
 							} catch (Exception e) {
 								Log.e(RegisterActivity.class.getName(),
 										"Exception received when attempting to register for Google Cloud "
@@ -165,12 +164,12 @@ public class RegisterActivity extends BaseActivity {
 		Button cancelButton = (Button) findViewById(R.id.register_cancelButton);
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 
-	@Override
-	public void onClick(View v) {
-		newActivity(LoginActivity.class);
-	}
+			@Override
+			public void onClick(View v) {
+				newActivity(LoginActivity.class);
+			}
 
-	});
+		});
 
 	}
 
@@ -229,6 +228,10 @@ public class RegisterActivity extends BaseActivity {
 		case REGISTERING:
 			registerButton.setText("Registering...");
 			registerButton.setEnabled(false);
+			break;
+		case UNREGISTERED:
+			registerButton.setText("Register");
+			registerButton.setEnabled(true);
 			break;
 		}
 		curState = newState;

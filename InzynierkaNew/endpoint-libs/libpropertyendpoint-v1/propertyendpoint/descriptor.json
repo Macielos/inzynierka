@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/propertyendpoint/v1/20160101221112/java/1.18.0-rc/inzynierkanew.com-propertyendpoint-v1-20160101221112-java-1.18.0-rc-sources.jar", 
-      "path": "inzynierkanew.com-propertyendpoint-v1-20160101221112-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/propertyendpoint/v1/20160106134845/java/1.18.0-rc/inzynierkanew.com-propertyendpoint-v1-20160106134845-java-1.18.0-rc-sources.jar", 
+      "path": "inzynierkanew.com-propertyendpoint-v1-20160106134845-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2016-01-01 22:11"
+      "timestamp": "2016-01-06 13:48"
     }, 
     {
-      "path": "inzynierkanew.com-propertyendpoint-v1-20160101221112-java-1.18.0-rc.jar.properties", 
+      "path": "inzynierkanew.com-propertyendpoint-v1-20160106134845-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "entities.general", 
   "language_version": "1.18.0-rc", 
   "id": "propertyendpoint:v1", 
-  "revision": 20160101221112
+  "revision": 20160106134845
 }

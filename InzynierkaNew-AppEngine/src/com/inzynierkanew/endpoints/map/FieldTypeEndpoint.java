@@ -6,15 +6,15 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
+
+import org.datanucleus.store.appengine.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.map.FieldType;
 import com.inzynierkanew.utils.EMF;
 
@@ -87,12 +87,10 @@ public class FieldTypeEndpoint {
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity already
 	 * exists in the datastore, an exception is thrown.
-	 * It uses HTTP POST method.
 	 *
 	 * @param fieldtype the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertFieldType")
 	public FieldType insertFieldType(FieldType fieldtype) {
 		EntityManager mgr = getEntityManager();
 		try {
@@ -106,45 +104,6 @@ public class FieldTypeEndpoint {
 		return fieldtype;
 	}
 
-	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
-	 *
-	 * @param fieldtype the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateFieldType")
-	public FieldType updateFieldType(FieldType fieldtype) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsFieldType(fieldtype)) {
-				throw new EntityNotFoundException("Object does not exist");
-			}
-			mgr.persist(fieldtype);
-		} finally {
-			mgr.close();
-		}
-		return fieldtype;
-	}
-
-	/**
-	 * This method removes the entity with primary key id.
-	 * It uses HTTP DELETE method.
-	 *
-	 * @param id the primary key of the entity to be deleted.
-	 */
-	@ApiMethod(name = "removeFieldType")
-	public void removeFieldType(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		try {
-			FieldType fieldtype = mgr.find(FieldType.class, id);
-			mgr.remove(fieldtype);
-		} finally {
-			mgr.close();
-		}
-	}
-	
 	@ApiMethod(name = "findByName")
 	public FieldType findByName(@Named("name") String name) {
 		EntityManager mgr = getEntityManager();

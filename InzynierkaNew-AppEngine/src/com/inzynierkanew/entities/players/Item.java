@@ -20,21 +20,21 @@ public class Item {
 	
 	private String icon;
 	
-	private int attackBonus;
-	private int defenceBonus;
-	private int powerBonus;
+	private int strengthBonus;
+	private int agilityBonus;
+	private int intelligenceBonus;
 		
 	public Item(Long id, String name, ItemClass itemClass, int itemLevel, String icon, int value, 
-			int attackBonus, int defenceBonus, int powerBonus) {
+			int strengthBonus, int agilityBonus, int intelligenceBonus) {
 		this.id = id;
 		this.name = name;
 		this.itemClass = itemClass;
 		this.itemLevel = itemLevel;
 		this.value = value;
 		this.icon = icon;
-		this.attackBonus = attackBonus;
-		this.defenceBonus = defenceBonus;
-		this.powerBonus = powerBonus;
+		this.strengthBonus = strengthBonus;
+		this.agilityBonus = agilityBonus;
+		this.intelligenceBonus = intelligenceBonus;
 	}
 	
 	public Long getId() {
@@ -60,17 +60,29 @@ public class Item {
 	public String getIcon() {
 		return icon;
 	}
-		
-	public int getAttackBonus() {
-		return attackBonus;
-	}
-	
-	public int getDefenceBonus() {
-		return defenceBonus;
-	}
-	
-	public int getPowerBonus() {
-		return powerBonus;
+
+	public int getStrengthBonus() {
+		return strengthBonus;
 	}
 
+	public void setStrengthBonus(int strengthBonus) {
+		this.strengthBonus = strengthBonus;
+	}
+
+	public int getAgilityBonus() {
+		return agilityBonus;
+	}
+
+	public void setAgilityBonus(int agilityBonus) {
+		this.agilityBonus = agilityBonus;
+	}
+
+	public int getIntelligenceBonus() {
+		return intelligenceBonus;
+	}
+
+	public void setIntelligenceBonus(int intelligenceBonus) {
+		this.intelligenceBonus = intelligenceBonus;
+	}
+	
 }

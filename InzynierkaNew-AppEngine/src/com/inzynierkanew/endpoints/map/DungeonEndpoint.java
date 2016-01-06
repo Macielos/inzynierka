@@ -1,23 +1,22 @@
 package com.inzynierkanew.endpoints.map;
 
-import com.inzynierkanew.entities.map.Dungeon;
-import com.inzynierkanew.utils.EMF;
+import java.util.List;
+
+import javax.annotation.Nullable;
+import javax.inject.Named;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.datanucleus.store.appengine.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
-
-import java.util.List;
-
-import javax.annotation.Nullable;
-import javax.inject.Named;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import com.inzynierkanew.entities.map.Dungeon;
+import com.inzynierkanew.utils.EMF;
 
 @Api(name = "dungeonendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.map") )
 public class DungeonEndpoint {
@@ -89,12 +88,10 @@ public class DungeonEndpoint {
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity already
 	 * exists in the datastore, an exception is thrown.
-	 * It uses HTTP POST method.
 	 *
 	 * @param dungeon the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertDungeon")
 	public Dungeon insertDungeon(Dungeon dungeon) {
 		EntityManager mgr = getEntityManager();
 		try {
@@ -107,29 +104,7 @@ public class DungeonEndpoint {
 		}
 		return dungeon;
 	}
-
-	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
-	 *
-	 * @param dungeon the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateDungeon")
-	public Dungeon updateDungeon(Dungeon dungeon) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsDungeon(dungeon)) {
-				throw new EntityNotFoundException("Object does not exist");
-			}
-			mgr.persist(dungeon);
-		} finally {
-			mgr.close();
-		}
-		return dungeon;
-	}
-
+	
 	/**
 	 * This method removes the entity with primary key id.
 	 * It uses HTTP DELETE method.

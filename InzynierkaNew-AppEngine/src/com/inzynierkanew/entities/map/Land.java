@@ -17,6 +17,7 @@ public class Land {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private boolean hasTown;
 	private Long townId;
 
 	@OneToMany(cascade = CascadeType.PERSIST)
@@ -25,6 +26,7 @@ public class Land {
 	private boolean hasFreePassage;
 
 	private long mapSegment;
+	private int suggestedLevel;
 
 	private int minX;
 	private int minY;
@@ -104,6 +106,14 @@ public class Land {
 		this.hasFreePassage = hasFreePassage;
 	}
 
+	public boolean hasTown() {
+		return hasTown;
+	}
+
+	public void setHasTown(boolean hasTown) {
+		this.hasTown = hasTown;
+	}
+
 	public int getWidth() {
 		return maxX - minX + 1;
 	}
@@ -119,13 +129,12 @@ public class Land {
 	public void setMapSegment(long mapSegment) {
 		this.mapSegment = mapSegment;
 	}
-	//
-	// public boolean hasTown() {
-	// return hasTown;
-	// }
-	//
-	// public void setHasTown(boolean hasTown) {
-	// this.hasTown = hasTown;
-	// }
 
+	public int getSuggestedLevel() {
+		return suggestedLevel;
+	}
+
+	public void setSuggestedLevel(int suggestedLevel) {
+		this.suggestedLevel = suggestedLevel;
+	}
 }

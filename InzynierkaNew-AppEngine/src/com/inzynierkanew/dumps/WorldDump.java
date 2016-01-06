@@ -26,15 +26,17 @@ public class WorldDump {
 		emptySymbols.put(0, " ");
 	}
 		
-	public void dumpTerrain(){
+	public WorldDump dumpTerrain(){
 		dump(false);
+		return this;
 	}
 	
-	public void dumpLands(){
+	public WorldDump dumpLands(){
 		dump(true);
+		return this;
 	}
 	
-	public void dump(boolean byLands){		
+	private void dump(boolean byLands){		
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;

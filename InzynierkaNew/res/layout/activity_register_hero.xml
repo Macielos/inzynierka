@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="0.87"
-            android:text="@string/attack"
+            android:text="@string/strength"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <NumberPicker
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="0.87"
-            android:text="@string/defence"
+            android:text="@string/agility"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <NumberPicker
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="0.87"
-            android:text="@string/power"
+            android:text="@string/intelligence"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <NumberPicker

@@ -87,11 +87,13 @@ public class LandModel implements IRenderable {
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.LTGRAY);
 		DrawableFieldType drawableFieldType;
+		float zoom = gameView.getZoom();
+		//TODO draw only what is visible on screen
 		for(int j=0; j<height; ++j){
 			for(int i=0; i<width; ++i){
 				drawableFieldType = fieldTypes.get(fields[j][i]);
 				if(drawableFieldType!=null){
-					canvas.drawBitmap(drawableFieldType.getBitmap(), gameView.getOffsetX()+Constants.TILE_SIZE*i, gameView.getOffsetY()+Constants.TILE_SIZE*j, null);
+					canvas.drawBitmap(drawableFieldType.getBitmap(), gameView.getOffsetX()+zoom*Constants.TILE_SIZE*i, gameView.getOffsetY()+zoom*Constants.TILE_SIZE*j, null);
 				}
 			}
 		}

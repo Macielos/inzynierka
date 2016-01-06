@@ -1,12 +1,7 @@
 package com.inzynierkanew.endpoints.players;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -15,16 +10,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
+import org.datanucleus.store.appengine.query.JPACursorHelper;
+
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.players.Item;
+import com.inzynierkanew.shared.SharedConstants;
 import com.inzynierkanew.utils.CollectionUtils;
 import com.inzynierkanew.utils.EMF;
-import com.inzynierkanew.utils.SharedConstants;
 
 @Api(name = "itemendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players") )
 public class ItemEndpoint {
@@ -97,14 +93,14 @@ public class ItemEndpoint {
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "getRandomItemsByType")
 	public CollectionResponse<Item> getRandomItemsByType(@Named("limit") Integer limit, 
-			@Named("heroLevel") Integer heroLevel, @Named("itemClass") String itemClass ) {
+			@Named("level") Integer level, @Named("itemClass") String itemClass ) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
 		List<Item> execute = null;
 		
-		int minItemLevel = heroLevel == null ? 0 : (heroLevel - SharedConstants.HERO_ITEM_LEVEL_DIFF);
-		Integer maxItemLevel = heroLevel == null ? null : (heroLevel + SharedConstants.HERO_ITEM_LEVEL_DIFF);
+		int minItemLevel = level == null ? 0 : (level - SharedConstants.HERO_ITEM_LEVEL_DIFF);
+		Integer maxItemLevel = level == null ? null : (level + SharedConstants.HERO_ITEM_LEVEL_DIFF);
 
 		try {
 			mgr = getEntityManager();
@@ -129,8 +125,6 @@ public class ItemEndpoint {
 		return CollectionResponse.<Item> builder().setItems(execute).build();
 	}
 	
-	
-
 	/**
 	 * This method gets the entity having primary key id. It uses HTTP GET method.
 	 *

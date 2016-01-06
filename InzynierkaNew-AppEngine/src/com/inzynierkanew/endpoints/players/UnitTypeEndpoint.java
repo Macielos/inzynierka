@@ -1,22 +1,22 @@
 package com.inzynierkanew.endpoints.players;
 
-import com.inzynierkanew.entities.players.UnitType;
-import com.inzynierkanew.utils.EMF;
-import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.ApiNamespace;
-import com.google.api.server.spi.response.CollectionResponse;
-import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JPACursorHelper;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import org.datanucleus.store.appengine.query.JPACursorHelper;
+
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.response.CollectionResponse;
+import com.google.appengine.api.datastore.Cursor;
+import com.inzynierkanew.entities.players.UnitType;
+import com.inzynierkanew.utils.EMF;
 
 @Api(name = "unittypeendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players"))
 public class UnitTypeEndpoint {
@@ -102,45 +102,6 @@ public class UnitTypeEndpoint {
 			mgr.close();
 		}
 		return unittype;
-	}
-
-	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
-	 *
-	 * @param unittype the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateUnitType")
-	public UnitType updateUnitType(UnitType unittype) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsUnitType(unittype)) {
-				throw new EntityNotFoundException("Object does not exist");
-			}
-			mgr.persist(unittype);
-		} finally {
-			mgr.close();
-		}
-		return unittype;
-	}
-
-	/**
-	 * This method removes the entity with primary key id.
-	 * It uses HTTP DELETE method.
-	 *
-	 * @param id the primary key of the entity to be deleted.
-	 */
-	@ApiMethod(name = "removeUnitType")
-	public void removeUnitType(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		try {
-			UnitType unittype = mgr.find(UnitType.class, id);
-			mgr.remove(unittype);
-		} finally {
-			mgr.close();
-		}
 	}
 
 	private boolean containsUnitType(UnitType unittype) {

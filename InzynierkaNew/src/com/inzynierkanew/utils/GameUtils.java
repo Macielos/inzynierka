@@ -5,13 +5,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.inzynierkanew.entities.players.itemendpoint.model.Item;
 import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.model.Unit;
 
 public abstract class GameUtils {
-	
+
+	private static final Random random = new Random();
+		
 	private static Comparator<Item> itemComparator = new Comparator<Item>() {
 		@Override
 		public int compare(Item lhs, Item rhs) {
@@ -28,6 +31,10 @@ public abstract class GameUtils {
 	
 	private GameUtils(){
 		
+	}
+	
+	public static double randomizedFactor(double deviation){
+		return 1 - deviation + random.nextDouble()*2*deviation;
 	}
 	
 	public static List<Unit> armyToUnitList(List<Integer> army, Map<Integer, UnitType> unitTypes) {
@@ -81,4 +88,13 @@ public abstract class GameUtils {
 	public static void sortItems(List<Item> items){
 		Collections.sort(items, itemComparator);
 	}
+	
+	public static ArrayList<Unit> copyUnits(List<Unit> units){
+		ArrayList<Unit> copy = new ArrayList<>(units.size());
+		for(Unit unit: units){
+			copy.add(new Unit(unit.getUnitType(), unit.getCount()));
+		}
+		return copy;
+	}
+
 }
