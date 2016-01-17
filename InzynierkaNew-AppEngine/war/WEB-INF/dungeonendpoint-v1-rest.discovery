@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/G-p79KZyenXJJWTZ9xZ9oslzDz4\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/0Ij6gIPJ-QfmUc2h-t4n9J4pT-g\"",
  "discoveryVersion": "v1",
  "id": "dungeonendpoint:v1",
  "name": "dungeonendpoint",
@@ -150,21 +150,6 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "insertDungeon": {
-   "id": "dungeonendpoint.insertDungeon",
-   "path": "dungeon",
-   "httpMethod": "POST",
-   "request": {
-    "$ref": "Dungeon",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "Dungeon"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "listDungeon": {
    "id": "dungeonendpoint.listDungeon",
    "path": "listDungeon/{landId}",
@@ -214,21 +199,27 @@
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
-  },
-  "updateDungeon": {
-   "id": "dungeonendpoint.updateDungeon",
-   "path": "dungeon",
-   "httpMethod": "PUT",
-   "request": {
-    "$ref": "Dungeon",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "Dungeon"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
+  }
+ },
+ "resources": {
+  "dungeonEndpoint": {
+   "methods": {
+    "insertDungeon": {
+     "id": "dungeonendpoint.dungeonEndpoint.insertDungeon",
+     "path": "dungeon",
+     "httpMethod": "POST",
+     "request": {
+      "$ref": "Dungeon",
+      "parameterName": "resource"
+     },
+     "response": {
+      "$ref": "Dungeon"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    }
+   }
   }
  }
 }

@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/eQDA8VM04EuITYn5mNfzpDyMe74\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/VnCybgnMK25TfzCA27dtb2LRaO0\"",
  "discoveryVersion": "v1",
  "id": "townvisitendpoint:v1",
  "name": "townvisitendpoint",
@@ -141,21 +141,6 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "insertTownVisit": {
-   "id": "townvisitendpoint.insertTownVisit",
-   "path": "townvisit",
-   "httpMethod": "POST",
-   "request": {
-    "$ref": "TownVisit",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "TownVisit"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "listTownVisit": {
    "id": "townvisitendpoint.listTownVisit",
    "path": "townvisit",
@@ -197,10 +182,10 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "updateTownVisit": {
-   "id": "townvisitendpoint.updateTownVisit",
-   "path": "townvisit",
-   "httpMethod": "PUT",
+  "saveTownVisit": {
+   "id": "townvisitendpoint.saveTownVisit",
+   "path": "saveTownVisit",
+   "httpMethod": "POST",
    "request": {
     "$ref": "TownVisit",
     "parameterName": "resource"

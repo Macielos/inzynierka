@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/NKB9NnEXfYsroK9C0wMSMTq1e1I\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/EuuxueC0XOKyizxszlUdKTV4NYc\"",
  "discoveryVersion": "v1",
  "id": "dungeonvisitendpoint:v1",
  "name": "dungeonvisitendpoint",
@@ -120,21 +120,6 @@
   }
  },
  "methods": {
-  "insertDungeonVisit": {
-   "id": "dungeonvisitendpoint.insertDungeonVisit",
-   "path": "dungeonvisit",
-   "httpMethod": "POST",
-   "request": {
-    "$ref": "DungeonVisit",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "DungeonVisit"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "listDungeonVisitsByIds": {
    "id": "dungeonvisitendpoint.listDungeonVisitsByIds",
    "path": "dungeonvisit/{heroId}/{relatedEntityId}/{byLand}",
@@ -189,10 +174,10 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "updateDungeonVisit": {
-   "id": "dungeonvisitendpoint.updateDungeonVisit",
-   "path": "dungeonvisit",
-   "httpMethod": "PUT",
+  "saveDungeonVisit": {
+   "id": "dungeonvisitendpoint.saveDungeonVisit",
+   "path": "saveDungeonVisit",
+   "httpMethod": "POST",
    "request": {
     "$ref": "DungeonVisit",
     "parameterName": "resource"

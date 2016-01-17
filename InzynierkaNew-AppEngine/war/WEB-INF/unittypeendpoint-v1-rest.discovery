@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/YP5esqNXilNwLKr7Bqpy2dIQQSM\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/DX0W_UdMT0fQs5S-zZVCqQkZ2UE\"",
  "discoveryVersion": "v1",
  "id": "unittypeendpoint:v1",
  "name": "unittypeendpoint",
@@ -117,6 +117,10 @@
      "type": "integer",
      "format": "int32"
     },
+    "minLandLevel": {
+     "type": "integer",
+     "format": "int32"
+    },
     "missiles": {
      "type": "integer",
      "format": "int32"
@@ -192,40 +196,6 @@
    },
    "response": {
     "$ref": "CollectionResponse_UnitType"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "removeUnitType": {
-   "id": "unittypeendpoint.removeUnitType",
-   "path": "unittype/{id}",
-   "httpMethod": "DELETE",
-   "parameters": {
-    "id": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "id"
-   ],
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "updateUnitType": {
-   "id": "unittypeendpoint.updateUnitType",
-   "path": "unittype",
-   "httpMethod": "PUT",
-   "request": {
-    "$ref": "UnitType",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "UnitType"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

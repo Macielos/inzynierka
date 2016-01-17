@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/9T-mzuxMyH9oVVxHqVIwcBheRQY\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/Z6XGYQcsN25Yh531xv7F1_P5qvY\"",
  "discoveryVersion": "v1",
  "id": "landendpoint:v1",
  "name": "landendpoint",
@@ -129,6 +129,9 @@
     "hasFreePassage": {
      "type": "boolean"
     },
+    "hasTown": {
+     "type": "boolean"
+    },
     "height": {
      "type": "integer",
      "format": "int32"
@@ -162,6 +165,10 @@
      "items": {
       "$ref": "Passage"
      }
+    },
+    "suggestedLevel": {
+     "type": "integer",
+     "format": "int32"
     },
     "townId": {
      "type": "string",
@@ -215,34 +222,6 @@
   }
  },
  "methods": {
-  "landendpoint.findLandsInNeighbourhood": {
-   "id": "landendpoint.findLandsInNeighbourhood",
-   "parameters": {
-    "mapSegment": {
-     "type": "string",
-     "required": true,
-     "format": "int64"
-    }
-   },
-   "parameterOrder": [
-    "mapSegment"
-   ],
-   "returns": {
-    "$ref": "CollectionResponse_Land"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "landendpoint.findLandsWithFreePassages": {
-   "id": "landendpoint.findLandsWithFreePassages",
-   "returns": {
-    "$ref": "CollectionResponse_Land"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "landendpoint.getLand": {
    "id": "landendpoint.getLand",
    "allowGet": true,
@@ -284,6 +263,34 @@
    "id": "landendpoint.landEndpoint.findLandForNewPlayer",
    "returns": {
     "$ref": "Land"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "landendpoint.landEndpoint.findLandsInNeighbourhood": {
+   "id": "landendpoint.landEndpoint.findLandsInNeighbourhood",
+   "parameters": {
+    "mapSegment": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "mapSegment"
+   ],
+   "returns": {
+    "$ref": "CollectionResponse_Land"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "landendpoint.landEndpoint.findLandsWithFreePassages": {
+   "id": "landendpoint.landEndpoint.findLandsWithFreePassages",
+   "returns": {
+    "$ref": "CollectionResponse_Land"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

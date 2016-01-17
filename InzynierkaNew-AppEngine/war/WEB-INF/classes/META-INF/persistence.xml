@@ -8,7 +8,6 @@
         <provider>org.datanucleus.api.jpa.PersistenceProviderImpl</provider>
 
         <class>com.inzynierkanew.entities.communication.MessageData</class>
-        <class>com.inzynierkanew.entities.general.Property</class>
         <class>com.inzynierkanew.entities.players.Player</class>
         <class>com.inzynierkanew.entities.players.Hero</class>
         <class>com.inzynierkanew.entities.players.UnitType</class>
@@ -16,7 +15,6 @@
         <class>com.inzynierkanew.entities.players.Faction</class>
         <class>com.inzynierkanew.entities.players.Item</class>
         <class>com.inzynierkanew.entities.map.Land</class>
-        <!-- class>com.inzynierkanew.entities.map.BaseField</class-->
         <class>com.inzynierkanew.entities.map.Town</class>
         <class>com.inzynierkanew.entities.map.TownVisit</class>
         <class>com.inzynierkanew.entities.map.Dungeon</class>

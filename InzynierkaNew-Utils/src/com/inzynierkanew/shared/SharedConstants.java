@@ -1,4 +1,4 @@
-package com.inzynierkanew.utils;
+package com.inzynierkanew.shared;
 
 public class SharedConstants {
 
@@ -7,11 +7,11 @@ public class SharedConstants {
 	public static final int BASE_XP_PER_LEVEL = 1000;
 	public static final int NEXT_LEVEL_FACTOR = 500;
 	
-	public static final int BASE_GOLD_PER_VICTORY = 300;
-	public static final double GOLD_XP_MODIFIER = 0.1;
+	public static final int BASE_GOLD_PER_VICTORY = 600;
+	public static final double GOLD_XP_MODIFIER = 0.3;
 	public static final double GOLD_RANDOM_FACTOR = 0.5;
 	
-	public static final double CHANCE_FOR_ITEM = 1.0; //0.6
+	public static final double CHANCE_FOR_ITEM = 0.7;
 	public static final int LEVELS_PER_NEXT_ITEM_LEVEL = 5;
 	public static final int LEVELS_PER_NEXT_ITEM_SLOT = 5;
 	public static final int MAX_EQUIPPED_ITEMS = 6;
@@ -19,7 +19,17 @@ public class SharedConstants {
 	
 	public static final int INITIAL_SKILL_VALUE = 10;
 	public static final int INITAL_SKILL_POINTS = 25;
+	public static final int SKILL_POINTS_PER_LEVEL = 10;
 	public static final int HERO_ITEM_LEVEL_DIFF = 5;
+	
+	public static final int HERO_INITIAL_GOLD = 10000;
+	
+	public static final int LOOT_MAX_SIZE = 3;
+	public static final int MAX_ARMY_SIZE = 6;
+	
+	public static final int HERO_STRENGTH_DAMAGE_BONUS = 1;
+	public static final int HERO_AGILITY_DAMAGE_BONUS = 1;
+	public static final int HERO_INTELLIGENCE_DAMAGE_BONUS = 4;
 	
 	public static final String STANDARD = "STANDARD";
 	public static final String MAGICAL = "MAGICAL";

@@ -10,13 +10,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-import org.datanucleus.store.appengine.query.JPACursorHelper;
-
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.inzynierkanew.entities.players.Item;
 import com.inzynierkanew.shared.SharedConstants;
 import com.inzynierkanew.utils.CollectionUtils;

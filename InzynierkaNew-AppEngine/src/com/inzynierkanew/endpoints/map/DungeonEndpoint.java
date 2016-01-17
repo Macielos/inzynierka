@@ -8,7 +8,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.datanucleus.store.appengine.query.JPACursorHelper;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;

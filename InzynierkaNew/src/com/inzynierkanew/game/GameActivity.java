@@ -32,7 +32,6 @@ import com.inzynierkanew.entities.players.unittypeendpoint.model.UnitType;
 import com.inzynierkanew.model.Loot;
 import com.inzynierkanew.model.Unit;
 import com.inzynierkanew.shared.SharedConstants;
-import com.inzynierkanew.shared.SharedUtils;
 import com.inzynierkanew.utils.AndroidUtils;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.Constants;
@@ -43,6 +42,7 @@ import com.inzynierkanew.utils.IOnConfirm;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -1056,6 +1056,7 @@ public class GameActivity extends BaseActivity {
 
 		TextView playerExperience = (TextView) findViewById(xpId);
 		playerExperience.setText("" + hero.getExperience() + "/" + xpForNextLevel);
+		playerExperience.setTextColor(Color.BLACK);
 
 		ProgressBar playerExperienceBar = (ProgressBar) findViewById(xpBarId);
 		playerExperienceBar.setMax(xpForNextLevel - xpForThisLevel);

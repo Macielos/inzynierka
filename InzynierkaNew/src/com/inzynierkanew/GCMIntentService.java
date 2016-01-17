@@ -116,43 +116,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	public void onRegistered(Context context, String registrationId) {
 		boolean alreadyRegisteredWithEndpointServer = false;
-
-		/*
-		 * try {
-		 */
-		/*
-		 * Using cloud endpoints, see if the device has already been registered
-		 * with the backend
-		 *//*
-			 * DeviceInfo existingInfo =
-			 * endpoint.getDeviceInfo(registrationId).execute();
-			 * 
-			 * if (existingInfo != null &&
-			 * registrationId.equals(existingInfo.getDeviceRegistrationID())) {
-			 * alreadyRegisteredWithEndpointServer = true; } } catch
-			 * (IOException e) { // Ignore }
-			 */
 		try {
-			// if (!alreadyRegisteredWithEndpointServer) {
-			/*
-			 * We are not registered as yet. Send an endpoint message containing
-			 * the GCM registration id and some of the device's product
-			 * information over to the backend. Then, we'll be registered.
-			 */
-			/*
-			 * if(playerEndpoint.findPlayerByName(playerForRegistration.getName(
-			 * ))!=null){ sendNotificationIntent(context, "Player with name "
-			 * +playerForRegistration.getName()+" already exists", true, true);
-			 * return; }
-			 */ /*
-				 * DeviceInfo deviceInfo = new DeviceInfo();
-				 * endpoint.insertDeviceInfo( deviceInfo
-				 * .setDeviceRegistrationID(registrationId)
-				 * .setTimestamp(System.currentTimeMillis())
-				 * .setDeviceInformation(
-				 * URLEncoder.encode(android.os.Build.MANUFACTURER + " " +
-				 * android.os.Build.PRODUCT, "UTF-8"))) .execute();
-				 */
 			Player player = registree.getPlayer().setDeviceRegistrationID(registrationId)
 					.setRegistrationTime(new DateTime(TimeUtils.now()));
 			playerEndpoint.registerPlayer(registree.getStrength(), registree.getAgility(), registree.getIntelligence(),

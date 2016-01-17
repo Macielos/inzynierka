@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/TBNQWcie3wogbhivqFxEJ32oWv4\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/hyTQpKzUuHh4Skg1Mx8JsvuQHW0\"",
  "discoveryVersion": "v1",
  "id": "itemendpoint:v1",
  "name": "itemendpoint",
@@ -93,11 +93,7 @@
    "id": "Item",
    "type": "object",
    "properties": {
-    "attackBonus": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "defenceBonus": {
+    "agilityBonus": {
      "type": "integer",
      "format": "int32"
     },
@@ -107,6 +103,10 @@
     "id": {
      "type": "string",
      "format": "int64"
+    },
+    "intelligenceBonus": {
+     "type": "integer",
+     "format": "int32"
     },
     "itemClass": {
      "$ref": "ItemClass"
@@ -118,7 +118,7 @@
     "name": {
      "type": "string"
     },
-    "powerBonus": {
+    "strengthBonus": {
      "type": "integer",
      "format": "int32"
     },
@@ -189,18 +189,18 @@
   },
   "getRandomItemsByType": {
    "id": "itemendpoint.getRandomItemsByType",
-   "path": "collectionresponse_item/{limit}/{heroLevel}/{itemClass}",
+   "path": "collectionresponse_item/{limit}/{level}/{itemClass}",
    "httpMethod": "GET",
    "parameters": {
-    "heroLevel": {
-     "type": "integer",
-     "required": true,
-     "format": "int32",
-     "location": "path"
-    },
     "itemClass": {
      "type": "string",
      "required": true,
+     "location": "path"
+    },
+    "level": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
      "location": "path"
     },
     "limit": {
@@ -212,7 +212,7 @@
    },
    "parameterOrder": [
     "limit",
-    "heroLevel",
+    "level",
     "itemClass"
    ],
    "response": {

@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/TweYpbLKbypguDeZrXQKxeggA6c\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/IEwnjkSbE6fytRKmyfzsEtb65H0\"",
  "discoveryVersion": "v1",
  "id": "factionendpoint:v1",
  "name": "factionendpoint",
@@ -208,40 +208,6 @@
    },
    "response": {
     "$ref": "CollectionResponse_Faction"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "removeFaction": {
-   "id": "factionendpoint.removeFaction",
-   "path": "faction/{id}",
-   "httpMethod": "DELETE",
-   "parameters": {
-    "id": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "id"
-   ],
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "updateFaction": {
-   "id": "factionendpoint.updateFaction",
-   "path": "faction",
-   "httpMethod": "PUT",
-   "request": {
-    "$ref": "Faction",
-    "parameterName": "resource"
-   },
-   "response": {
-    "$ref": "Faction"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

@@ -294,16 +294,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 				throw new RuntimeException("Land is null");
 			}
 
-			AsyncTask<Long, Void, Town> townTask = new AsyncTask<Long, Void, Town>() {
-				protected Town doInBackground(Long[] params) {
-					try {
-						return townEndpoint.getTown(params[0]).execute();
-					} catch (IOException e) {
-						Log.e(TAG, "Failed to download town", e);
-						return null;
-					}
-				};
-			}.execute(land.getTownId());
+			boolean hasTown = land.getTownId()!=null;
+
+			AsyncTask<Long, Void, Town> townTask = null;
+			if (hasTown) {
+				townTask = new AsyncTask<Long, Void, Town>() {
+					protected Town doInBackground(Long[] params) {
+						try {
+							return townEndpoint.getTown(params[0]).execute();
+						} catch (IOException e) {
+							Log.e(TAG, "Failed to download town", e);
+							return null;
+						}
+					};
+				}.execute(land.getTownId());
+			}
 
 			AsyncTask<Void, Void, List<Dungeon>> dungeonsTask = new AsyncTask<Void, Void, List<Dungeon>>() {
 				protected List<Dungeon> doInBackground(Void[] params) {
@@ -315,11 +320,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 					}
 				};
 			}.execute();
-			
-			town = townTask.get();
+
+			town = hasTown ? townTask.get() : null;
 			dungeons = dungeonsTask.get();
-			
-			if (town == null) {
+
+			if (hasTown && town == null) {
 				throw new RuntimeException("Town is null");
 			}
 			if (dungeons == null) {
@@ -338,16 +343,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 				};
 			}.execute();
 
-			AsyncTask<Void, Void, TownVisit> townVisitTask = new AsyncTask<Void, Void, TownVisit>() {
-				protected TownVisit doInBackground(Void[] params) {
-					try {
-						return townVisitEndpoint.getTownVisit(town.getId(), hero.getId()).execute();
-					} catch (IOException e) {
-						Log.e(TAG, "Failed to download town visit history", e);
-						return null;
-					}
-				};
-			}.execute();
+			AsyncTask<Void, Void, TownVisit> townVisitTask = null;
+			if (hasTown) {
+				townVisitTask = new AsyncTask<Void, Void, TownVisit>() {
+					protected TownVisit doInBackground(Void[] params) {
+						try {
+							return townVisitEndpoint.getTownVisit(town.getId(), hero.getId()).execute();
+						} catch (IOException e) {
+							Log.e(TAG, "Failed to download town visit history", e);
+							return null;
+						}
+					};
+				}.execute();
+			}
 
 			AsyncTask<Void, Void, List<Item>> standardItemsTask = new AsyncTask<Void, Void, List<Item>>() {
 				protected List<Item> doInBackground(Void[] params) {
@@ -388,7 +396,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 			}.execute();
 
 			dungeonVisitHistory = createDungeonVisitHistory(dungeonVisitsTask.get());
-			townVisit = townVisitTask.get();
+			townVisit = hasTown ? townVisitTask.get() : null;
 
 			itemCache = new HashMap<>(3);
 			itemCache.put(SharedConstants.STANDARD, standardItemsTask.get());
@@ -413,12 +421,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
 	public Bitmap createBitmap(int id) {
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), id);
-		return Bitmap.createScaledBitmap(bitmap, (int) (Constants.TILE_SIZE * zoom), (int) (Constants.TILE_SIZE * zoom), false);
+		return Bitmap.createScaledBitmap(bitmap, (int) (Constants.TILE_SIZE * zoom), (int) (Constants.TILE_SIZE * zoom),
+				false);
 	}
 
 	private Bitmap getPlayerBitmap() {
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hero);
-		return Bitmap.createScaledBitmap(bitmap, (int) (Constants.TILE_SIZE * zoom), (int) (Constants.TILE_SIZE * zoom), false);
+		return Bitmap.createScaledBitmap(bitmap, (int) (Constants.TILE_SIZE * zoom), (int) (Constants.TILE_SIZE * zoom),
+				false);
 	}
 
 	private DisplayMetrics getSize() {

@@ -29,7 +29,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
 	private boolean cleanPlayersOnInit = false;
 	private boolean cleanWorldOnInit = false;
-	private boolean repopulateTypesOnInit = false;
+	private boolean repopulateTypesOnInit = true;
 	private int landsGeneratedOnInit = 20;
 
 	public static final long HUMANS_ID = 1L;
@@ -119,9 +119,26 @@ public class ApplicationInitializer implements ServletContextListener {
 				new UnitType(102L, "Archer", 450, "archer", humans.getId(), 6, 10, 40, 5, true, 8, 1),
 				new UnitType(103L, "Knight", 1500, "knight", humans.getId(), 18, 36, 200, 7, false, 0, 11));
 
-		List<FieldType> fieldTypes = Arrays.asList(new FieldType(1L, "Road", true, "road"),
+		List<FieldType> fieldTypes = Arrays.asList(
 				new FieldType(2L, "Passage", true, "passage"), new FieldType(3L, "Town", true, "town"),
 				new FieldType(4L, "Dungeon", true, "dungeon"), new FieldType(5L, "Portal", true, "portal"),
+				
+				new FieldType(21L, "RoadHorizontal", true, "road_horizontal"),
+				new FieldType(22L, "RoadVertical", true, "road_vertical"),
+				new FieldType(23L, "RoadEndUp", true, "road_end_up"),
+				new FieldType(24L, "RoadEndDown", true, "road_end_down"),
+				new FieldType(25L, "RoadEndLeft", true, "road_end_left"),
+				new FieldType(26L, "RoadEndRight", true, "road_end_right"),
+				new FieldType(27L, "RoadLeftUp", true, "road_left_up"),
+				new FieldType(28L, "RoadLeftDown", true, "road_left_down"),
+				new FieldType(29L, "RoadRightUp", true, "road_right_up"),
+				new FieldType(30L, "RoadRightDown", true, "road_right_down"),
+				new FieldType(31L, "RoadTUp", true, "road_t_up"),
+				new FieldType(32L, "RoadTDown", true, "road_t_down"),
+				new FieldType(33L, "RoadTLeft", true, "road_t_left"),
+				new FieldType(34L, "RoadTRight", true, "road_t_right"),
+				new FieldType(35L, "RoadX", true, "road_x"),
+
 				new FieldType(100L, "Grass", true, "grass"), new FieldType(110L, "Mountains", false, "mountains"));
 
 		List<Item> items = Arrays

@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/4H938h2-BOnteTLfmOPZvX8KbYU\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/_MDQTmnDNIAK7RzHy47oaDGKEZc\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -268,10 +268,16 @@
   },
   "registerPlayer": {
    "id": "playerendpoint.registerPlayer",
-   "path": "registerPlayer/{strength}/{agility}/{intelligence}",
+   "path": "registerPlayer/{strength}/{agility}/{intelligence}/{freeSkillPoints}",
    "httpMethod": "POST",
    "parameters": {
     "agility": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "freeSkillPoints": {
      "type": "integer",
      "required": true,
      "format": "int32",
@@ -293,7 +299,8 @@
    "parameterOrder": [
     "strength",
     "agility",
-    "intelligence"
+    "intelligence",
+    "freeSkillPoints"
    ],
    "request": {
     "$ref": "Player",

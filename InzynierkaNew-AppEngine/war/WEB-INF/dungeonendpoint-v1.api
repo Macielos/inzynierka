@@ -27,59 +27,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "dungeonendpoint.insertDungeon" : {
-      "path" : "dungeon",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonEndpoint.insertDungeon",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "dungeonendpoint.updateDungeon" : {
-      "path" : "dungeon",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonEndpoint.updateDungeon",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "dungeonendpoint.removeDungeon" : {
-      "path" : "dungeon/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonEndpoint.removeDungeon",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "dungeonendpoint.listDungeon" : {
       "path" : "listDungeon/{landId}",
       "httpMethod" : "GET",
@@ -109,6 +56,27 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "dungeonendpoint.removeDungeon" : {
+      "path" : "dungeon/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonEndpoint.removeDungeon",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
     "dungeonendpoint.getDungeon" : {
       "path" : "getDungeon/{id}",
       "httpMethod" : "GET",
@@ -129,10 +97,41 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "dungeonendpoint.dungeonEndpoint.insertDungeon" : {
+      "path" : "dungeon",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonEndpoint.insertDungeon",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
     "schemas" : {
+      "CollectionResponse_Dungeon" : {
+        "id" : "CollectionResponse_Dungeon",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Dungeon"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "Dungeon" : {
         "id" : "Dungeon",
         "type" : "object",
@@ -166,48 +165,25 @@
             }
           }
         }
-      },
-      "CollectionResponse_Dungeon" : {
-        "id" : "CollectionResponse_Dungeon",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Dungeon"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.DungeonEndpoint.insertDungeon" : {
-        "request" : {
-          "$ref" : "Dungeon"
-        },
-        "response" : {
-          "$ref" : "Dungeon"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.DungeonEndpoint.updateDungeon" : {
-        "request" : {
-          "$ref" : "Dungeon"
-        },
-        "response" : {
-          "$ref" : "Dungeon"
-        }
-      },
-      "com.inzynierkanew.endpoints.map.DungeonEndpoint.removeDungeon" : {
-      },
       "com.inzynierkanew.endpoints.map.DungeonEndpoint.listDungeon" : {
         "response" : {
           "$ref" : "CollectionResponse_Dungeon"
         }
       },
+      "com.inzynierkanew.endpoints.map.DungeonEndpoint.removeDungeon" : {
+      },
       "com.inzynierkanew.endpoints.map.DungeonEndpoint.getDungeon" : {
+        "response" : {
+          "$ref" : "Dungeon"
+        }
+      },
+      "com.inzynierkanew.endpoints.map.DungeonEndpoint.insertDungeon" : {
+        "request" : {
+          "$ref" : "Dungeon"
+        },
         "response" : {
           "$ref" : "Dungeon"
         }

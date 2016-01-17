@@ -18,14 +18,20 @@
 
         <TextView
             android:id="@+id/main_goldCount"
-            android:layout_width="80dp"
+            android:layout_width="88dp"
             android:layout_height="fill_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/main_level"
-            android:layout_width="64dp"
+            android:layout_width="76dp"
             android:layout_height="fill_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:textSize="20sp" />
 
         <FrameLayout
@@ -105,7 +111,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -113,9 +119,10 @@
 
         <LinearLayout
             android:id="@+id/main_armyContainer"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_toLeftOf="@+id/main_show_menu_layout"
+            android:layout_toStartOf="@+id/main_show_menu_layout"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -220,8 +227,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="128dp"
-            android:layout_height="128dp" >
+            android:id="@+id/main_show_menu_layout"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" >
 
             <ImageButton
                 android:id="@+id/main_show_menu"
@@ -230,6 +240,6 @@
                 android:layout_weight="1"
                 android:src="@drawable/show_menu" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

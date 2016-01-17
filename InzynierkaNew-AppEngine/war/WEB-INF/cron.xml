@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+ <!-- 
+ <cron>
+    <url>/scheduler/refreshWorld</url>
+    <description>Clears town and dungeon visits so that recruitable units and creeps are visible again for players, repopulates towns and dungeons</description>
+    <schedule>every day 04:00</schedule>
+  </cron>
+  -->
+  <cron>
+    <url>/scheduler/test</url>
+    <description>test</description>
+    <schedule>every 20 seconds</schedule>
+  </cron>
+</cronentries>

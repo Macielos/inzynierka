@@ -31,7 +31,6 @@ import com.inzynierkanew.entities.players.Faction;
 import com.inzynierkanew.entities.players.Hero;
 import com.inzynierkanew.entities.players.UnitType;
 import com.inzynierkanew.shared.SharedConstants;
-import com.inzynierkanew.shared.SharedUtils;
 import com.inzynierkanew.utils.Point;
 import com.inzynierkanew.utils.RandomUtils;
 import com.inzynierkanew.utils.Statistics;
@@ -85,6 +84,7 @@ public class WorldGenerator {
 	private static final double CHANCE_FOR_BEGINNER_LEVEL = 0.2;
 	private static final double NEXT_UNIT_CHANCE_CHANGE = 0.6;
 	private static final double TOWN_ARMY_FACTOR = 1.8;
+	private static final double DUNGEON_ARMY_FACTOR = 1.7;
 
 	private static final Comparator<UnitType> unitComparator = new Comparator<UnitType>() {
 
@@ -101,7 +101,11 @@ public class WorldGenerator {
 			return 0;
 		}
 	};
-	
+	private static final double CHANCE_TO_RANDOMIZE = 0.2;
+
+	private static final double RANDOMIZE_INIT_CONTINUE_RATE = 1.4;
+	private static final double RANDOMIZE_CONTINUE_RATE_DROP = 0.25;
+
 	// LOG
 	private Log log = LogFactory.getLog(getClass());
 
@@ -127,6 +131,8 @@ public class WorldGenerator {
 	private Map<Long, List<UnitType>> townUnitTypesByFactions;
 	private Map<Long, Faction> factions = new HashMap<>();
 
+	private Set<Integer> roadFieldTypes;
+
 	// EXISTING ELEMENTS
 	private Land borderLand = null;
 	private Passage borderLandPassage = null;
@@ -136,10 +142,6 @@ public class WorldGenerator {
 
 	// TEMP PRODUCTS
 	private int[][] mapSegment;
-
-	public int[][] getMapSegment() {
-		return mapSegment;
-	}
 
 	private int width;
 	private int height;
@@ -244,8 +246,6 @@ public class WorldGenerator {
 				hasFreePassage = hasFreePassage(toUpdate);
 				if (hasFreePassage != toUpdate.hasFreePassage()) {
 					toUpdate.setHasFreePassage(hasFreePassage);
-					// log.info("Neighbour "+toUpdate.getId()+": setFreePassage
-					// updated to "+hasFreePassage);
 					landEndpoint.updateLand(toUpdate);
 				}
 			}
@@ -280,6 +280,8 @@ public class WorldGenerator {
 		calcSuggestedLevel();
 		loadUnitAndMapData();
 		placeDungeons();
+		randomizeTerrain();
+		adjustRoads();
 		log.info(WorldGenerationUtils.mapToString(mapSegment));
 		Land land = toLand();
 		log.info("Successfully generated land with seed " + seed);
@@ -289,10 +291,13 @@ public class WorldGenerator {
 	public void initFields() {
 		PASSABLE = (int) fieldTypeEndpoint.findByName("Grass").getId();
 		NON_PASSABLE = (int) fieldTypeEndpoint.findByName("Mountains").getId();
-		ROAD = (int) fieldTypeEndpoint.findByName("Road").getId();
+		ROAD = 1;
 		PASSAGE = (int) fieldTypeEndpoint.findByName("Passage").getId();
 		TOWN = (int) fieldTypeEndpoint.findByName("Town").getId();
 		DUNGEON = (int) fieldTypeEndpoint.findByName("Dungeon").getId();
+		
+		roadFieldTypes = new HashSet<>(
+				Arrays.asList(1, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, PASSAGE, TOWN, DUNGEON));
 	}
 
 	public void loadUnitAndMapData() {
@@ -326,10 +331,10 @@ public class WorldGenerator {
 				}
 			}
 		}
-		for(List<UnitType> unitTypeList: dungeonUnitTypesByFactions.values()){
+		for (List<UnitType> unitTypeList : dungeonUnitTypesByFactions.values()) {
 			Collections.sort(unitTypeList, unitComparator);
 		}
-		for(List<UnitType> unitTypeList: townUnitTypesByFactions.values()){
+		for (List<UnitType> unitTypeList : townUnitTypesByFactions.values()) {
 			Collections.sort(unitTypeList, unitComparator);
 		}
 	}
@@ -427,7 +432,8 @@ public class WorldGenerator {
 
 		neighbours = (borderLand == null) ? new ArrayList<Land>(0)
 				: (List<Land>) landEndpoint
-						.findLandsInNeighbourhood(WorldGenerationUtils.calcMapSegment(minX, minY, maxX, maxY));
+						.findLandsInNeighbourhood(WorldGenerationUtils.calcMapSegment(minX, minY, maxX, maxY))
+						.getItems();
 
 		for (Land neighbour : neighbours) {
 			// log.info("Neighbour "+neighbour.getId()+":
@@ -1529,6 +1535,108 @@ public class WorldGenerator {
 		return land;
 	}
 
+	private void randomizeTerrain() {
+		double randomize;
+		for (Point point : crossroads) {
+			if (!dungeons.contains(point)) {
+				randomize = random.nextDouble();
+				if (randomize < CHANCE_TO_RANDOMIZE) {
+					randomizeTerrainInternal(point.x, point.y, RANDOMIZE_INIT_CONTINUE_RATE);
+				}
+			}
+		}
+	}
+
+	private void randomizeTerrainInternal(int x, int y, double minResultToContinue) {
+		if (minResultToContinue <= 0 || x < 0 || y < 0 || x >= width || y >= height) {
+			return;
+		}
+		double nextField = random.nextDouble();
+		if (nextField > minResultToContinue) {
+			return;
+		}
+		if (mapSegment[y][x] == NON_PASSABLE && !isBorder(x, y)) {
+			mapSegment[y][x] = PASSABLE;
+		}
+
+		for (Point point : getOrderedPointsForMapPopulation(x, y, -1)) {
+			randomizeTerrainInternal(point.x, point.y, minResultToContinue - RANDOMIZE_CONTINUE_RATE_DROP);
+		}
+	}
+
+	private void adjustRoads() {
+		for (int j = 0; j < height; ++j) {
+			for (int i = 0; i < width; ++i) {
+				if(hasType(i, j, ROAD)){
+					mapSegment[j][i] = getRoadAdjustment(i, j);
+				}
+			}
+		}
+	}
+	
+	private int getRoadAdjustment(int x, int y) {
+		//X
+		if(matchesPattern(x, y, true, true, true, true)){
+			return 35;
+		}
+		//T
+		if(matchesPattern(x, y, true, true, true, false)){
+			return 31;
+		}
+		if(matchesPattern(x, y, false, true, true, true)){
+			return 32;
+		}
+		if(matchesPattern(x, y, true, true, false, true)){
+			return 33;
+		}
+		if(matchesPattern(x, y, true, false, true, true)){
+			return 34;
+		}
+		//turns
+		if(matchesPattern(x, y, true, true, false, false)){
+			return 27;
+		}
+		if(matchesPattern(x, y, false, true, false, true)){
+			return 28;
+		}
+		if(matchesPattern(x, y, true, false, true, false)){
+			return 29;
+		}
+		if(matchesPattern(x, y, false, false, true, true)){
+			return 30;
+		}
+		//straights
+		if(matchesPattern(x, y, false, true, true, false)){
+			return 21;
+		}
+		if(matchesPattern(x, y, true, false, false, true)){
+			return 22;
+		}
+		//ends
+		if(matchesPattern(x, y, true, false, false, false)){
+			return 23;
+		}
+		if(matchesPattern(x, y, false, false, false, true)){
+			return 24;
+		}
+		if(matchesPattern(x, y, false, true, false, false)){
+			return 25;
+		}
+		if(matchesPattern(x, y, false, false, true, false)){
+			return 26;
+		}
+		//"isles" - draw grass
+		return 2;
+	} 
+	
+	private boolean matchesPattern(int x, int y, boolean top, boolean left, boolean right, boolean bottom){
+		return matchesFilter(x, y-1, top) && matchesFilter(x-1, y, left) && matchesFilter(x+1, y, right) && matchesFilter(x, y+1, bottom); 
+	}
+	
+	private boolean matchesFilter(int x, int y, boolean filter){
+		return withinMapSegment(x, y) && roadFieldTypes.contains(mapSegment[y][x]) == filter;
+	}
+
 	private void calcSuggestedLevel() {
 		double beginnerLevel = random.nextDouble();
 		if (beginnerLevel < CHANCE_FOR_BEGINNER_LEVEL) {
@@ -1558,12 +1666,13 @@ public class WorldGenerator {
 	private int[] createTownArmy(Long factionId) {
 		List<UnitType> unitTypesForSelectedFaction = townUnitTypesByFactions.get(factionId);
 		double unitStrength;
-		int totalArmyStrength = ARMY_MIN_STRENGTH + suggestedLevel * ARMY_INCREASE_PER_LEVEL; 
-		totalArmyStrength = (int) ((double)totalArmyStrength * TOWN_ARMY_FACTOR);
+		int totalArmyStrength = ARMY_MIN_STRENGTH + suggestedLevel * ARMY_INCREASE_PER_LEVEL;
+		totalArmyStrength = (int) ((double) totalArmyStrength * TOWN_ARMY_FACTOR);
 		List<Integer> army = new ArrayList<>(unitTypesForSelectedFaction.size() * 2);
-		for(UnitType unitType: unitTypesForSelectedFaction){
+		for (UnitType unitType : unitTypesForSelectedFaction) {
 			army.add(unitType.getId().intValue());
-			unitStrength = totalArmyStrength / unitTypesForSelectedFaction.size() * RandomUtils.randomizedFactor(ARMY_RANDOM_FACTOR);
+			unitStrength = totalArmyStrength / unitTypesForSelectedFaction.size()
+					* RandomUtils.randomizedFactor(ARMY_RANDOM_FACTOR);
 			army.add(calcUnitCount(unitStrength, unitType));
 		}
 		int[] armyArray = new int[army.size()];
@@ -1579,7 +1688,7 @@ public class WorldGenerator {
 		List<Long> factions = new ArrayList<>(map.keySet());
 		return factions.get(random.nextInt(factions.size()));
 	}
-	
+
 	private int[] createDungeonArmy(Long factionId) {
 		List<UnitType> unitTypesForSelectedFaction = dungeonUnitTypesByFactions.get(factionId);
 
@@ -1588,23 +1697,24 @@ public class WorldGenerator {
 		double rand;
 		UnitType nextUnitType;
 		List<UnitType> armyUnitTypes = new ArrayList<>(SharedConstants.MAX_ARMY_SIZE);
-		for(int i=0; i<SharedConstants.MAX_ARMY_SIZE; ++i){
+		for (int i = 0; i < SharedConstants.MAX_ARMY_SIZE; ++i) {
 			rand = random.nextDouble();
-			if(rand < chanceForNextUnit){
+			if (rand < chanceForNextUnit) {
 				nextUnitType = unitTypesForSelectedFaction.get(random.nextInt(unitTypesForSelectedFaction.size()));
 				armyUnitTypes.add(nextUnitType);
 			}
 			chanceForNextUnit *= NEXT_UNIT_CHANCE_CHANGE;
 		}
-		
+
 		double unitStrength;
 		int totalArmyStrength = ARMY_MIN_STRENGTH + suggestedLevel * ARMY_INCREASE_PER_LEVEL;
-		for(UnitType unitType: armyUnitTypes){
+		for (UnitType unitType : armyUnitTypes) {
 			army.add(unitType.getId().intValue());
-			unitStrength = totalArmyStrength / armyUnitTypes.size() * RandomUtils.randomizedFactor(ARMY_RANDOM_FACTOR);
+			unitStrength = totalArmyStrength / armyUnitTypes.size() * RandomUtils.randomizedFactor(ARMY_RANDOM_FACTOR)
+					* DUNGEON_ARMY_FACTOR;
 			army.add(calcUnitCount(unitStrength, unitType));
 		}
-		
+
 		int[] armyArray = new int[army.size()];
 		int i = 0;
 		for (Integer unit : army) {
@@ -1615,7 +1725,7 @@ public class WorldGenerator {
 	}
 
 	private int calcUnitCount(double totalStrength, UnitType unitType) {
-		return (int) Math.round(totalStrength / unitType.calcUnitStrength());
+		return (int) Math.ceil(totalStrength / unitType.calcUnitStrength());
 	}
 
 	private boolean hasFreePassage(Land land) {
@@ -1663,6 +1773,10 @@ public class WorldGenerator {
 
 	private void throwException(String message) throws WorldGenerationException {
 		throw new WorldGenerationException(mapSegment, seed, message);
+	}
+	
+	public int[][] getMapSegment() {
+		return mapSegment;
 	}
 
 }
