@@ -1,5 +1,7 @@
 package com.inzynierkanew.endpoints.players;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -9,18 +11,27 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
+import com.inzynierkanew.endpoints.communication.WorldUpdateEndpoint;
 import com.inzynierkanew.entities.players.Hero;
+import com.inzynierkanew.messages.WorldUpdate;
+import com.inzynierkanew.shared.SharedConstants;
 import com.inzynierkanew.utils.EMF;
 
 @Api(name = "heroendpoint", namespace = @ApiNamespace(ownerDomain = "inzynierkanew.com", ownerName = "inzynierkanew.com", packagePath = "entities.players"))
 public class HeroEndpoint {
 
+	private static final WorldUpdateEndpoint worldUpdateEndpoint = new WorldUpdateEndpoint();
+	private final Log log = LogFactory.getLog(getClass());
+	
 	/**
 	 * This method lists all the entities inserted in datastore.
 	 * It uses HTTP GET method and paging support.
@@ -63,6 +74,29 @@ public class HeroEndpoint {
 		}
 
 		return CollectionResponse.<Hero> builder().setItems(execute).setNextPageToken(cursorString).build();
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	@ApiMethod(name = "getActiveHeroesInLand")
+	public CollectionResponse<Hero> getActiveHeroesInLand(@Named("landId") Long landId) {
+
+		log.info("Getting active heroes in land "+landId);
+		EntityManager mgr = null;
+		List<Hero> execute = null;
+
+		try {
+			mgr = getEntityManager();
+			Query query = mgr.createQuery("select from Hero as Hero where Hero.active = true and Hero.currentLandId = "+landId);
+			execute = (List<Hero>) query.getResultList();
+			log.info("Result is: "+execute);
+			for (Hero obj : execute);
+		} finally {
+			mgr.close();
+		}
+
+		CollectionResponse<Hero> response = CollectionResponse.<Hero> builder().setItems(execute).build();
+		log.info("Response is: "+response);
+		return response;
 	}
 
 	/**
@@ -114,13 +148,19 @@ public class HeroEndpoint {
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updateHero")
-	public Hero updateHero(Hero hero) {
+	public Hero updateHero(Hero hero, @Named("sendWorldUpdate") boolean sendWorldUpdate) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (!containsHero(hero)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
 			mgr.merge(hero);
+			log.info("updating hero "+hero.getId());
+			if(sendWorldUpdate){
+				worldUpdateEndpoint.sendWorldUpdate(hero.getCurrentLandId(), new WorldUpdate(SharedConstants.MOVE, hero.getId(), hero.getCurrentLandId(), hero.getX(), hero.getY()));
+			}
+		} catch (IOException e) {
+			log.error(e, e);
 		} finally {
 			mgr.close();
 		}
@@ -139,6 +179,28 @@ public class HeroEndpoint {
 		try {
 			Hero hero = mgr.find(Hero.class, id);
 			mgr.remove(hero);
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	@ApiMethod(name = "moveHeroToDifferentLand")
+	public void moveHeroToDifferentLand(@Named("id")Long id, @Named("nextLandId")Long nextLandId, @Named("x")Integer x, @Named("y")Integer y){
+		EntityManager mgr = null;
+		try {
+			mgr = getEntityManager();
+			Hero hero = mgr.find(Hero.class, id);
+			if(hero!=null && nextLandId.longValue() != hero.getCurrentLandId().longValue()){
+				long oldLandId = hero.getCurrentLandId();
+				hero.setX(x);
+				hero.setY(y);
+				hero.setCurrentLandId(nextLandId);
+				mgr.persist(hero);
+				worldUpdateEndpoint.sendWorldUpdate(oldLandId, new WorldUpdate(SharedConstants.DEPART, id, nextLandId, x, y));
+				worldUpdateEndpoint.sendWorldUpdate(nextLandId, new WorldUpdate(SharedConstants.ARRIVE, id, nextLandId, x, y));
+			}
+		} catch (IOException e) {
+			log.error(e, e);
 		} finally {
 			mgr.close();
 		}

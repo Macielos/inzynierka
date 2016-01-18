@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/J8TkrtZ2Bqd5GlglAQtL7HgC8iU\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/6e086K7fnjlWfKbfsJFLEdB3Z7Q\"",
  "discoveryVersion": "v1",
  "id": "heroendpoint:v1",
  "name": "heroendpoint",
@@ -91,6 +91,9 @@
    "id": "Hero",
    "type": "object",
    "properties": {
+    "active": {
+     "type": "boolean"
+    },
     "agility": {
      "type": "integer",
      "format": "int32"
@@ -105,6 +108,9 @@
     "currentLandId": {
      "type": "string",
      "format": "int64"
+    },
+    "deviceRegistrationID": {
+     "type": "string"
     },
     "equippedItems": {
      "type": "array",
@@ -160,6 +166,26 @@
   }
  },
  "methods": {
+  "heroendpoint.getActiveHeroesInLand": {
+   "id": "heroendpoint.getActiveHeroesInLand",
+   "allowGet": true,
+   "parameters": {
+    "landId": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "landId"
+   ],
+   "returns": {
+    "$ref": "CollectionResponse_Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "heroendpoint.getHero": {
    "id": "heroendpoint.getHero",
    "allowGet": true,
@@ -216,6 +242,40 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
+  "heroendpoint.moveHeroToDifferentLand": {
+   "id": "heroendpoint.moveHeroToDifferentLand",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "nextLandId": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "x": {
+     "type": "integer",
+     "required": true,
+     "format": "int32"
+    },
+    "y": {
+     "type": "integer",
+     "required": true,
+     "format": "int32"
+    }
+   },
+   "parameterOrder": [
+    "id",
+    "nextLandId",
+    "x",
+    "y"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "heroendpoint.removeHero": {
    "id": "heroendpoint.removeHero",
    "parameters": {
@@ -237,10 +297,15 @@
    "parameters": {
     "resource": {
      "$ref": "Hero"
+    },
+    "sendWorldUpdate": {
+     "type": "boolean",
+     "required": true
     }
    },
    "parameterOrder": [
-    "resource"
+    "resource",
+    "sendWorldUpdate"
    ],
    "returns": {
     "$ref": "Hero"

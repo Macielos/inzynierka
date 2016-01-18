@@ -254,7 +254,7 @@ public class BattleResolver {
 	private int countXpGained(List<Unit> enemyLosses) {
 		int experienceGained = 0;
 		for (Unit enemyUnit : enemyLosses) {
-			experienceGained += enemyUnit.getCount() * enemyUnit.getUnitType().getHitpoints() / 10;
+			experienceGained += enemyUnit.getCount() * enemyUnit.getUnitType().getHitpoints() / 3;
 		}
 		return experienceGained;
 	}

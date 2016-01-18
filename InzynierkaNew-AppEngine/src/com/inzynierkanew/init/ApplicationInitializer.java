@@ -29,7 +29,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
 	private boolean cleanPlayersOnInit = false;
 	private boolean cleanWorldOnInit = false;
-	private boolean repopulateTypesOnInit = true;
+	private boolean repopulateTypesOnInit = false;
 	private int landsGeneratedOnInit = 20;
 
 	public static final long HUMANS_ID = 1L;

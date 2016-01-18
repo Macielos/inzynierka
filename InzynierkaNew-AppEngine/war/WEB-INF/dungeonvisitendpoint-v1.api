@@ -5,6 +5,7 @@
   "name" : "dungeonvisitendpoint",
   "version" : "v1",
   "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
   "adapter" : {
     "bns" : "https://1059.appspot.com/_ah/spi",
     "deadline" : 65.0,
@@ -43,27 +44,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "dungeonvisitendpoint.removeDungeonVisit" : {
-      "path" : "dungeonvisit/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.removeDungeonVisit",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "dungeonvisitendpoint.listDungeonVisitsByIds" : {
       "path" : "dungeonvisit/{heroId}/{relatedEntityId}/{byLand}",
       "httpMethod" : "GET",
@@ -91,6 +71,27 @@
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "dungeonvisitendpoint.removeDungeonVisit" : {
+      "path" : "dungeonvisit/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.removeDungeonVisit",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
       }
     }
   },
@@ -149,12 +150,12 @@
           "$ref" : "DungeonVisit"
         }
       },
-      "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.removeDungeonVisit" : {
-      },
       "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.listDungeonVisitsByIds" : {
         "response" : {
           "$ref" : "CollectionResponse_DungeonVisit"
         }
+      },
+      "com.inzynierkanew.endpoints.map.DungeonVisitEndpoint.removeDungeonVisit" : {
       }
     }
   }

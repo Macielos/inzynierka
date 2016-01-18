@@ -1,11 +1,11 @@
 package com.inzynierkanew.entities.players;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.inzynierkanew.shared.SharedConstants;
 
 @Entity
 public class Hero {
@@ -13,6 +13,8 @@ public class Hero {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String deviceRegistrationID;
 
 	private int x;
 	private int y;
@@ -32,12 +34,15 @@ public class Hero {
 	private int[] army;
 	private int[] equippedItems;
 	private int[] items;
+	
+	private boolean active;
 
-	public Hero(int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int freeSkillPoints){
-		this(x, y, currentLandId, initialGold, strength, agility, intelligence, freeSkillPoints, null, null, null);
+	public Hero(String deviceRegistrationId, int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int freeSkillPoints){
+		this(deviceRegistrationId, x, y, currentLandId, initialGold, strength, agility, intelligence, freeSkillPoints, null, null, null);
 	}
 	
-	public Hero(int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int freeSkillPoints, int[] army, int[] equippedItems, int[] items) {
+	public Hero(String deviceRegistrationId, int x, int y, Long currentLandId, long initialGold, int strength, int agility, int intelligence, int freeSkillPoints, int[] army, int[] equippedItems, int[] items) {
+		this.deviceRegistrationID = deviceRegistrationId;
 		this.x = x;
 		this.y = y;
 		this.level = 1;
@@ -51,10 +56,19 @@ public class Hero {
 		this.army = army;
 		this.equippedItems = equippedItems;
 		this.items = items;
+		this.active = false;
 	}
 
 	public Long getId() {
 		return id;
+	}
+	
+	public String getDeviceRegistrationID() {
+		return deviceRegistrationID;
+	}
+
+	public void setDeviceRegistrationID(String deviceRegistrationID) {
+		this.deviceRegistrationID = deviceRegistrationID;
 	}
 
 	public int getX() {
@@ -159,6 +173,14 @@ public class Hero {
 
 	public void setItems(int[] items) {
 		this.items = items;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

@@ -9,6 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
+import org.mortbay.log.Log;
+import org.mortbay.log.LogFactory;
+
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -108,6 +111,7 @@ public class PlayerEndpoint {
 	 */
 	@ApiMethod(name = "registerPlayer")
 	public Player registerPlayer(Player player, 
+			@Named("deviceRegistrationId") String deviceRegistrationID, 
 			@Named("strength") Integer strength, 
 			@Named("agility") Integer agility, 
 			@Named("intelligence") Integer intelligence, 
@@ -119,7 +123,7 @@ public class PlayerEndpoint {
 			}
 			Land startingLand = landEndpoint.findLandForNewPlayer();
 			Town startingTown = townEndpoint.getTown(startingLand.getTownId());
-			Hero hero = new Hero(startingTown.getX(), startingTown.getY(), startingLand.getId(), SharedConstants.HERO_INITIAL_GOLD, strength, agility, intelligence, freeSkillPoints);
+			Hero hero = new Hero(deviceRegistrationID, startingTown.getX(), startingTown.getY(), startingLand.getId(), SharedConstants.HERO_INITIAL_GOLD, strength, agility, intelligence, freeSkillPoints);
 			hero = heroEndpoint.insertHero(hero);
 			player.setHeroId(hero.getId());
 			mgr.persist(player);
@@ -230,44 +234,20 @@ public class PlayerEndpoint {
 				return new LoginResponse();
 			}
 			
+			Hero hero = mgr.find(Hero.class, player.getHeroId());
+			if(hero == null){
+				return new LoginResponse();
+			} 
+			if(!hero.isActive()){
+				hero.setActive(true);
+				mgr.merge(hero);
+			}
+			
 			//session = new PlayerSession(player.getId(), UUID.randomUUID().toString(), new Date());
 			//mgr.merge(session);
 			
 			//TODO zrobiæ system sesji, który nie jest tak zjebany jak trzymanie ich w datastorze
 			return new LoginResponse(player.getId().toString());
-		} finally {
-			mgr.close();
-		}
-	}
-	
-	@ApiMethod(name = "updateHeroPosition")
-	public void updateHeroPosition(@Named("id")Long id, @Named("x")Integer x, @Named("y")Integer y){
-		EntityManager mgr = null;
-		try {
-			mgr = getEntityManager();
-			Hero hero = mgr.find(Hero.class, id);
-			if(hero!=null){
-				hero.setX(x);
-				hero.setY(y);
-				mgr.persist(hero);
-			}
-		} finally {
-			mgr.close();
-		}
-	}
-	
-	@ApiMethod(name = "moveHeroToDifferentLand")
-	public void moveHeroToDifferentLand(@Named("id")Long id, @Named("nextLandId")Long nextLandId, @Named("x")Integer x, @Named("y")Integer y){
-		EntityManager mgr = null;
-		try {
-			mgr = getEntityManager();
-			Hero hero = mgr.find(Hero.class, id);
-			if(hero!=null){
-				hero.setX(x);
-				hero.setY(y);
-				hero.setCurrentLandId(nextLandId);
-				mgr.persist(hero);
-			}
 		} finally {
 			mgr.close();
 		}

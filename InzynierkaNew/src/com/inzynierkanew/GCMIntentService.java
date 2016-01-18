@@ -7,6 +7,7 @@ import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.util.DateTime;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.model.Player;
+import com.inzynierkanew.game.GameView;
 import com.inzynierkanew.init.RegisterActivity;
 import com.inzynierkanew.utils.CloudEndpointUtils;
 import com.inzynierkanew.utils.RegistrationContainer;
@@ -37,6 +38,8 @@ import android.util.Log;
  */
 public class GCMIntentService extends GCMBaseIntentService {
 	private final Playerendpoint playerEndpoint;
+
+	private static GameView gameView;
 
 	/*
 	 * TODO: Set this to a valid project number. See
@@ -77,6 +80,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 		playerEndpoint = CloudEndpointUtils.newPlayerEndpoint();
 	}
 
+	// niezbyt to ³adne ale póki co innego pomys³u nie mam
+	public static void setGameView(GameView newGameView) {
+		gameView = newGameView;
+	}
+
 	/**
 	 * Called on registration error. This is called in the context of a Service
 	 * - no dialog or UI.
@@ -102,8 +110,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
-		sendNotificationIntent(context,
-				"Message received via Google Cloud Messaging:\n\n" + intent.getStringExtra("message"), true, false);
+		Log.i("GCM", intent.getExtras().toString());
+		if (gameView != null) {
+			gameView.updateOtherHero(intent);
+		}
 	}
 
 	/**
@@ -115,12 +125,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onRegistered(Context context, String registrationId) {
-		boolean alreadyRegisteredWithEndpointServer = false;
 		try {
-			Player player = registree.getPlayer().setDeviceRegistrationID(registrationId)
-					.setRegistrationTime(new DateTime(TimeUtils.now()));
-			playerEndpoint.registerPlayer(registree.getStrength(), registree.getAgility(), registree.getIntelligence(),
-					registree.getPointsLeft(), player).execute();
+			Player player = registree.getPlayer().setRegistrationTime(new DateTime(TimeUtils.now()));
+			playerEndpoint.registerPlayer(registrationId, registree.getStrength(), registree.getAgility(),
+					registree.getIntelligence(), registree.getPointsLeft(), player).execute();
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),
 					"Exception received when attempting to register with server at " + playerEndpoint.getRootUrl(), e);

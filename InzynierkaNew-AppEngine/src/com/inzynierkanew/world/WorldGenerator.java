@@ -60,8 +60,8 @@ public class WorldGenerator {
 	private static final int CROSSROAD_MIN_GAP = 5;
 	private static final int CROSSROAD_GAP_DIFF = 3;
 
-	private static final int ARMY_MIN_STRENGTH = 600;
-	private static final int ARMY_INCREASE_PER_LEVEL = 200;
+	private static final int ARMY_MIN_STRENGTH = 400;
+	private static final int ARMY_INCREASE_PER_LEVEL = 250;
 
 	public static final int EMPTY = 0;
 	public static final int EXISTING_LAND = -1;
@@ -83,8 +83,8 @@ public class WorldGenerator {
 
 	private static final double CHANCE_FOR_BEGINNER_LEVEL = 0.2;
 	private static final double NEXT_UNIT_CHANCE_CHANGE = 0.6;
-	private static final double TOWN_ARMY_FACTOR = 1.8;
-	private static final double DUNGEON_ARMY_FACTOR = 1.7;
+	private static final double TOWN_ARMY_FACTOR = 2.8;
+	private static final double DUNGEON_ARMY_FACTOR = 1.0;
 
 	private static final Comparator<UnitType> unitComparator = new Comparator<UnitType>() {
 

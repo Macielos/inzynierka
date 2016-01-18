@@ -22,7 +22,7 @@ import com.inzynierkanew.entities.players.heroendpoint.Heroendpoint;
 import com.inzynierkanew.entities.players.itemendpoint.Itemendpoint;
 import com.inzynierkanew.entities.players.playerendpoint.Playerendpoint;
 import com.inzynierkanew.entities.players.unittypeendpoint.Unittypeendpoint;
-import com.inzynierkanew.messageEndpoint.MessageEndpoint;
+import com.inzynierkanew.worldUpdateEndpoint.WorldUpdateEndpoint;
 
 import android.app.Activity;
 import android.util.Log;
@@ -160,15 +160,6 @@ public class CloudEndpointUtils {
 	
 	public static Heroendpoint newHeroEndpoint(){
 		Heroendpoint.Builder endpointBuilder = new Heroendpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) {
-					}
-				});
-		return updateBuilder(endpointBuilder).build();
-	}
-		
-	public static MessageEndpoint newMessageEndpoint(){
-		MessageEndpoint.Builder endpointBuilder = new MessageEndpoint.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {
 					public void initialize(HttpRequest httpRequest) {
 					}

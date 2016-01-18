@@ -108,7 +108,7 @@ public class LandEndpoint {
 	}
 
 	private Collection<Land> findLandsInTheNeighbourhoodInternal(EntityManager mgr, long mapSegment) {
-		return mgr.createQuery("select from Land as Land where mapSegment = " + mapSegment).getResultList();
+		return mgr.createQuery("select from Land as Land where Land.mapSegment = " + mapSegment).getResultList();
 	}
 
 	public Land findLandForNewPlayer() {

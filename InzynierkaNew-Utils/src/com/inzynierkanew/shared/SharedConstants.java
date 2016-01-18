@@ -8,7 +8,7 @@ public class SharedConstants {
 	public static final int NEXT_LEVEL_FACTOR = 500;
 	
 	public static final int BASE_GOLD_PER_VICTORY = 600;
-	public static final double GOLD_XP_MODIFIER = 0.3;
+	public static final double GOLD_XP_MODIFIER = 0.5;
 	public static final double GOLD_RANDOM_FACTOR = 0.5;
 	
 	public static final double CHANCE_FOR_ITEM = 0.7;
@@ -40,9 +40,17 @@ public class SharedConstants {
 	public static final double LEGENDARY_ITEM_STOCK_FACTOR = 0.1;
 	
 	public static final double ITEM_SELL_MODIFIER = 0.6;
-	public static final double ITEM_BUY_MODIFIER = 1.8;
 	
 	public static final String SEPARATOR = ",";
 	
+	public static final String ACTION = "action";
+	public static final int ARRIVE = 0;
+	public static final int MOVE = 1;
+	public static final int DEPART = 2;
+	
+	public static final String HERO_ID = "heroId";
+	public static final String CURRENT_LAND_ID = "currentLandId";
+	public static final String NEW_X = "newX";
+	public static final String NEW_Y = "newY";
 	
 }

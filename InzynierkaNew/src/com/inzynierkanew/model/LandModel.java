@@ -248,6 +248,17 @@ public class LandModel implements IRenderable {
 		return drawableFieldType.getFieldType().getPassable().booleanValue();
 	}
 	
+	public DrawableFieldType getField(int x, int y) {
+		if(!withinMapSegment(x, y)){
+			return null;
+		}
+		DrawableFieldType drawableFieldType = fieldTypes.get(fields[y][x]);
+		if(drawableFieldType == null){
+			return null;
+		}
+		return drawableFieldType;
+	}
+	
 	public boolean isDungeon(int x, int y){
 		return withinMapSegment(x, y) && fields[y][x] == dungeonIndex;
 	}

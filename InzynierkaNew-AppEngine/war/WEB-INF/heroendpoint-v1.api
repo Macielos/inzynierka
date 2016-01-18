@@ -5,6 +5,7 @@
   "name" : "heroendpoint",
   "version" : "v1",
   "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
   "adapter" : {
     "bns" : "https://1059.appspot.com/_ah/spi",
     "deadline" : 65.0,
@@ -43,6 +44,49 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "heroendpoint.updateHero" : {
+      "path" : "hero/{sendWorldUpdate}",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
+      "request" : {
+        "parameters" : {
+          "sendWorldUpdate" : {
+            "type" : "boolean",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.getHero" : {
+      "path" : "hero/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "heroendpoint.removeHero" : {
       "path" : "hero/{id}",
       "httpMethod" : "DELETE",
@@ -62,22 +106,6 @@
       },
       "response" : {
         "body" : "empty"
-      }
-    },
-    "heroendpoint.updateHero" : {
-      "path" : "hero",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
       }
     },
     "heroendpoint.listHero" : {
@@ -105,17 +133,17 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "heroendpoint.getHero" : {
-      "path" : "hero/{id}",
+    "heroendpoint.getActiveHeroesInLand" : {
+      "path" : "collectionresponse_hero/{landId}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero",
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.getActiveHeroesInLand",
       "request" : {
         "parameters" : {
-          "id" : {
+          "landId" : {
             "type" : "int64",
             "required" : true
           }
@@ -124,6 +152,39 @@
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.moveHeroToDifferentLand" : {
+      "path" : "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.players.HeroEndpoint.moveHeroToDifferentLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "nextLandId" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "x" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "y" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
       }
     }
   },
@@ -136,6 +197,9 @@
           "id" : {
             "type" : "string",
             "format" : "int64"
+          },
+          "deviceRegistrationID" : {
+            "type" : "string"
           },
           "x" : {
             "type" : "integer"
@@ -186,6 +250,9 @@
             "items" : {
               "type" : "integer"
             }
+          },
+          "active" : {
+            "type" : "boolean"
           }
         }
       },
@@ -214,8 +281,6 @@
           "$ref" : "Hero"
         }
       },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
-      },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.updateHero" : {
         "request" : {
           "$ref" : "Hero"
@@ -224,15 +289,24 @@
           "$ref" : "Hero"
         }
       },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero" : {
+        "response" : {
+          "$ref" : "Hero"
+        }
+      },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.removeHero" : {
+      },
       "com.inzynierkanew.endpoints.players.HeroEndpoint.listHero" : {
         "response" : {
           "$ref" : "CollectionResponse_Hero"
         }
       },
-      "com.inzynierkanew.endpoints.players.HeroEndpoint.getHero" : {
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.getActiveHeroesInLand" : {
         "response" : {
-          "$ref" : "Hero"
+          "$ref" : "CollectionResponse_Hero"
         }
+      },
+      "com.inzynierkanew.endpoints.players.HeroEndpoint.moveHeroToDifferentLand" : {
       }
     }
   }

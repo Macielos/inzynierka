@@ -19,8 +19,6 @@ public class Player {
 
 	private String password;
 
-	private String deviceRegistrationID;
-
 	private Date registrationTime;
 
 	private String sessionId;
@@ -50,14 +48,6 @@ public class Player {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getDeviceRegistrationID() {
-		return deviceRegistrationID;
-	}
-
-	public void setDeviceRegistrationID(String deviceRegistrationID) {
-		this.deviceRegistrationID = deviceRegistrationID;
 	}
 
 	public Date getRegistrationTime() {

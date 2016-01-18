@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/_MDQTmnDNIAK7RzHy47oaDGKEZc\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/GgjzX5CewwY0ki41iBF-jPxIzso\"",
  "discoveryVersion": "v1",
  "id": "playerendpoint:v1",
  "name": "playerendpoint",
@@ -102,9 +102,6 @@
    "id": "Player",
    "type": "object",
    "properties": {
-    "deviceRegistrationID": {
-     "type": "string"
-    },
     "heroId": {
      "type": "string",
      "format": "int64"
@@ -226,55 +223,20 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "moveHeroToDifferentLand": {
-   "id": "playerendpoint.moveHeroToDifferentLand",
-   "path": "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
-   "httpMethod": "POST",
-   "parameters": {
-    "id": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    },
-    "nextLandId": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    },
-    "x": {
-     "type": "integer",
-     "required": true,
-     "format": "int32",
-     "location": "path"
-    },
-    "y": {
-     "type": "integer",
-     "required": true,
-     "format": "int32",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "id",
-    "nextLandId",
-    "x",
-    "y"
-   ],
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "registerPlayer": {
    "id": "playerendpoint.registerPlayer",
-   "path": "registerPlayer/{strength}/{agility}/{intelligence}/{freeSkillPoints}",
+   "path": "registerPlayer/{deviceRegistrationId}/{strength}/{agility}/{intelligence}/{freeSkillPoints}",
    "httpMethod": "POST",
    "parameters": {
     "agility": {
      "type": "integer",
      "required": true,
      "format": "int32",
+     "location": "path"
+    },
+    "deviceRegistrationId": {
+     "type": "string",
+     "required": true,
      "location": "path"
     },
     "freeSkillPoints": {
@@ -297,6 +259,7 @@
     }
    },
    "parameterOrder": [
+    "deviceRegistrationId",
     "strength",
     "agility",
     "intelligence",
@@ -345,39 +308,6 @@
    },
    "parameterOrder": [
     "id"
-   ],
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "updateHeroPosition": {
-   "id": "playerendpoint.updateHeroPosition",
-   "path": "void/{id}/{x}/{y}",
-   "httpMethod": "PUT",
-   "parameters": {
-    "id": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    },
-    "x": {
-     "type": "integer",
-     "required": true,
-     "format": "int32",
-     "location": "path"
-    },
-    "y": {
-     "type": "integer",
-     "required": true,
-     "format": "int32",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "id",
-    "x",
-    "y"
    ],
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

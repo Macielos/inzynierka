@@ -189,8 +189,8 @@ if (window.location.hostname == 'localhost'
     if (message == "") {
       showInfo("Message must not be empty!");
       } else {
-        gapi.client.messageEndpoint
-        .sendMessage({"message": message})
+        gapi.client.worldUpdateEndpoint
+        .sendMessage({"action": "1"})
         .execute(handleMessageResponse);
       }
   }

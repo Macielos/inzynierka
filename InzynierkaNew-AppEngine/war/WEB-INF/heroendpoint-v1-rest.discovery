@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/J8TkrtZ2Bqd5GlglAQtL7HgC8iU\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/6e086K7fnjlWfKbfsJFLEdB3Z7Q\"",
  "discoveryVersion": "v1",
  "id": "heroendpoint:v1",
  "name": "heroendpoint",
@@ -93,6 +93,9 @@
    "id": "Hero",
    "type": "object",
    "properties": {
+    "active": {
+     "type": "boolean"
+    },
     "agility": {
      "type": "integer",
      "format": "int32"
@@ -107,6 +110,9 @@
     "currentLandId": {
      "type": "string",
      "format": "int64"
+    },
+    "deviceRegistrationID": {
+     "type": "string"
     },
     "equippedItems": {
      "type": "array",
@@ -162,6 +168,28 @@
   }
  },
  "methods": {
+  "getActiveHeroesInLand": {
+   "id": "heroendpoint.getActiveHeroesInLand",
+   "path": "collectionresponse_hero/{landId}",
+   "httpMethod": "GET",
+   "parameters": {
+    "landId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "landId"
+   ],
+   "response": {
+    "$ref": "CollectionResponse_Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "getHero": {
    "id": "heroendpoint.getHero",
    "path": "hero/{id}",
@@ -221,6 +249,46 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
+  "moveHeroToDifferentLand": {
+   "id": "heroendpoint.moveHeroToDifferentLand",
+   "path": "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
+   "httpMethod": "POST",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "nextLandId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "x": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "y": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id",
+    "nextLandId",
+    "x",
+    "y"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "removeHero": {
    "id": "heroendpoint.removeHero",
    "path": "hero/{id}",
@@ -242,8 +310,18 @@
   },
   "updateHero": {
    "id": "heroendpoint.updateHero",
-   "path": "hero",
+   "path": "hero/{sendWorldUpdate}",
    "httpMethod": "PUT",
+   "parameters": {
+    "sendWorldUpdate": {
+     "type": "boolean",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "sendWorldUpdate"
+   ],
    "request": {
     "$ref": "Hero",
     "parameterName": "resource"

@@ -5,6 +5,7 @@
   "name" : "townendpoint",
   "version" : "v1",
   "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
   "adapter" : {
     "bns" : "https://1059.appspot.com/_ah/spi",
     "deadline" : 65.0,
@@ -27,27 +28,6 @@
   "ownerName" : "inzynierkanew.com",
   "packagePath" : "entities.map",
   "methods" : {
-    "townendpoint.removeTown" : {
-      "path" : "town/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.removeTown",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "townendpoint.insertTown" : {
       "path" : "town",
       "httpMethod" : "POST",
@@ -103,6 +83,27 @@
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "townendpoint.removeTown" : {
+      "path" : "town/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.inzynierkanew.endpoints.map.TownEndpoint.removeTown",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
       }
     },
     "townendpoint.getTown" : {
@@ -179,8 +180,6 @@
       }
     },
     "methods" : {
-      "com.inzynierkanew.endpoints.map.TownEndpoint.removeTown" : {
-      },
       "com.inzynierkanew.endpoints.map.TownEndpoint.insertTown" : {
         "request" : {
           "$ref" : "Town"
@@ -201,6 +200,8 @@
         "response" : {
           "$ref" : "CollectionResponse_Town"
         }
+      },
+      "com.inzynierkanew.endpoints.map.TownEndpoint.removeTown" : {
       },
       "com.inzynierkanew.endpoints.map.TownEndpoint.getTown" : {
         "response" : {
