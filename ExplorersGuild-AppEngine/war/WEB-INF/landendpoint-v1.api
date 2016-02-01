@@ -1,0 +1,297 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://explorersguild-1199.appspot.com/_ah/api",
+  "name" : "landendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
+  "adapter" : {
+    "bns" : "https://explorersguild-1199.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "explorersguild.com",
+  "ownerName" : "explorersguild.com",
+  "packagePath" : "entities.map",
+  "methods" : {
+    "landendpoint.insertLand" : {
+      "path" : "land",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.insertLand",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.listLand" : {
+      "path" : "land",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.listLand",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.updateLand" : {
+      "path" : "land",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.updateLand",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.getLand" : {
+      "path" : "land/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.getLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.removeLand" : {
+      "path" : "land/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.removeLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "landendpoint.landEndpoint.findLandForNewPlayer" : {
+      "path" : "findLandForNewPlayer",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.findLandForNewPlayer",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.landEndpoint.findLandsWithFreePassages" : {
+      "path" : "findLandsWithFreePassages",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.findLandsWithFreePassages",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "landendpoint.landEndpoint.findLandsInNeighbourhood" : {
+      "path" : "findLandsInNeighbourhood/{mapSegment}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.LandEndpoint.findLandsInNeighbourhood",
+      "request" : {
+        "parameters" : {
+          "mapSegment" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Land" : {
+        "id" : "Land",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "townId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "hasTown" : {
+            "type" : "boolean"
+          },
+          "hasFreePassage" : {
+            "type" : "boolean"
+          },
+          "mapSegment" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "suggestedLevel" : {
+            "type" : "integer"
+          },
+          "minX" : {
+            "type" : "integer"
+          },
+          "minY" : {
+            "type" : "integer"
+          },
+          "maxX" : {
+            "type" : "integer"
+          },
+          "maxY" : {
+            "type" : "integer"
+          },
+          "fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "height" : {
+            "type" : "integer"
+          },
+          "width" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "CollectionResponse_Land" : {
+        "id" : "CollectionResponse_Land",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Land"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.explorersguild.endpoints.map.LandEndpoint.insertLand" : {
+        "request" : {
+          "$ref" : "Land"
+        },
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.listLand" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.updateLand" : {
+        "request" : {
+          "$ref" : "Land"
+        },
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.getLand" : {
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.removeLand" : {
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.findLandForNewPlayer" : {
+        "response" : {
+          "$ref" : "Land"
+        }
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.findLandsWithFreePassages" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      },
+      "com.explorersguild.endpoints.map.LandEndpoint.findLandsInNeighbourhood" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Land"
+        }
+      }
+    }
+  }
+}

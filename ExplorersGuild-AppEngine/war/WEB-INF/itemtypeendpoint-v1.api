@@ -1,0 +1,255 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://explorersguild-1199.appspot.com/_ah/api",
+  "name" : "itemtypeendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
+  "adapter" : {
+    "bns" : "https://explorersguild-1199.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "explorersguild.com",
+  "ownerName" : "explorersguild.com",
+  "packagePath" : "entities.players",
+  "methods" : {
+    "itemtypeendpoint.getItemType" : {
+      "path" : "itemtype/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.ItemTypeEndpoint.getItemType",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemtypeendpoint.getItemTypes" : {
+      "path" : "collectionresponse_itemtype/{ids}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.ItemTypeEndpoint.getItemTypes",
+      "request" : {
+        "parameters" : {
+          "ids" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemtypeendpoint.listItemType" : {
+      "path" : "itemtype",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.ItemTypeEndpoint.listItemType",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemtypeendpoint.removeItemType" : {
+      "path" : "itemtype/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.ItemTypeEndpoint.removeItemType",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "itemtypeendpoint.getRandomItemsByType" : {
+      "path" : "collectionresponse_itemtype/{limit}/{level}/{itemClass}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.ItemTypeEndpoint.getRandomItemsByType",
+      "request" : {
+        "parameters" : {
+          "limit" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "level" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "itemClass" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemtypeendpoint.insertItemType" : {
+      "path" : "itemtype",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.ItemTypeEndpoint.insertItemType",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "ItemType" : {
+        "id" : "ItemType",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "itemClass" : {
+            "$ref" : "ItemClass"
+          },
+          "itemLevel" : {
+            "type" : "integer"
+          },
+          "value" : {
+            "type" : "integer"
+          },
+          "icon" : {
+            "type" : "string"
+          },
+          "strengthBonus" : {
+            "type" : "integer"
+          },
+          "agilityBonus" : {
+            "type" : "integer"
+          },
+          "intelligenceBonus" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "ItemClass" : {
+        "id" : "ItemClass",
+        "type" : "string",
+        "enum" : [ "STANDARD", "MAGICAL", "LEGENDARY" ]
+      },
+      "CollectionResponse_ItemType" : {
+        "id" : "CollectionResponse_ItemType",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "ItemType"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.explorersguild.endpoints.players.ItemTypeEndpoint.getItemType" : {
+        "response" : {
+          "$ref" : "ItemType"
+        }
+      },
+      "com.explorersguild.endpoints.players.ItemTypeEndpoint.getItemTypes" : {
+        "response" : {
+          "$ref" : "CollectionResponse_ItemType"
+        }
+      },
+      "com.explorersguild.endpoints.players.ItemTypeEndpoint.listItemType" : {
+        "response" : {
+          "$ref" : "CollectionResponse_ItemType"
+        }
+      },
+      "com.explorersguild.endpoints.players.ItemTypeEndpoint.removeItemType" : {
+      },
+      "com.explorersguild.endpoints.players.ItemTypeEndpoint.getRandomItemsByType" : {
+        "response" : {
+          "$ref" : "CollectionResponse_ItemType"
+        }
+      },
+      "com.explorersguild.endpoints.players.ItemTypeEndpoint.insertItemType" : {
+        "request" : {
+          "$ref" : "ItemType"
+        },
+        "response" : {
+          "$ref" : "ItemType"
+        }
+      }
+    }
+  }
+}

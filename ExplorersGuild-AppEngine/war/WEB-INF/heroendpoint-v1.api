@@ -1,0 +1,331 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://explorersguild-1199.appspot.com/_ah/api",
+  "name" : "heroendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
+  "adapter" : {
+    "bns" : "https://explorersguild-1199.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "explorersguild.com",
+  "ownerName" : "explorersguild.com",
+  "packagePath" : "entities.players",
+  "methods" : {
+    "heroendpoint.insertHero" : {
+      "path" : "hero",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.insertHero",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.listHero" : {
+      "path" : "hero",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.listHero",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.updateHero" : {
+      "path" : "hero/{action}",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.updateHero",
+      "request" : {
+        "parameters" : {
+          "action" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.removeHero" : {
+      "path" : "hero/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.removeHero",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "heroendpoint.getHero" : {
+      "path" : "hero/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.getHero",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.getActiveHeroesInLand" : {
+      "path" : "collectionresponse_hero/{landId}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.getActiveHeroesInLand",
+      "request" : {
+        "parameters" : {
+          "landId" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heroendpoint.moveHeroToDifferentLand" : {
+      "path" : "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.moveHeroToDifferentLand",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "nextLandId" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "x" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "y" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "heroendpoint.getHighestLevelHero" : {
+      "path" : "getHighestLevelHero",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.players.HeroEndpoint.getHighestLevelHero",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Hero" : {
+        "id" : "Hero",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "deviceRegistrationID" : {
+            "type" : "string"
+          },
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "level" : {
+            "type" : "integer"
+          },
+          "experience" : {
+            "type" : "integer"
+          },
+          "freeSkillPoints" : {
+            "type" : "integer"
+          },
+          "currentLandId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "gold" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "strength" : {
+            "type" : "integer"
+          },
+          "agility" : {
+            "type" : "integer"
+          },
+          "intelligence" : {
+            "type" : "integer"
+          },
+          "army" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "active" : {
+            "type" : "boolean"
+          },
+          "lastLogin" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "CollectionResponse_Hero" : {
+        "id" : "CollectionResponse_Hero",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Hero"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.explorersguild.endpoints.players.HeroEndpoint.insertHero" : {
+        "request" : {
+          "$ref" : "Hero"
+        },
+        "response" : {
+          "$ref" : "Hero"
+        }
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.listHero" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Hero"
+        }
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.updateHero" : {
+        "request" : {
+          "$ref" : "Hero"
+        },
+        "response" : {
+          "$ref" : "Hero"
+        }
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.removeHero" : {
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.getHero" : {
+        "response" : {
+          "$ref" : "Hero"
+        }
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.getActiveHeroesInLand" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Hero"
+        }
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.moveHeroToDifferentLand" : {
+      },
+      "com.explorersguild.endpoints.players.HeroEndpoint.getHighestLevelHero" : {
+        "response" : {
+          "$ref" : "Hero"
+        }
+      }
+    }
+  }
+}

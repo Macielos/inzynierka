@@ -1,0 +1,11 @@
+<!-- Indices written at Mon, 1 Feb 2016 03:18:48 CET -->
+
+<datastore-indexes>
+
+    <!-- Used 9 times in query history -->
+    <datastore-index kind="ItemType" ancestor="false" source="auto">
+        <property name="itemClass" direction="asc"/>
+        <property name="itemLevel" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

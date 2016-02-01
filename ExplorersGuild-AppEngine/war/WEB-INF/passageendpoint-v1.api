@@ -1,0 +1,270 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://explorersguild-1199.appspot.com/_ah/api",
+  "name" : "passageendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
+  "adapter" : {
+    "bns" : "https://explorersguild-1199.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "explorersguild.com",
+  "ownerName" : "explorersguild.com",
+  "packagePath" : "entities.map",
+  "methods" : {
+    "passageendpoint.removePassage" : {
+      "path" : "passage/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.PassageEndpoint.removePassage",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "passageendpoint.getPassage" : {
+      "path" : "passage/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.PassageEndpoint.getPassage",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "passageendpoint.listPassage" : {
+      "path" : "listPassage/{landId}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.PassageEndpoint.listPassage",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          },
+          "landId" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "passageendpoint.insertPassage" : {
+      "path" : "passage",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.PassageEndpoint.insertPassage",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "passageendpoint.updatePassage" : {
+      "path" : "passage",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.PassageEndpoint.updatePassage",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "passageendpoint.findInactivePortal" : {
+      "path" : "findInactivePortal",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.PassageEndpoint.findInactivePortal",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Passage" : {
+        "id" : "Passage",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          },
+          "direction" : {
+            "type" : "integer"
+          },
+          "landId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "nextLandId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "nextX" : {
+            "type" : "integer"
+          },
+          "nextY" : {
+            "type" : "integer"
+          },
+          "nextLandSuggestedLevel" : {
+            "type" : "integer"
+          },
+          "portal" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Key" : {
+        "id" : "Key",
+        "type" : "object",
+        "properties" : {
+          "kind" : {
+            "type" : "string"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          },
+          "namespace" : {
+            "type" : "string"
+          },
+          "complete" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "CollectionResponse_Passage" : {
+        "id" : "CollectionResponse_Passage",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Passage"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.explorersguild.endpoints.map.PassageEndpoint.removePassage" : {
+      },
+      "com.explorersguild.endpoints.map.PassageEndpoint.getPassage" : {
+        "response" : {
+          "$ref" : "Passage"
+        }
+      },
+      "com.explorersguild.endpoints.map.PassageEndpoint.listPassage" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Passage"
+        }
+      },
+      "com.explorersguild.endpoints.map.PassageEndpoint.insertPassage" : {
+        "request" : {
+          "$ref" : "Passage"
+        },
+        "response" : {
+          "$ref" : "Passage"
+        }
+      },
+      "com.explorersguild.endpoints.map.PassageEndpoint.updatePassage" : {
+        "request" : {
+          "$ref" : "Passage"
+        },
+        "response" : {
+          "$ref" : "Passage"
+        }
+      },
+      "com.explorersguild.endpoints.map.PassageEndpoint.findInactivePortal" : {
+        "response" : {
+          "$ref" : "Passage"
+        }
+      }
+    }
+  }
+}

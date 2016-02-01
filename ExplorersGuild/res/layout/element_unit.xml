@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".TownActivity" >
+
+    <ImageView
+        android:id="@+id/unit_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/swordsman" />
+
+    <TextView
+        android:id="@+id/unit_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/unit_image"
+        android:layout_below="@+id/unit_image"
+        android:layout_marginLeft="23dp"
+        android:text="@string/empty"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <SeekBar
+        android:id="@+id/unit_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unit_image" />
+
+    <Button
+        android:id="@+id/unit_recruitButton"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_alignRight="@+id/unit_bar"
+        android:layout_below="@+id/unit_cost"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="73dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scrollHorizontally="true"
+        android:text="@string/recruit" />
+
+    <TextView
+        android:id="@+id/unit_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/unit_bar"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@+id/unit_image"
+        android:ems="10" />
+
+    <LinearLayout
+        android:id="@+id/unit_cost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/unit_count"
+        android:orientation="horizontal"
+        android:layout_toRightOf="@+id/unit_image" >
+
+        <ImageView
+            android:id="@+id/unit_goldIcon"
+            android:layout_width="64dp"
+            android:layout_height="fill_parent"
+            android:src="@drawable/gold" />
+
+        <TextView
+            android:id="@+id/unit_goldCount"
+            android:layout_width="88dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</RelativeLayout>

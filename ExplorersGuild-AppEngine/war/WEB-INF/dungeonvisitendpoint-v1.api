@@ -1,0 +1,162 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://explorersguild-1199.appspot.com/_ah/api",
+  "name" : "dungeonvisitendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "discovery" : [ "PUBLIC" ],
+  "adapter" : {
+    "bns" : "https://explorersguild-1199.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "explorersguild.com",
+  "ownerName" : "explorersguild.com",
+  "packagePath" : "entities.map",
+  "methods" : {
+    "dungeonvisitendpoint.saveDungeonVisit" : {
+      "path" : "saveDungeonVisit",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.DungeonVisitEndpoint.saveDungeonVisit",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "dungeonvisitendpoint.listDungeonVisitsByIds" : {
+      "path" : "dungeonvisit/{heroId}/{relatedEntityId}/{byLand}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.DungeonVisitEndpoint.listDungeonVisitsByIds",
+      "request" : {
+        "parameters" : {
+          "heroId" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "relatedEntityId" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "byLand" : {
+            "type" : "boolean",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "dungeonvisitendpoint.removeDungeonVisit" : {
+      "path" : "dungeonvisit/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.explorersguild.endpoints.map.DungeonVisitEndpoint.removeDungeonVisit",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "DungeonVisit" : {
+        "id" : "DungeonVisit",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "heroId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "dungeonId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "landId" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "army" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        }
+      },
+      "CollectionResponse_DungeonVisit" : {
+        "id" : "CollectionResponse_DungeonVisit",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DungeonVisit"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.explorersguild.endpoints.map.DungeonVisitEndpoint.saveDungeonVisit" : {
+        "request" : {
+          "$ref" : "DungeonVisit"
+        },
+        "response" : {
+          "$ref" : "DungeonVisit"
+        }
+      },
+      "com.explorersguild.endpoints.map.DungeonVisitEndpoint.listDungeonVisitsByIds" : {
+        "response" : {
+          "$ref" : "CollectionResponse_DungeonVisit"
+        }
+      },
+      "com.explorersguild.endpoints.map.DungeonVisitEndpoint.removeDungeonVisit" : {
+      }
+    }
+  }
+}

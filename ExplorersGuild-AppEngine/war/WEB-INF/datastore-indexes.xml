@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+
+	<datastore-index kind="DungeonVisit">
+		<property name="heroId" direction="asc" />
+		<property name="dungeonId" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="DungeonVisit">
+		<property name="heroId" direction="asc" />
+		<property name="dungeonId" direction="asc" />
+		<property name="landId" direction="asc" />		
+	</datastore-index>
+	
+	<datastore-index kind="Land">
+		<property name="hasTown" direction="asc" />
+		<property name="suggestedLevel" direction="asc" />
+	</datastore-index>
+
+	<datastore-index kind="TownVisit">
+		<property name="heroId" direction="asc" />
+		<property name="townId" direction="asc" />
+	</datastore-index>
+
+	<datastore-index kind="Hero">
+		<property name="active" direction="asc" />
+		<property name="currentLandId" direction="asc" />
+	</datastore-index>
+	
+</datastore-indexes>

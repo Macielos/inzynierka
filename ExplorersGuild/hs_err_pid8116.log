@@ -1,0 +1,105 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:136), pid=8116, tid=5928
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version:  (7.0_79-b15) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (24.79-b02 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000000093e000):  JavaThread "Unknown thread" [_thread_in_vm, id=5928, stack(0x00000000020a0000,0x00000000021a0000)]
+
+Stack: [0x00000000020a0000,0x00000000021a0000]
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x000000000093e000 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=5928, stack(0x00000000020a0000,0x00000000021a0000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.009 loading class 0x00000000021f62d0 done
+Event: 0.009 loading class 0x00000000021f5cd0 done
+Event: 0.009 loading class 0x00000000021f5cb0
+Event: 0.009 loading class 0x00000000021fde50
+Event: 0.009 loading class 0x00000000021fde50 done
+Event: 0.009 loading class 0x00000000021fde80
+Event: 0.009 loading class 0x00000000021fde80 done
+Event: 0.009 loading class 0x00000000021fdeb0
+Event: 0.009 loading class 0x00000000021fdeb0 done
+Event: 0.009 loading class 0x00000000021f5cb0 done
+
+
+Dynamic libraries:
+0x00007ff79c510000 - 0x00007ff79c543000 	C:\Program Files\Java\jre7\bin\javaw.exe
+0x00007ffc05830000 - 0x00007ffc059f1000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffc03c70000 - 0x00007ffc03d1d000 	C:\WINDOWS\system32\KERNEL32.DLL
+0x00007ffc02260000 - 0x00007ffc02448000 	C:\WINDOWS\system32\KERNELBASE.dll
+0x00007ffc03eb0000 - 0x00007ffc03f57000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x00007ffc03570000 - 0x00007ffc0360d000 	C:\WINDOWS\system32\msvcrt.dll
+0x00007ffc03fe0000 - 0x00007ffc0403b000 	C:\WINDOWS\system32\sechost.dll
+0x00007ffc02c30000 - 0x00007ffc02d4c000 	C:\WINDOWS\system32\RPCRT4.dll
+0x00007ffc02d50000 - 0x00007ffc02ea6000 	C:\WINDOWS\system32\USER32.dll
+0x00007ffc03d20000 - 0x00007ffc03ea6000 	C:\WINDOWS\system32\GDI32.dll
+0x00007ffbfe180000 - 0x00007ffbfe3f4000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.10586.0_none_8c15ae12515e1c22\COMCTL32.dll
+0x00007ffc03610000 - 0x00007ffc0388d000 	C:\WINDOWS\system32\combase.dll
+0x00007ffc02470000 - 0x00007ffc024da000 	C:\WINDOWS\system32\bcryptPrimitives.dll
+0x00007ffc03460000 - 0x00007ffc0349b000 	C:\WINDOWS\system32\IMM32.DLL
+0x000000006b180000 - 0x000000006b252000 	C:\Program Files\Java\jre7\bin\msvcr100.dll
+0x000000006b3f0000 - 0x000000006bbc5000 	C:\Program Files\Java\jre7\bin\server\jvm.dll
+0x00007ffc02eb0000 - 0x00007ffc02eb8000 	C:\WINDOWS\system32\PSAPI.DLL
+0x00007ffc00470000 - 0x00007ffc00493000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffbffb70000 - 0x00007ffbffb79000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffc03c00000 - 0x00007ffc03c6b000 	C:\WINDOWS\system32\WS2_32.dll
+0x0000000000940000 - 0x000000000096c000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ffc024e0000 - 0x00007ffc02523000 	C:\WINDOWS\system32\cfgmgr32.dll
+0x000000006c080000 - 0x000000006c08f000 	C:\Program Files\Java\jre7\bin\verify.dll
+0x000000006b2e0000 - 0x000000006b308000 	C:\Program Files\Java\jre7\bin\java.dll
+0x000000006c060000 - 0x000000006c075000 	C:\Program Files\Java\jre7\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1250 -Xbootclasspath:C:\Users\Arjan\android-sdks\platforms\android-23\android.jar;C:\Users\Arjan\android-sdks\add-ons\addon-google_apis-google-23\libs\effects.jar;C:\Users\Arjan\android-sdks\add-ons\addon-google_apis-google-23\libs\usb.jar;C:\Users\Arjan\android-sdks\add-ons\addon-google_apis-google-23\libs\maps.jar 
+java_command: org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 61001 -testLoaderClass org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoader -loaderpluginname org.eclipse.jdt.junit4.runtime -classNames test.BattleResolverTest
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=
+[error occurred during error reporting (printing environment variables), id 0xc0000005]
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 8.1 , 64 bit Build 9600 
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 61 stepping 4, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, erms, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 8288768k(2825012k free), swap 9665024k(1909248k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (24.79-b02) for windows-amd64 JRE (1.7.0_79-b15), built on Apr 10 2015 12:36:16 by "java_re" with unknown MS VC++:1600
+
+time: Mon Feb 01 03:25:57 2016
+elapsed time: 0 seconds
+

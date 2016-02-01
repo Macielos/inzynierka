@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+	<cron>
+		<url>/cron/clearVisits</url>
+		<description>Clears town and dungeon visits so that players see units and monsters respawned</description>
+		<schedule>every day 03:00</schedule>
+	</cron>
+	<cron>
+		<url>/cron/fireWorldGeneration</url>
+		<description>Generates new lands</description>
+		<schedule>every day 03:10</schedule>
+	</cron>
+</cronentries>

@@ -1,0 +1,21 @@
+# view AndroidManifest.xml #generated:68
+-keep class android.test.InstrumentationTestRunner { <init>(...); }
+
+# view AndroidManifest.xml #generated:39
+-keep class com.explorersguild.GCMIntentService { <init>(...); }
+
+# view AndroidManifest.xml #generated:62
+-keep class com.explorersguild.game.GameActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:59
+-keep class com.explorersguild.init.LoginActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:29
+-keep class com.explorersguild.init.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:56
+-keep class com.explorersguild.init.RegisterActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:41
+-keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
+

@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+    android:gravity="center_vertical|center_horizontal|center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/register_enterName"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="@string/your_name" />
+
+    <EditText
+        android:id="@+id/register_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:inputType="text"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/register_enterPassword"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="@string/password" />
+
+    <EditText
+        android:id="@+id/register_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="textPassword" />
+    	
+  <Button
+      android:id="@+id/register_nextButton"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/next" />
+
+  <Button
+      android:id="@+id/register_cancelButton"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/cancel" />
+
+</LinearLayout>

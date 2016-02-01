@@ -1,0 +1,346 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/aNNEI7PZRTEC9d5wQ18Ob-QrONs\"",
+ "discoveryVersion": "v1",
+ "id": "heroendpoint:v1",
+ "name": "heroendpoint",
+ "version": "v1",
+ "description": "This is an API",
+ "ownerDomain": "explorersguild.com",
+ "ownerName": "explorersguild.com",
+ "packagePath": "entities.players",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://explorersguild-1199.appspot.com/_ah/api/heroendpoint/v1/",
+ "basePath": "/_ah/api/heroendpoint/v1/",
+ "rootUrl": "https://explorersguild-1199.appspot.com/_ah/api/",
+ "servicePath": "heroendpoint/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "CollectionResponse_Hero": {
+   "id": "CollectionResponse_Hero",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Hero"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "Hero": {
+   "id": "Hero",
+   "type": "object",
+   "properties": {
+    "active": {
+     "type": "boolean"
+    },
+    "agility": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "army": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
+    "currentLandId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "deviceRegistrationID": {
+     "type": "string"
+    },
+    "experience": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "freeSkillPoints": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "gold": {
+     "type": "string",
+     "format": "int64"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "intelligence": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
+    "lastLogin": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "level": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "strength": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "x": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "y": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  }
+ },
+ "methods": {
+  "getActiveHeroesInLand": {
+   "id": "heroendpoint.getActiveHeroesInLand",
+   "path": "collectionresponse_hero/{landId}",
+   "httpMethod": "GET",
+   "parameters": {
+    "landId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "landId"
+   ],
+   "response": {
+    "$ref": "CollectionResponse_Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getHero": {
+   "id": "heroendpoint.getHero",
+   "path": "hero/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getHighestLevelHero": {
+   "id": "heroendpoint.getHighestLevelHero",
+   "path": "getHighestLevelHero",
+   "httpMethod": "GET",
+   "response": {
+    "$ref": "Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertHero": {
+   "id": "heroendpoint.insertHero",
+   "path": "hero",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "Hero",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listHero": {
+   "id": "heroendpoint.listHero",
+   "path": "hero",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "moveHeroToDifferentLand": {
+   "id": "heroendpoint.moveHeroToDifferentLand",
+   "path": "moveHeroToDifferentLand/{id}/{nextLandId}/{x}/{y}",
+   "httpMethod": "POST",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "nextLandId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "x": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "y": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id",
+    "nextLandId",
+    "x",
+    "y"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeHero": {
+   "id": "heroendpoint.removeHero",
+   "path": "hero/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateHero": {
+   "id": "heroendpoint.updateHero",
+   "path": "hero/{action}",
+   "httpMethod": "PUT",
+   "parameters": {
+    "action": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "action"
+   ],
+   "request": {
+    "$ref": "Hero",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Hero"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  }
+ }
+}

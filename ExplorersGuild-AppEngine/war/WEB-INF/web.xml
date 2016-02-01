@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value>com.explorersguild.endpoints.communication.WorldUpdateEndpoint,com.explorersguild.endpoints.map.DungeonEndpoint,com.explorersguild.endpoints.map.DungeonVisitEndpoint,com.explorersguild.endpoints.map.FieldTypeEndpoint,com.explorersguild.endpoints.map.LandEndpoint,com.explorersguild.endpoints.map.PassageEndpoint,com.explorersguild.endpoints.map.TownEndpoint,com.explorersguild.endpoints.map.TownVisitEndpoint,com.explorersguild.endpoints.players.FactionEndpoint,com.explorersguild.endpoints.players.HeroEndpoint,com.explorersguild.endpoints.players.ItemTypeEndpoint,com.explorersguild.endpoints.players.PlayerEndpoint,com.explorersguild.endpoints.players.UnitTypeEndpoint</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>WorldGenerationScheduler</servlet-name>
+		<servlet-class>com.explorersguild.cron.WorldGenerationScheduler</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WorldGenerationScheduler</servlet-name>
+		<url-pattern>/cron/fireWorldGeneration</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ClearVisitScheduler</servlet-name>
+		<servlet-class>com.explorersguild.cron.ClearVisitScheduler</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClearVisitScheduler</servlet-name>
+		<url-pattern>/cron/clearVisits</url-pattern>
+	</servlet-mapping>
+	
+
+	<listener>
+		<listener-class>com.explorersguild.init.ApplicationInitializer</listener-class>
+	</listener>
+
+</web-app>
